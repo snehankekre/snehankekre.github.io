@@ -1,6 +1,8 @@
 ---
 layout: post
 title: Contact
+image: 
+        feature: contact.png
 ---
 
 You can email me at [snehan@minerva.kgi.edu](mailto:snehan@minerva.kgi.edu).
