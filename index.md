@@ -7,7 +7,7 @@ avatar: true
 title-size: 80px
 full-screen-mobile: true
 image: 
-        feature: stars.jpeg
+        feature: contact.png
 comments: False
 ---
 
