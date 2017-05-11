@@ -12,7 +12,7 @@ comments: False
 ---
 
 ## Research
-<b>* [In Progress]
+<b>[In progress - Using Deep Learning to search for exoplanets in the Kepler public data]</b>
 
 
 ## Industry Experience
