@@ -1,6 +1,6 @@
 ---
 layout: home
-title: "Miles To Go"
+title: "Piecewise explorations of a continuous function"
 permalink: /blog.html
 description: "Snehan Kekre's Blog"
 tags: [Jekyll, theme, responsive, blog, template]
