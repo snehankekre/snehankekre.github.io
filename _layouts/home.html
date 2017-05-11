@@ -1,0 +1,37 @@
+{% include head.html %}
+
+{% include nav.html %}
+
+{% include header.html %}
+
+<!-- Page Header -->
+<section class="article">
+  <article class="wrap post">
+                {% for post in site.posts %}
+                <div class="post-preview">
+                  <a href="{{ site.url }}{{ post.url }}">
+                    <header class="intro-header post-preview-header" style="background-image: url(images/{{ post.image.feature }})">
+                    </header>
+                      <h2 class="post-title">{{post.title}}</h2>
+                      <h3 class="post-subtitle">{{post.description}}
+                      </h3>
+                  </a>
+                  <p class="post-meta">{{ post.date | date: "%B %d, %Y" }}</p>
+              </div>
+                  <hr class="home-hr">
+                {% endfor %}
+
+<!--           <ul class="pager">
+              <li class="next">
+                  <a href="/page2">Older Posts →</a>
+              </li>
+          </ul> -->
+          
+
+<blockquote>
+  <p>Want more? Reach out to <a href="mailto:snehan@minerva.kgi.edu">snehan@minerva.kgi.edu</a> with suggestions.</p>
+</blockquote>
+  </article>
+</section>
+
+{% include footer.html %}

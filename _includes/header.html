@@ -1,0 +1,27 @@
+{% if page.image.feature %}
+  {% if page.image.feature contains 'https://' | escape or page.image.feature contains 'http://' | escape %}
+  <header class="intro-header{% if page.full-screen-mobile %} full-screen-mobile{% endif %}" style="background-image: url({{ page.image.feature }})">
+  {% else %}
+  <header class="intro-header{% if page.full-screen-mobile %} full-screen-mobile{% endif %}" style="background-image: url({{ site.url }}/images/{{ page.image.feature }})">
+  {% endif %}
+  <div class="overlay" {% if page.overlay-alpha %}style ="background: rgba(0, 0, 0, {{ page.overlay-alpha }});"{% endif %}></div>
+    <div class="container {% if page.full-screen-mobile %} center-vertically{% endif %}">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="site-heading {% if page.full-screen-mobile %}light-padding{% endif %}">
+                {% if page.avatar %}
+                <div class="avatar" style="background: url({{ site.url }}/images/me.jpg)"></div>
+                <h2 class="header-title">Snehan Kekre</h2>
+                {% endif %}
+                    <h1 class="header-title">{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</h1>
+                    <span class="subheading">{{ page.description }}</span>
+                {% if page.date %}
+                <p class="date">{{page.date | date: "%b %d, %Y" }}</p>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+{% else %}
+{% endif %}

@@ -1,0 +1,1 @@
+This is a Jekyll powered blog hosted on Github pages. Thanks to [@twnsndco](https://twitter.com/twnsndco) for the Balzac Jekyll theme.
