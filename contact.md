@@ -2,7 +2,7 @@
 layout: post
 title: Contact
 image: 
-        feature: contact.png
+        feature: typewriter.jpg
 ---
 
 You can email me at [snehan@minerva.kgi.edu](mailto:snehan@minerva.kgi.edu).
