@@ -15,6 +15,7 @@ published: True
 > #### \- John Henry Mackay
 
 ## Papers (7)
+- [Mach's Principle: the original Einstein's considerations] (http://philsci-archive.pitt.edu/12338/1/Einstein_1907_12_EN.pdf)
 - [Searching for exoplanets in the Kepler public data](https://goo.gl/mMLQBw)
 - [TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems](http://download.tensorflow.org/paper/whitepaper2015.pdf)
 - [Human brain networks function in connectome-specific harmonic waves](https://www.nature.com/articles/ncomms10340)
