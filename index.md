@@ -1,7 +1,7 @@
 ---
 layout: post
 title: " "
-description: I study Applied Physics and CS at Minerva Schools as an undergraduate. I'm interested in QM, Deep Learning, Machine Learning and AI.
+description: I’m an Applied Physics and CS Bachelor’s student at Minerva Schools. I'm interested in QM, Deep Learning, Machine Learning and AI.
 tags: [about, snehan, kekre, deep, learning, neural nets, machine, learning, ai, cats, data, brightbotnews]
 avatar: true
 title-size: 80px
