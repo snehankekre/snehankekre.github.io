@@ -13,12 +13,6 @@ comments: False
 
 ## Research
 <b>[In progress - Using Deep Learning to search for exoplanets in the Kepler public data]</b>
-
-
-## Industry Experience
-<b>[Rhyme](https://www.rhyme.com)</b>
-
-Course Strategist and Outreach Coordinator. Design courses for the Rhyme platform, reaching out to content creators to create courses on the Rhyme platform, managing the course creation projects.
 <hr>
 
 <b>[Minerva Project](https://www.minerva.kgi.edu/)</b>
