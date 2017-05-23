@@ -14,7 +14,8 @@ published: True
 >
 > #### \- John Henry Mackay
 
-## Papers (8)
+## Papers (9)
+- [Dermatologist-level classification of skin cancer with deep neural networks](https://www.nature.com.sci-hub.cc/nature/journal/v542/n7639/full/nature21056.html)
 - [Mach's Principle: the original Einstein's considerations](http://philsci-archive.pitt.edu/12338/1/Einstein_1907_12_EN.pdf)
 - [Searching for exoplanets in the Kepler public data](https://goo.gl/mMLQBw)
 - [TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems](http://download.tensorflow.org/paper/whitepaper2015.pdf)
