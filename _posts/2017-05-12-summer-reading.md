@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "2017 Summer Reading List [stuff I’ve read so far]"
-date:   2017-05-12 11:20:13
+title:  "2017 Summer Reading List [stuff I’ve read so far or am reading]"
+date:   2017-05-23 11:20:13
 categories: 2017 read I books reading year in review papers
 image: 
         feature: books-2.jpeg
