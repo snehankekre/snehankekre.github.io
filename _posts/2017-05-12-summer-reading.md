@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "2017 Summer Reading List [stuff I’ve read so far or am reading]"
-date:   2017-05-23 11:20:13
+date:   2017-05-28 11:20:13
 categories: 2017 read I books reading year in review papers
 image: 
         feature: books-2.jpeg
@@ -14,7 +14,8 @@ published: True
 >
 > #### \- John Henry Mackay
 
-## Papers (9)
+## Papers (10)
+- [A remark on Ruzsa’s construction of an infinite Sidon set](https://arxiv.org/pdf/1103.5732.pdf)
 - [Dermatologist-level classification of skin cancer with deep neural networks](https://www.nature.com.sci-hub.cc/nature/journal/v542/n7639/full/nature21056.html)
 - [Mach's Principle: the original Einstein's considerations](http://philsci-archive.pitt.edu/12338/1/Einstein_1907_12_EN.pdf)
 - [Searching for exoplanets in the Kepler public data](https://goo.gl/mMLQBw)
