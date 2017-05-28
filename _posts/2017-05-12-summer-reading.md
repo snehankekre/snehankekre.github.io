@@ -14,7 +14,8 @@ published: True
 >
 > #### \- John Henry Mackay
 
-## Papers (10)
+## Papers (11)
+- [A Few Useful Things to Know about Machine Learning](https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf)
 - [A remark on Ruzsa’s construction of an infinite Sidon set](https://arxiv.org/pdf/1103.5732.pdf)
 - [Dermatologist-level classification of skin cancer with deep neural networks](https://www.nature.com.sci-hub.cc/nature/journal/v542/n7639/full/nature21056.html)
 - [Mach's Principle: the original Einstein's considerations](http://philsci-archive.pitt.edu/12338/1/Einstein_1907_12_EN.pdf)
