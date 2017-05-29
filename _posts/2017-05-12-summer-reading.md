@@ -14,7 +14,8 @@ published: True
 >
 > #### \- John Henry Mackay
 
-## Papers (11)
+## Papers (12)
+- [Dendritic Computation](https://neurophysics.ucsd.edu/courses/physics_171/annurev.neuro.28.061604.135703.pdf)
 - [A Few Useful Things to Know about Machine Learning](https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf)
 - [A remark on Ruzsa’s construction of an infinite Sidon set](https://arxiv.org/pdf/1103.5732.pdf)
 - [Dermatologist-level classification of skin cancer with deep neural networks](https://www.nature.com.sci-hub.cc/nature/journal/v542/n7639/full/nature21056.html)
