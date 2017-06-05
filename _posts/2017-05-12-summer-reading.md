@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "2017 Summer Reading List [stuff I’ve read so far or am reading]"
-date:   2017-05-28 11:20:13
+date:   2017-06-04 11:20:13
 categories: 2017 read I books reading year in review papers
 image: 
         feature: books-2.jpeg
@@ -14,7 +14,8 @@ published: True
 >
 > #### \- John Henry Mackay
 
-## Papers (12)
+## Papers (13)
+- [Counter-RAPTOR: Safeguarding Tor Against Active Routing Attacks](https://www.princeton.edu/~pmittal/publications/counter-raptor-sp17)
 - [Dendritic Computation](https://neurophysics.ucsd.edu/courses/physics_171/annurev.neuro.28.061604.135703.pdf)
 - [A Few Useful Things to Know about Machine Learning](https://homes.cs.washington.edu/~pedrod/papers/cacm12.pdf)
 - [A remark on Ruzsa’s construction of an infinite Sidon set](https://arxiv.org/pdf/1103.5732.pdf)
