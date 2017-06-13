@@ -42,8 +42,8 @@ links:
   - title: Github
     url: https://github.com/snehankekre
     external: true
-#  - title : Resume
-#    url: /resume.pdf
+  - title : Resume
+    url: /resume.pdf
   - title : Contact
     url: /contact.html
     
