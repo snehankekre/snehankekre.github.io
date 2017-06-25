@@ -238,7 +238,7 @@ chip@chip:~$
 
 ## Install and run Tor on CHIP
 
-Tor can installed on CHIP using Tor's debian [repos](https://www.torproject.org/docs/debian.html.en). Add these two lines to /etc/apt/sources.list:
+Tor can be installed on CHIP using Tor's debian [repos](https://www.torproject.org/docs/debian.html.en). Add these two lines to /etc/apt/sources.list:
 deb https://deb.torproject.org/torproject.org jessie main
 deb-src https://deb.torproject.org/torproject.org jessie main
 
@@ -260,7 +260,7 @@ deb https://deb.torproject.org/torproject.org jessie main
 deb-src https://deb.torproject.org/torproject.org jessie main
 {% endhighlight %}
 
-Then add the gpg key used to sign the packages by running the following commands:
+Then add the GPG key used to sign the packages by running the following commands:
 
 {% highlight shell %}
 chip@chip:~$ gpg --keyserver keys.gnupg.net --recv A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
