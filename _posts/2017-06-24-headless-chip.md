@@ -93,6 +93,8 @@ tmpfs           246M     0  246M   0% /sys/fs/cgroup
 tmpfs            50M  4.0K   50M   1% /run/user/1000
 {% endhighlight %}
 
+## Network and Wifi
+
 Set up CHIP's WiFi:
 
 {% highlight shell %}
@@ -116,7 +118,7 @@ chip@chip:~$ sudo nmtui
                            ???????????????????????????                          
                                                         
 {% endhighlight %}
-Select the `Edit a connection` option and click `<OK>`
+Select the Edit a connection option and click <OK>
 
 Now choose select your WiFi network and enter the password.
 
@@ -185,8 +187,139 @@ rtt min/avg/max/mdev = 9.962/22.765/50.671/16.578 ms
 chip@chip:~$ 
 {% endhighlight %}
 
+## Connect to CHIP over SSH
 
+To connect to CHIP via SSH you need the local ip address:
 
+{% highlight shell %}
+chip@chip:~$ sudo ifconfig
+[sudo] password for chip: 
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:8 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:8 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1 
+          RX bytes:1104 (1.0 KiB)  TX bytes:1104 (1.0 KiB)
 
+usb0      Link encap:Ethernet  HWaddr 4e:5b:65:5c:bd:04  
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+wlan0     Link encap:Ethernet  HWaddr 38:a2:8c:5e:83:13  
+          inet addr:10.112.16.13  Bcast:10.112.17.255  Mask:255.255.254.0
+          inet6 addr: fe80::3aa2:8cff:fe5e:8313/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:13751 errors:0 dropped:493 overruns:0 frame:0
+          TX packets:4885 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:4239749 (4.0 MiB)  TX bytes:903110 (881.9 KiB)
+{% endhighlight %}
+
+Use the inet addr under wlan0 to connect via SSH:
+
+{% highlight shell %}
+ssh chip@10.112.16.13
+chip@10.112.16.13's password: 
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Sun Jun 25 02:21:33 2017 from XX.XXX.XX.XXXX
+chip@chip:~$ 
+{% endhighlight %}
+
+## Install and run Tor on CHIP
+
+Tor can installed on CHIP using Tor's debian [repos](https://www.torproject.org/docs/debian.html.en). Add these two lines to /etc/apt/sources.list:
+deb https://deb.torproject.org/torproject.org jessie main
+deb-src https://deb.torproject.org/torproject.org jessie main
+
+{% highlight shell %}
+chip@chip:~$ nano /etc/apt/sources.list
+
+deb http://ftp.us.debian.org/debian/ jessie main contrib non-free 
+deb-src http://ftp.us.debian.org/debian/ jessie main contrib non-free
+
+deb http://security.debian.org/ jessie/updates main contrib non-free 
+deb-src http://security.debian.org/ jessie/updates main contrib non-free
+
+deb http://http.debian.net/debian jessie-backports main contrib non-free 
+deb-src http://http.debian.net/debian jessie-backports main contrib non-free
+
+deb http://opensource.nextthing.co/chip/debian/repo jessie main
+
+deb https://deb.torproject.org/torproject.org jessie main
+deb-src https://deb.torproject.org/torproject.org jessie main
+{% endhighlight %}
+
+Then add the gpg key used to sign the packages by running the following commands:
+
+{% highlight shell %}
+chip@chip:~$ gpg --keyserver keys.gnupg.net --recv A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
+gpg: requesting key 886DDD89 from hkp server keys.gnupg.net
+gpg: key 886DDD89: "deb.torproject.org archive signing key" not changed
+gpg: Total number processed: 1
+gpg:              unchanged: 1
+chip@chip:~$ gpg --export A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89 | sudo apt-key add -
+[sudo] password for chip: 
+OK
+{% endhighlight %}
+
+You can install and run it with the following commands:
+
+{% highlight shell %}
+chip@chip:~$ sudo apt-get update
+chip@chip:~$ sudo apt-get install tor deb.torproject.org-keyring
+chip@chip:~$ tor
+{% endhighlight %}
+
+## Creating and configuring a Tor hidden service .onion address
+
+What are Tor hidden services? From the Tor Project [website](https://www.torproject.org/docs/hidden-services.html.en): "Tor makes it possible for users to hide their locations while offering various kinds of services, such as web publishing or an instant messaging server. Using Tor "rendezvous points," other Tor users can connect to these hidden services, each without knowing the other's network identity."
+
+First set up a simple webserver:
+{% highlight shell %}
+chip@chip:~$ mkdir simple-server
+chip@chip:~$ cd simple-server/
+chip@chip:~/simple-server$ echo "Hello, This is my Tor hidden service!" > index.html
+chip@chip:~/simple-server$ python -m SimpleHTTPServer 8000
+Serving HTTP on 0.0.0.0 port 8000 ...
+{% endhighlight %}
+
+Now open a new tab and add the following lines to your torrc files located at usr/local/etc/tor/torrc 
+
+{% highlight shell %}
+log info file /usr/local/etc/tor/tor.log
+# hidden services
+HiddenServiceDir /usr/local/etc/tor/hidden_http_service/
+HiddenServicePort 80 127.0.0.1:8000
+{% endhighlight %}
+
+This will now make your simple server running on localhost:8000 available as a Tor hidden service. Restart Tor so that the changes take effect. Then read the contents of the hostname file for your .onion address:
+
+{% highlight shell %}
+chip@chip:~/simple-server$ sudo killall tor
+[sudo] password for chip: 
+chip@chip:~/simple-server$ tor
+chip@chip:~ cat /usr/local/etc/tor/hidden_http_service/hostname
+xxxxxxxxxxxxxx.onion
+{% endhighlight %}
+
+You can now test your hidden service using curl through Tor:
+{% highlight shell %}
+chip@chip:~ curl --socks5-hostname 127.0.0.1:9050 xxxxxxxxxxxxxx.onion
+Hello, This is my Tor hidden service!
+{% endhighlight %}
+
+### Congratulations! You now have CHIP in headless mode running a Tor hidden service.
+More: To get [Signal](https://whispersystems.org/) on PocketCHIP read Nathan Freitas' [blog post](https://nathan.freitas.net/2017/02/14/getting-signal-on-a-pocketchip/)
 
 > Questions? Reach out to <snehan@minerva.kgi.edu> 
