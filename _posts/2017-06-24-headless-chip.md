@@ -118,7 +118,7 @@ chip@chip:~$ sudo nmtui
                            ???????????????????????????                          
                                                         
 {% endhighlight %}
-Select the Edit a connection option and click <OK>
+Select the Edit a connection option and click OK
 
 Now choose select your WiFi network and enter the password.
 
