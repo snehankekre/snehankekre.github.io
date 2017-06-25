@@ -26,14 +26,14 @@ Connect to CHIP from a Mac OS X using a generic micro-USB cable. The Mac would s
 ## Login and explore
 Open up a terminal:
 
-{% highlight python %}
+{% highlight shell %}
 cd /dev/
 ls
 {% endhighlight %}
 
 You will see listed something like so:
 
-{% highlight python %}
+{% highlight shell %}
 disk2				stderr
 disk2s1				stdin
 disk2s2				stdout
@@ -48,26 +48,26 @@ disk5s1				ttyp0
 
 To figure out which one of them is CHIP, find USB connected devices:
 
-{% highlight python %}
+{% highlight shell %}
 ls /dev/tty.usb*
 {% endhighlight %}
 
 Connect to /dev/tty.usbmodem1413 using screen:
 
-{% highlight python %}
+{% highlight shell %}
 screen /dev/tty.usbmodem1413
 {% endhighlight %}
 
 You will now connect to CHIP and be asked to login. The default username and password are both chip.
 
-{% highlight python %}
+{% highlight shell %}
 chip login: chip
 Password: chip
 {% endhighlight %}
 
 The first thing you want to do is change the password to something secure. You can either use a password manager to generate a password with high entropy or use EFF's [diceware method](https://www.eff.org/dice) to make a secure and memorable passphrase.
 
-{% highlight python %}
+{% highlight shell %}
 chip@chip:~$ passwd
 Changing password for chip.
 (current) UNIX password: 
@@ -95,7 +95,7 @@ tmpfs            50M  4.0K   50M   1% /run/user/1000
 
 Set up CHIP's WiFi:
 
-{% highlight python %}
+{% highlight shell %}
 chip@chip:~$ export TERM=ansi
 chip@chip:~$ sudo nmtui
 [sudo] password for chip: 
@@ -120,7 +120,7 @@ Select the `Edit a connection` option and click `<OK>`
 
 Now choose select your WiFi network and enter the password.
 
-{% highlight python %}
+{% highlight shell %}
                ??????????????????????????????????????????????????Ŀ              
                ?                                                  ?             
                ? ????????????????????????????????????Ŀ           ?              
@@ -171,7 +171,7 @@ Now choose select your WiFi network and enter the password.
 
 To test your connection, try pinging a website:
 
-{% highlight python %}
+{% highlight shell %}
 chip@chip:~$ ping google.com
 PING google.com (172.217.5.110) 56(84) bytes of data.
 64 bytes from sfo03s07-in-f110.1e100.net (172.217.5.110): icmp_seq=1 ttl=55 time=19.8 ms
