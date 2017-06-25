@@ -319,7 +319,7 @@ chip@chip:~ curl --socks5-hostname 127.0.0.1:9050 xxxxxxxxxxxxxx.onion
 Hello, This is my Tor hidden service!
 {% endhighlight %}
 
-### Congratulations! You now have CHIP in headless mode running a Tor hidden service.
+# Congratulations! You now have CHIP in headless mode running a Tor hidden service.
 More: To get [Signal](https://whispersystems.org/) on PocketCHIP read Nathan Freitas' [blog post](https://nathan.freitas.net/2017/02/14/getting-signal-on-a-pocketchip/)
 
 > Questions? Reach out to <snehan@minerva.kgi.edu> 
