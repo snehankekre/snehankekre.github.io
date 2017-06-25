@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Get CHIP setup with Tor"
+title:  "Get CHIP set up with Tor"
 date:   2017-06-24 12:00:00
 categories: c.h.i.p headless mode cli ssh tor hidden service
 image: 
