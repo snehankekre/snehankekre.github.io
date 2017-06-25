@@ -25,14 +25,12 @@ Connect to CHIP from a Mac OS X using a generic micro-USB cable. The Mac would s
 
 ## Login and explore
 Open up a terminal:
-
 {% highlight python %}
 cd /dev/
 ls
 {% endhighlight %}
 
 You will see listed something like so:
-
 {% highlight python %}
 disk2				stderr
 disk2s1				stdin
