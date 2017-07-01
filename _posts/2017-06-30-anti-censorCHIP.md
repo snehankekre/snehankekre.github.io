@@ -1,12 +1,13 @@
 ---
 layout: post
-title: "Introducing Anti-CensorCHIP"
-date: 2017-06-30 12:00:00
-categories: c.h.i.p ooni anti-censorchip censorship surveillance tor onion hidden service ooniprobe
-image:
-		feature: OONI.png
-overlay-alpha: .1
+title:  "Introducing Anti-CensorCHIP"
+date:   2017-06-30 12:00:00
+categories: chip ooni anti-censorchip censorship surveillance tor onion hidden service ooniprobe
+image: 
+        feature: OONI.png
 description: Configure OONI on C.H.I.P to test your network for signs of censorship and surveillance.
+comments: False
+overlay-alpha: .1
 published: True
 ---
 
