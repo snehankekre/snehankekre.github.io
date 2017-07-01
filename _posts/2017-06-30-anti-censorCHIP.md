@@ -58,7 +58,7 @@ I will not attempt to automate network measurement collection as Lepidopter does
 
 In a later blog I hope to describe a plug-and-play of version ooniprobe so as to enable users to contribute to the collection of network measurements consistently across time, without having to manually run ooniprobe from CHIP, regardless of their technical skills.
 
-Before you start installing and running ooniprobe, I urge you to read the [**risks**](https://ooni.torproject.org/about/risks/) involved. Read it once more.
+**Warning:** Before you start installing and running ooniprobe, I urge you to read the [**risks**](https://ooni.torproject.org/about/risks/) involved. Read it once more.
 
 ## Installing Tor on CHIP
 
