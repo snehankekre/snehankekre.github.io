@@ -115,7 +115,7 @@ ooniprobe -i /home/chip/web-full.yaml
 
 ![alt text](https://raw.githubusercontent.com/snehankekre/snehankekre.github.io/master/images/running-ooniprobe.gif "Running ooniprobe")
 
-If you have SSH configured over a Tor Hidden Service, you are now ready to deploy Anti-censorCHIP to overtly or covertly to monitor your network for signs of censorship and tampering.
+If you have SSH configured over a Tor Hidden Service, you are now ready to deploy Anti-censorCHIP to overtly or covertly to monitor your favorite repressive regime's network for signs of censorship and tampering.
 
 ## Get Involved With OONI
 
