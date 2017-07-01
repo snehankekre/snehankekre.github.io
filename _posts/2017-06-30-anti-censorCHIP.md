@@ -11,13 +11,13 @@ overlay-alpha: .1
 published: True
 ---
 
-The Open Observatory of Network Interference ([OONI](https://ooni.torproject.org)) is a *free software* project under the [Tor Project](https://torproject.org) which aims to detect internet censorship and signs of network tampering. OONI shares observations and data about the nature, methods, and prevalence of censorship and network tampering around the world, through the use of open methodologies and FLOSS tools.
+The Open Observatory of Network Interference ([OONI](https://ooni.torproject.org)) is a free software project under the [Tor Project](https://torproject.org) which aims to detect internet censorship and signs of network tampering. OONI shares observations and data about the nature, methods, and prevalence of censorship and network tampering around the world, through the use of open methodologies and FLOSS tools.
 OONI's testing methodology measures:
-* Blocking of websites
-* Blocking of instant messaging apps
-* Blocking of censorship circumvention tools (Tor, VPN, Psiphon, Lantern)
-* Detection of middle boxes proxy technologies that could be responsible for censorship and/or surveillance
-* Speed and network performance tests (NDT)
+- Blocking of websites
+- Blocking of instant messaging apps
+- Blocking of censorship circumvention tools (Tor, VPN, Psiphon, Lantern)
+- Detection of middle boxes proxy technologies that could be responsible for censorship and/or surveillance
+- Speed and network performance tests (NDT)
 
 Read OONI reports of censorship in [Egypt](https://ooni.torproject.org/post/egypt-censors/), [Indonesia](https://ooni.torproject.org/post/indonesia-internet-censorship/), [Thailand](https://ooni.torproject.org/post/thailand-internet-censorship/), [Malaysia](https://ooni.torproject.org/post/malaysia-report/), [Kenya](https://ooni.torproject.org/post/kenya-study/), [Gambia](https://ooni.torproject.org/post/gambia-internet-shutdown/), [Turkey](https://ooni.torproject.org/post/turkey-internet-access-disruption/), [Ethiopia](https://ooni.torproject.org/post/ethiopia-internet-shutdown-amidst-recent-protests/), [Brazil](https://ooni.torproject.org/post/brazil-whatsapp-block/), [Greece](https://ooni.torproject.org/post/eeep-greek-censorship/), and [Palestine](https://ooni.torproject.org/post/hadara-palestine/). 
 
@@ -29,7 +29,11 @@ OONI can currently be installed on OS X, Linux, Raspberry Pi, IOS, and Android.
 </figure>
 
 Lepidopter, a distribution of ooniprobe for Raspberry Pi platforms, was developed to deploy plug-and-play, cheap devices that keep tabs on censorship. 
-The rest of this blog is devoted to configuring ooniprobe on [C.H.I.P](https://getchip.com/pages/chip), the world's first $9 computer. CHIP contains a 1GHz R8 processor, 4GB of high speed storage, 512Mb of RAM, built-in WiFi B/G/N, and a flavor of Debian available under the name *CHIP Operating System*. As such, it is cheap and sufficiently powerful and robust enough to run ooniprobe. I will not attempt in this blog to automate network measurement collection as Lepidopter does, but will provide a comprehensive, step-by-step guide to configure ooniprobe on CHIP (anti-censorCHIP). In a later blog I hope to describe a plug-and-play version ooniprobe so as to enable users to contribute to the collection of network measurements consistently across time, without having to manually run ooniprobe from CHIP, regardless of their technical skills.
+The rest of this blog is devoted to configuring ooniprobe on [C.H.I.P](https://getchip.com/pages/chip), the world's first $9 computer. 
+
+CHIP contains a 1GHz R8 processor, 4GB of high speed storage, 512Mb of RAM, built-in WiFi B/G/N, and a flavor of Debian available under the name CHIP Operating System. As such, it is cheap and sufficiently powerful and robust enough to run ooniprobe. 
+
+I will not attempt in this blog to automate network measurement collection as Lepidopter does, but will provide a comprehensive, step-by-step guide to configure ooniprobe on CHIP (anti-censorCHIP). In a later blog I hope to describe a plug-and-play version ooniprobe so as to enable users to contribute to the collection of network measurements consistently across time, without having to manually run ooniprobe from CHIP, regardless of their technical skills.
 
 Before you start installing and running ooniprobe, I urge you to read the [risks](https://ooni.torproject.org/about/risks/) involved. Read it once more.
 
