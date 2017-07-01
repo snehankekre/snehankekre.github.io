@@ -24,6 +24,7 @@ OONI's testing methodology measures:
 
 Read OONI reports of censorship in [Egypt](https://ooni.torproject.org/post/egypt-censors/), [Indonesia](https://ooni.torproject.org/post/indonesia-internet-censorship/), [Thailand](https://ooni.torproject.org/post/thailand-internet-censorship/), [Malaysia](https://ooni.torproject.org/post/malaysia-report/), [Kenya](https://ooni.torproject.org/post/kenya-study/), [Gambia](https://ooni.torproject.org/post/gambia-internet-shutdown/), [Turkey](https://ooni.torproject.org/post/turkey-internet-access-disruption/), [Ethiopia](https://ooni.torproject.org/post/ethiopia-internet-shutdown-amidst-recent-protests/), [Brazil](https://ooni.torproject.org/post/brazil-whatsapp-block/), [Greece](https://ooni.torproject.org/post/eeep-greek-censorship/), and [Palestine](https://ooni.torproject.org/post/hadara-palestine/). 
 
+## Supported platforms
 
 OONI can currently be installed on OS X, Linux, Raspberry Pi, IOS, and Android.
 
@@ -31,6 +32,8 @@ OONI can currently be installed on OS X, Linux, Raspberry Pi, IOS, and Android.
     <img src="{{ site.url }}/images/install-ooni.png">
     <figcaption>Install OONI</figcaption>
 </figure>
+
+## Why install ooniprobe on CHIP
 
 Lepidopter, a distribution of ooniprobe for Raspberry Pi platforms, was developed to deploy plug-and-play, cheap devices that keep tabs on censorship. 
 The rest of this blog is devoted to configuring ooniprobe on [C.H.I.P](https://getchip.com/pages/chip), the world's first $9 computer. 
