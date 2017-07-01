@@ -46,7 +46,7 @@ OONI can currently be installed on OS X, Linux, Raspberry Pi, IOS, and Android.
     <figcaption>Install OONI</figcaption>
 </figure>
 
-## Why install ooniprobe on CHIP
+## Why install ooniprobe on CHIP?
 
 Lepidopter, a distribution of ooniprobe for Raspberry Pi platforms, was developed to deploy plug-and-play, cheap devices that keep tabs on censorship. 
 
@@ -137,7 +137,7 @@ Help OONI detect censorship by submitting URLs for testing! Learn more [here](ht
 
 OONI source code is available on [github](https://github.com/TheTorProject/ooni-probe) and mirrored on [Tor Project git](https://gitweb.torproject.org/ooni-probe.git). If you have code you would like to contribute you should open a [pull request](https://github.com/TheTorProject/ooni-probe/compare) or [file an issue](https://github.com/TheTorProject/ooni-probe/issues/new).
 
-If you are interested in hacking on OONI or writing your own nettests you should look at [developer documentation](https://ooni.torproject.org/docs/).
+If you are interested in hacking on OONI or writing your own nettests you should look at the [developer documentation](https://ooni.torproject.org/docs/).
 
 > Questions? Reach out to <snehan@minerva.kgi.edu>
 
