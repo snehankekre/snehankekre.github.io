@@ -36,13 +36,18 @@ OONI can currently be installed on OS X, Linux, Raspberry Pi, IOS, and Android.
 ## Why install ooniprobe on CHIP
 
 Lepidopter, a distribution of ooniprobe for Raspberry Pi platforms, was developed to deploy plug-and-play, cheap devices that keep tabs on censorship. 
+
 The rest of this blog is devoted to configuring ooniprobe on [C.H.I.P](https://getchip.com/pages/chip), the world's first $9 computer. 
 
 CHIP contains a 1GHz R8 processor, 4GB of high speed storage, 512Mb of RAM, built-in WiFi B/G/N, and a flavor of Debian available under the name CHIP Operating System. As such, it is cheap and sufficiently powerful and robust enough to run ooniprobe. 
 
-I will not attempt in this blog to automate network measurement collection as Lepidopter does, but will provide a comprehensive, step-by-step guide to configure ooniprobe on CHIP (anti-censorCHIP). In a later blog I hope to describe a plug-and-play version ooniprobe so as to enable users to contribute to the collection of network measurements consistently across time, without having to manually run ooniprobe from CHIP, regardless of their technical skills.
+I will not attempt in this blog to automate network measurement collection as Lepidopter does, but will provide a guide to configure ooniprobe on CHIP (anti-censorCHIP). 
 
-Before you start installing and running ooniprobe, I urge you to read the [risks](https://ooni.torproject.org/about/risks/) involved. Read it once more.
+In a later blog I hope to describe a plug-and-play version ooniprobe so as to enable users to contribute to the collection of network measurements consistently across time, without having to manually run ooniprobe from CHIP, regardless of their technical skills.
+
+Before you start installing and running ooniprobe, I urge you to read the [**risks**](https://ooni.torproject.org/about/risks/) involved. Read it once more.
+
+## Installing Tor on CHIP
 
 To get configure WiFi, install Tor on CHIP, and connect over SSH, read my previous blog [post](https://snehankekre.github.io/headless-chip).
 
