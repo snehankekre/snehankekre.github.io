@@ -13,13 +13,17 @@ published: True
 
 The Open Observatory of Network Interference ([OONI](https://ooni.torproject.org)) is a free software project under the [Tor Project](https://torproject.org) which aims to detect internet censorship and signs of network tampering. OONI shares observations and data about the nature, methods, and prevalence of censorship and network tampering around the world, through the use of open methodologies and FLOSS tools.
 OONI's testing methodology measures:
+
+{% highlight shell %}
 - Blocking of websites
 - Blocking of instant messaging apps
 - Blocking of censorship circumvention tools (Tor, VPN, Psiphon, Lantern)
 - Detection of middle boxes proxy technologies that could be responsible for censorship and/or surveillance
 - Speed and network performance tests (NDT)
+{% endhighlight %}
 
 Read OONI reports of censorship in [Egypt](https://ooni.torproject.org/post/egypt-censors/), [Indonesia](https://ooni.torproject.org/post/indonesia-internet-censorship/), [Thailand](https://ooni.torproject.org/post/thailand-internet-censorship/), [Malaysia](https://ooni.torproject.org/post/malaysia-report/), [Kenya](https://ooni.torproject.org/post/kenya-study/), [Gambia](https://ooni.torproject.org/post/gambia-internet-shutdown/), [Turkey](https://ooni.torproject.org/post/turkey-internet-access-disruption/), [Ethiopia](https://ooni.torproject.org/post/ethiopia-internet-shutdown-amidst-recent-protests/), [Brazil](https://ooni.torproject.org/post/brazil-whatsapp-block/), [Greece](https://ooni.torproject.org/post/eeep-greek-censorship/), and [Palestine](https://ooni.torproject.org/post/hadara-palestine/). 
+
 
 OONI can currently be installed on OS X, Linux, Raspberry Pi, IOS, and Android.
 
