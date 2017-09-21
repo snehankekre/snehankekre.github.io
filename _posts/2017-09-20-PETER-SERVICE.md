@@ -2,14 +2,15 @@
 layout: post
 title:  "Translating Spy Files Russia"
 date:   2017-09-21 12:00:00
-categories: wikileaks FSB Peter-Service telecommunications surveillance DPI control traffic analysis
-image: 
+categories: wikileaks spy files DPI
         feature: spyfiles.jpg
 overlay-alpha: .1
-description: English Translation of PETER-SERVICE: Broadband Russia Forum 2013 from the latest batch of Spy Files from Wikileaks.
+description: English Translation of a Peter-Service document from the latest batch of Spy Files from Wikileaks..
 comments: true
-published: true
+published: True
 ---
+
+
 
 On 19 September 2017, Wikileaks started publishing "[Spy Files Russia](https://wikileaks.org/spyfiles/russia/)" as part of the [Spy Files](https://wikileaks.org/spyfiles/about/) series about Mass Surveillance systems. 
 
