@@ -10,8 +10,8 @@ You can email me at [snehan@minerva.kgi.edu](mailto:snehan@minerva.kgi.edu).
 PGP key
 -
 
-<pre>Key ID:      0x7A54CB3
-Fingerprint: 2701 FD9B 6033 44D8 512E 77E2 0B90 03A2 7A54 CB3E</pre>
+<pre>Key ID:      0xC4D78825
+Fingerprint: CCFC 97D2 995B 8AE7 C447  2215 9844 C33E C4D7 8825</pre>
 
 [Download PGP public key block.](/pgp.asc)
 
