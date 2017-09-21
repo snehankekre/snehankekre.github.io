@@ -88,7 +88,7 @@ Domestic Stack of  DPI/Big Data/Data Mining technologies and solutions in the fi
 
 <figure>
     <img src="{{ site.url }}/images/PS-BBR-FORUM-2013/6.png">
-    <figcaption>Slide 6/figcaption>
+    <figcaption>Slide 6</figcaption>
 </figure>
 
 **Title**: Is our business alone, or are there alternatives?
@@ -106,7 +106,7 @@ M. Samsonov
 
 <figure>
     <img src="{{ site.url }}/images/PS-BBR-FORUM-2013/7.png">
-    <figcaption>Slide 7/figcaption>
+    <figcaption>Slide 7</figcaption>
 </figure>
 
 **Title**: The opportunities and solutions lie at the intersection
