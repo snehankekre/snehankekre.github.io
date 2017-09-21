@@ -1,10 +1,11 @@
 ---
 layout: post
-title:  "Spy Files Russia: English Translation of PETER-SERVICE: Broadband Russia Forum 2013"
-date:   2017-09-20 12:00:00
+title:  "Translating Spy Files Russia"
+date:   2017-06-30 12:00:00
 categories: wikileaks FSB Peter-Service telecommunications surveillance DPI control traffic analysis
 image: 
         feature: SPY_Files.png
+description: English Translation of PETER-SERVICE: Broadband Russia Forum 2013 from the latest batch of Spy Files from Wikileaks
 comments: False
 overlay-alpha: .1
 published: True
