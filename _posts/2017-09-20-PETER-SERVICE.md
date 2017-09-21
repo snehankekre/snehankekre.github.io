@@ -3,7 +3,7 @@ layout: post
 title:  "Translating Spy Files Russia"
 date:   2017-09-21 12:00:00
 categories: wikileaks spy files DPI
-        feature: spyfiles.jpg
+        feature: spy-files.jpg
 overlay-alpha: .1
 description: English Translation of a Peter-Service document from the latest batch of Spy Files from Wikileaks..
 comments: true
