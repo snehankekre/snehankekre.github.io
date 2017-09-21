@@ -4,7 +4,7 @@ title:  "2017 Summer Reading List [stuff I’ve read so far or am reading]"
 date:   2017-06-04 11:20:13
 categories: 2017 read I books reading year in review papers
 image: 
-        feature: spyfiles.jpg
+        feature: books-2.jpeg
 description: Off to a good start...
 comments: False
 overlay-alpha: .5
