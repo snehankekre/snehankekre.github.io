@@ -24,7 +24,13 @@ The rest of this blog post will be devoted to translating a single document, [PE
 </figure>
 
 
-Domestic Stack of  DPI/Big Data/Data Mining technologies and solutions in the field of information collection and processing, as well as the means of predictions of social and business trends is the key to digital and financial sovereignty of the state and business in the 21st century.
+Domestic Stack of 
+
+DPI/Big Data/Data Mining technologies and 
+
+solutions in the field of information collection and processing, 
+
+as well as the means of predictions of social and business trends is the key to digital and financial sovereignty of the state and business in the 21st century.
 
 <figure>
     <img src="{{ site.url }}/images/PS-BBR-FORUM-2013/2.png">
