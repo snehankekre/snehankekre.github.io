@@ -287,7 +287,7 @@ Right side:
 
 - Effective and operative interaction through supply chains: customer support, and customer maintenance.
 - We concentrate our efforts in important directions
-- Number of staff: 400 employees, accompanied by 250 contractors above the average market, organized in a well-managed and mobil structure  with the ability to manage complex work, and subcontractors.
+- Number of staff: 400 employees, accompanied by 250 contractors above the average market, organized in a well-managed and mobile structure  with the ability to manage complex work, and subcontractors.
 - 5 branches across the country.
 - A separate company "Peter-Service Special-Technology".
 
