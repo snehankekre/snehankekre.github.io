@@ -473,7 +473,7 @@ Downloading business transactions
 
 *Calls of subscribers*
 
-**500 million **
+**500 million**
 
 connections per day per cluster node
 
