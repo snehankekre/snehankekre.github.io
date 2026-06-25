@@ -1,5 +1,6 @@
 ---
 import Layout from '~/layouts/Layout.astro';
+import { Image } from 'astro:assets';
 
 const SITE = 'https://snehankekre.com';
 const RESUME_URL = '/Snehan_Kekre_CV.pdf';
@@ -105,15 +106,54 @@ const projects = [
   },
 ];
 
-// Diving photos are placeholders — swap in your own.
+// Diving media — drop photos & short clips into src/assets/diving/ and they appear here.
+// Filenames become captions, e.g. "01-cenote-dos-ojos.jpg" -> "cenote dos ojos".
+// A numeric prefix controls order; images and videos are picked up automatically.
+const diveImages = import.meta.glob('../assets/diving/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP}', {
+  eager: true,
+});
+const diveVideos = import.meta.glob('../assets/diving/*.{mp4,webm,mov,MP4,WEBM,MOV}', {
+  eager: true,
+  query: '?url',
+  import: 'default',
+});
+
+// Curated captions (the handwritten note under each frame), keyed by filename.
+const diveCaptions: Record<string, string> = {
+  '01-technical-cave-diving.mp4': 'Sulawesi — the trip that changed everything',
+  '02-100-meter-adv-trimix.mp4': '100m trimix · Tulamben',
+  '03-75m-1.webp': '75m, open-circuit sidemount',
+  '04-75m-2.webp': 'hypoxic trimix',
+  '05-75m-3.webp': 'deep on bottom gas',
+  '06-ccr.mp4': 'rebreather on the Tanjung Jepun wreck',
+  '07-cave-jump-how-to.mp4': "how to ‘jump’ in a cave",
+  '08-cave-diving-optional.mp4': 'the closest thing to peace',
+  '09-cave-diving-instructor-praying.mp4': 'will we fit? — Kaponda Ponda',
+};
+
+const fileName = (path: string) => path.split('/').pop()!;
+const diveCaption = (path: string) =>
+  diveCaptions[fileName(path)] ??
+  fileName(path)
+    .replace(/\.[^.]+$/, '')
+    .replace(/^\d+[-_\s]*/, '')
+    .replace(/[-_]+/g, ' ')
+    .trim();
+
 const dives = [
-  { src: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=700&q=80', cap: 'over the reef' },
-  { src: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?auto=format&fit=crop&w=700&q=80', cap: 'light, going down' },
-  { src: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=700&q=80', cap: 'into the cave' },
-  { src: 'https://images.unsplash.com/photo-1682687982360-3fbab65f9d50?auto=format&fit=crop&w=700&q=80', cap: 'silhouette' },
-  { src: 'https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?auto=format&fit=crop&w=700&q=80', cap: 'surface, from below' },
-  { src: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=700&q=80', cap: 'home reef' },
-];
+  ...Object.entries(diveImages).map(([path, mod]) => ({
+    path,
+    type: 'image' as const,
+    src: (mod as { default: ImageMetadata }).default,
+    cap: diveCaption(path),
+  })),
+  ...Object.entries(diveVideos).map(([path, url]) => ({
+    path,
+    type: 'video' as const,
+    src: url as string,
+    cap: diveCaption(path),
+  })),
+].sort((a, b) => a.path.localeCompare(b.path));
 
 // Sample log — replace with real entries.
 const log = [
@@ -225,13 +265,22 @@ const log = [
 
         <div class="polaroids">
           {dives.map((d) => (
-            <figure class="polaroid">
-              <img src={d.src} alt={d.cap} loading="lazy" />
+            <figure class:list={['polaroid', { 'is-video': d.type === 'video' }]}>
+              {d.type === 'image' ? (
+                <Image class="pol-media" src={d.src} alt={d.cap} width={400} loading="lazy" />
+              ) : (
+                <video class="pol-media" src={d.src} controls playsinline preload="metadata"></video>
+              )}
               <figcaption>{d.cap}</figcaption>
             </figure>
           ))}
         </div>
-        <p class="hint">↑ placeholders for now — my real photos go here.</p>
+        {dives.length === 0 && (
+          <p class="hint">
+            add diving photos &amp; clips to <code>src/assets/diving/</code> — filenames become captions.
+          </p>
+        )}
+        <p class="dive-follow"><a href={INSTAGRAM} target="_blank" rel="noopener">more on instagram&nbsp;↗</a></p>
 
         <h3 class="sublabel">dive log <span class="hint-inline">(sample)</span></h3>
         <table class="log">
@@ -362,13 +411,17 @@ const log = [
       margin: 0; background: #fff; padding: 0.5rem 0.5rem 0; width: 11rem;
       border: 1px solid #d7cdbb; box-shadow: 2px 4px 0 rgba(24,18,12,0.18);
     }
-    .polaroid img { display: block; width: 100%; height: 9rem; object-fit: cover; }
+    .polaroid .pol-media { display: block; width: 100%; height: 9rem; object-fit: cover; background: #11212b; }
+    /* vertical reels get taller, portrait frames so the footage isn't cropped to a sliver */
+    .polaroid.is-video { width: 9.5rem; }
+    .polaroid.is-video .pol-media { height: 15rem; }
     .polaroid figcaption { font-family: var(--hand); font-size: 1.35rem; line-height: 1.1; color: var(--deep); text-align: center; padding: 0.35rem 0 0.5rem; }
     .polaroid:nth-child(odd) { transform: rotate(-2deg); }
     .polaroid:nth-child(even) { transform: rotate(1.6deg); }
     .polaroid:nth-child(3n) { transform: rotate(2.4deg); }
     .polaroid:hover { transform: rotate(0); transition: transform 0.18s ease; }
     .hint { font-size: 0.8rem; color: var(--muted); text-align: center; margin: 0.4rem 0 0; }
+    .dive-follow { text-align: center; margin: 1.2rem 0 0; font-size: 0.9rem; }
     .hint-inline { color: var(--muted); text-transform: none; letter-spacing: 0; }
 
     /* dive log table */
