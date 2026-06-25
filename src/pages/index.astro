@@ -141,26 +141,18 @@ const diveCaption = (path: string) =>
     .trim();
 
 const dives = [
-  ...Object.entries(diveImages).map(([path, mod]) => ({
-    path,
-    type: 'image' as const,
-    src: (mod as { default: ImageMetadata }).default,
-    cap: diveCaption(path),
-  })),
+  ...Object.entries(diveImages).map(([path, mod]) => {
+    const img = (mod as { default: ImageMetadata }).default;
+    return { path, type: 'image' as const, src: img, full: img.src, cap: diveCaption(path) };
+  }),
   ...Object.entries(diveVideos).map(([path, url]) => ({
     path,
     type: 'video' as const,
     src: url as string,
+    full: url as string,
     cap: diveCaption(path),
   })),
 ].sort((a, b) => a.path.localeCompare(b.path));
-
-// Sample log — replace with real entries.
-const log = [
-  { site: 'cenote dos ojos', loc: 'mx', depth: '10m', type: 'cavern', note: 'first overhead' },
-  { site: 'the pit', loc: 'mx', depth: '30m', type: 'cave', note: 'halocline' },
-  { site: 'blue hole', loc: '—', depth: '40m', type: 'open', note: 'deep' },
-];
 ---
 
 <Layout metadata={metadata}>
@@ -265,12 +257,25 @@ const log = [
 
         <div class="polaroids">
           {dives.map((d) => (
-            <figure class:list={['polaroid', { 'is-video': d.type === 'video' }]}>
-              {d.type === 'image' ? (
-                <Image class="pol-media" src={d.src} alt={d.cap} width={400} loading="lazy" />
-              ) : (
-                <video class="pol-media" src={d.src} controls playsinline preload="metadata"></video>
-              )}
+            <figure
+              class:list={['polaroid', { 'is-video': d.type === 'video' }]}
+              role="button"
+              tabindex="0"
+              aria-label={`Open ${d.cap}`}
+              data-lb-type={d.type}
+              data-lb-src={d.full}
+              data-lb-cap={d.cap}
+            >
+              <div class="pol-frame">
+                {d.type === 'image' ? (
+                  <Image class="pol-media" src={d.src} alt={d.cap} width={520} loading="lazy" />
+                ) : (
+                  <Fragment>
+                    <video class="pol-media" src={`${d.src}#t=0.1`} muted playsinline preload="metadata"></video>
+                    <span class="play-badge" aria-hidden="true">▶</span>
+                  </Fragment>
+                )}
+              </div>
               <figcaption>{d.cap}</figcaption>
             </figure>
           ))}
@@ -281,19 +286,14 @@ const log = [
           </p>
         )}
         <p class="dive-follow"><a href={INSTAGRAM} target="_blank" rel="noopener">more on instagram&nbsp;↗</a></p>
-
-        <h3 class="sublabel">dive log <span class="hint-inline">(sample)</span></h3>
-        <table class="log">
-          <thead>
-            <tr><th>site</th><th>loc</th><th>depth</th><th>type</th><th>notes</th></tr>
-          </thead>
-          <tbody>
-            {log.map((l) => (
-              <tr><td>{l.site}</td><td>{l.loc}</td><td>{l.depth}</td><td>{l.type}</td><td>{l.note}</td></tr>
-            ))}
-          </tbody>
-        </table>
       </section>
+
+      <!-- lightbox -->
+      <dialog id="lightbox" class="lightbox">
+        <button class="lb-close" aria-label="Close">✕</button>
+        <div class="lb-stage"></div>
+        <p class="lb-cap"></p>
+      </dialog>
 
       <!-- footer -->
       <footer class="foot">
@@ -307,6 +307,62 @@ const log = [
       </footer>
     </main>
   </div>
+
+  <script>
+    const dlg = document.getElementById('lightbox') as HTMLDialogElement | null;
+    if (dlg) {
+      const stage = dlg.querySelector('.lb-stage') as HTMLElement;
+      const cap = dlg.querySelector('.lb-cap') as HTMLElement;
+
+      const openLb = (el: HTMLElement) => {
+        const type = el.dataset.lbType;
+        const src = el.dataset.lbSrc || '';
+        const c = el.dataset.lbCap || '';
+        stage.innerHTML = '';
+        if (type === 'video') {
+          const v = document.createElement('video');
+          v.src = src;
+          v.controls = true;
+          v.autoplay = true;
+          v.playsInline = true;
+          v.className = 'lb-media';
+          stage.appendChild(v);
+        } else {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = c;
+          img.className = 'lb-media';
+          stage.appendChild(img);
+        }
+        cap.textContent = c;
+        dlg.showModal();
+      };
+
+      const closeLb = () => {
+        const v = stage.querySelector('video');
+        if (v) v.pause();
+        stage.innerHTML = '';
+        if (dlg.open) dlg.close();
+      };
+
+      document.querySelectorAll<HTMLElement>('.polaroid').forEach((p) => {
+        p.addEventListener('click', () => openLb(p));
+        p.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openLb(p);
+          }
+        });
+      });
+
+      dlg.querySelector('.lb-close')?.addEventListener('click', closeLb);
+      // click on backdrop (outside the media) closes
+      dlg.addEventListener('click', (e) => {
+        if (e.target === dlg) closeLb();
+      });
+      dlg.addEventListener('close', closeLb);
+    }
+  </script>
 
   <style is:global>
     :root {
@@ -374,7 +430,6 @@ const log = [
     /* blocks */
     .block { margin-top: 3.2rem; }
     .label { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); border-bottom: 2px solid var(--line); padding-bottom: 0.4rem; margin: 0 0 1.4rem; }
-    .sublabel { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 2.2rem 0 0.8rem; }
 
     /* tags */
     .tags { list-style: none; padding: 0; margin: 0 0 1.3rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -406,28 +461,48 @@ const log = [
     /* diving */
     .dive-intro { max-width: 38rem; font-size: 1.12rem; line-height: 1.65; }
     .dive-intro em { font-style: italic; color: var(--deep); }
-    .polaroids { display: flex; flex-wrap: wrap; gap: 1.4rem 1.1rem; margin: 1.8rem 0 0.6rem; justify-content: center; }
-    .polaroid {
-      margin: 0; background: #fff; padding: 0.5rem 0.5rem 0; width: 11rem;
-      border: 1px solid #d7cdbb; box-shadow: 2px 4px 0 rgba(24,18,12,0.18);
+    /* gallery breaks out wider than the text column for room to breathe */
+    .polaroids {
+      display: flex; flex-wrap: wrap; gap: 2.2rem 1.8rem; margin: 2.2rem 0 0.6rem;
+      justify-content: center; align-items: flex-start;
+      width: min(60rem, 92vw); position: relative; left: 50%; transform: translateX(-50%);
     }
-    .polaroid .pol-media { display: block; width: 100%; height: 9rem; object-fit: cover; background: #11212b; }
+    .polaroid {
+      margin: 0; background: #fff; padding: 0.6rem 0.6rem 0; width: 15rem; cursor: pointer;
+      border: 1px solid #d7cdbb; box-shadow: 2px 5px 0 rgba(24,18,12,0.18);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .pol-frame { position: relative; }
+    .polaroid .pol-media { display: block; width: 100%; height: 11.5rem; object-fit: cover; background: #11212b; }
     /* vertical reels get taller, portrait frames so the footage isn't cropped to a sliver */
-    .polaroid.is-video { width: 9.5rem; }
-    .polaroid.is-video .pol-media { height: 15rem; }
-    .polaroid figcaption { font-family: var(--hand); font-size: 1.35rem; line-height: 1.1; color: var(--deep); text-align: center; padding: 0.35rem 0 0.5rem; }
+    .polaroid.is-video { width: 13rem; }
+    .polaroid.is-video .pol-media { height: 21rem; }
+    .play-badge {
+      position: absolute; inset: 0; margin: auto; width: 3rem; height: 3rem;
+      display: flex; align-items: center; justify-content: center; border-radius: 50%;
+      background: rgba(24,18,12,0.55); color: #fff; font-size: 1.05rem; padding-left: 0.15rem;
+      pointer-events: none;
+    }
+    .polaroid figcaption { font-family: var(--hand); font-size: 1.45rem; line-height: 1.1; color: var(--deep); text-align: center; padding: 0.4rem 0 0.55rem; }
     .polaroid:nth-child(odd) { transform: rotate(-2deg); }
     .polaroid:nth-child(even) { transform: rotate(1.6deg); }
     .polaroid:nth-child(3n) { transform: rotate(2.4deg); }
-    .polaroid:hover { transform: rotate(0); transition: transform 0.18s ease; }
+    .polaroid:hover { transform: rotate(0) scale(1.02); box-shadow: 3px 7px 0 rgba(24,18,12,0.22); }
+    .polaroid:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
     .hint { font-size: 0.8rem; color: var(--muted); text-align: center; margin: 0.4rem 0 0; }
-    .dive-follow { text-align: center; margin: 1.2rem 0 0; font-size: 0.9rem; }
-    .hint-inline { color: var(--muted); text-transform: none; letter-spacing: 0; }
+    .dive-follow { text-align: center; margin: 1.6rem 0 0; font-size: 0.9rem; }
 
-    /* dive log table */
-    .log { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-    .log th, .log td { text-align: left; padding: 0.45rem 0.6rem; border: 1px solid var(--line); }
-    .log thead th { background: var(--ink); color: var(--paper); text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.72rem; }
+    /* lightbox */
+    .lightbox { border: none; padding: 0; background: transparent; max-width: 96vw; max-height: 96vh; overflow: visible; }
+    .lightbox::backdrop { background: rgba(10,8,6,0.88); }
+    .lb-stage { display: flex; align-items: center; justify-content: center; }
+    .lb-media { display: block; max-width: 92vw; max-height: 82vh; width: auto; height: auto; border: 0.4rem solid #fff; box-shadow: 0 12px 44px rgba(0,0,0,0.5); background: #11212b; }
+    .lb-cap { font-family: var(--hand); font-size: 1.6rem; color: #fff; text-align: center; margin: 0.7rem 0 0; }
+    .lb-close {
+      position: fixed; top: 1rem; right: 1.1rem; width: 2.6rem; height: 2.6rem; border: none;
+      border-radius: 50%; background: rgba(255,255,255,0.18); color: #fff; font-size: 1.1rem; cursor: pointer;
+    }
+    .lb-close:hover { background: rgba(255,255,255,0.34); }
 
     /* footer */
     .foot { margin-top: 3.6rem; border-top: 2px solid var(--line); padding-top: 1.4rem; }
