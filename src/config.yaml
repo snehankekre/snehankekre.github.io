@@ -11,20 +11,18 @@ metadata:
   title:
     default: Snehan Kekre
     template: '%s — Snehan Kekre'
-  description: 'Open-source developer relations and documentation leader. Community, docs, developer education — and a diver.'
+  description: 'Snehan Kekre is an open-source developer relations and documentation leader (Streamlit). Community, docs, and developer education — and a diver.'
   robots:
     index: true
     follow: true
   openGraph:
     site_name: Snehan Kekre
     images:
-      - url: '~/assets/images/default.png'
+      - url: '~/assets/images/og.png'
         width: 1200
-        height: 628
+        height: 630
     type: website
   twitter:
-    handle: '@snehankekre'
-    site: '@snehankekre'
     cardType: summary_large_image
 
 i18n:

@@ -1,15 +1,44 @@
 ---
 import Layout from '~/layouts/Layout.astro';
 
-const metadata = {
-  title: 'Snehan Kekre — docs, devrel & diving',
-  ignoreTitleTemplate: true,
-};
-
+const SITE = 'https://snehankekre.com';
 const RESUME_URL = '/Snehan_Kekre_CV.pdf';
 const EMAIL = 'snehan.minerva@gmail.com';
 const LINKEDIN = 'https://www.linkedin.com/in/snehankekre/';
 const GITHUB = 'https://github.com/snehankekre';
+const COURSERA = 'https://www.coursera.org/instructor/snehan-kekre';
+const INSTAGRAM = 'https://www.instagram.com/snehankekre/';
+
+const metadata = {
+  title: 'Snehan Kekre — docs, devrel & diving',
+  ignoreTitleTemplate: true,
+  description:
+    'Snehan Kekre is an open-source developer relations and documentation leader (Streamlit). Community, docs, and developer education — and a diver.',
+};
+
+// JSON-LD Person structured data — helps search engines tie this site to me as an entity.
+const personSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Snehan Kekre',
+  url: SITE,
+  image: `${SITE}/og.png`,
+  jobTitle: 'Developer Relations & Documentation Leader',
+  description:
+    'Open-source developer relations and documentation leader. Community support, technical writing, and developer education.',
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'Minerva University' },
+  knowsAbout: [
+    'Developer Relations',
+    'Community Support',
+    'Technical Writing',
+    'Documentation',
+    'Developer Education',
+    'Open Source',
+    'Python',
+    'Streamlit',
+  ],
+  sameAs: [LINKEDIN, GITHUB, COURSERA, INSTAGRAM],
+};
 
 const work = [
   {
@@ -51,6 +80,12 @@ const work = [
 
 const projects = [
   {
+    name: 'docs.astrobee.ai',
+    blurb: 'Built the AstroBee documentation site from scratch and owned all of its content, demos, and assets — the material the team pitched to prospective customers.',
+    href: 'https://docs.astrobee.ai/',
+    link: 'docs.astrobee.ai ↗',
+  },
+  {
     name: 'docs.streamlit.io',
     blurb: 'Moved all of Streamlit’s docs off Sphinx/ReadTheDocs onto a Next.js + MDX platform, then owned the docs, tutorials and auto-generated reference.',
     href: 'https://docs.streamlit.io/',
@@ -89,6 +124,8 @@ const log = [
 ---
 
 <Layout metadata={metadata}>
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(personSchema)} />
+
   <div class="page">
     <header class="topbar">
       <a class="brand" href="#top">snehan kekre</a>
