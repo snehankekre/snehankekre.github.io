@@ -1,0 +1,184 @@
+cv:
+  name: Snehan Kekre
+  email: snehan.minerva@gmail.com
+  phone: tel:+91-938-041-30-12
+  location: India
+  social_networks:
+    - network: LinkedIn
+      username: snehankekre
+    - network: GitHub
+      username: snehankekre
+  sections:
+    summary:
+      - Open-source developer-relations and documentation leader with 8 years across developer education,
+        community support, and technical writing. Built and ran the documentation and
+        support forum for Streamlit (1M+ monthly active developers), resolving the bulk of user
+        issues and acting as the bridge between users and product and engineering. A strong
+        written communicator who ships docs, code, demos, and content, and represents products
+        publicly through talks, videos, and writing.
+    experience:
+      - company: AstroBee
+        position: Head of Documentation
+        location: Remote, India
+        start_date: 2025-06
+        end_date: 2026-05
+        highlights:
+          - Built the documentation site and owned all of its content, demos, and assets
+            (including tutorials, guides, and reference docs).
+          - Assisted with growth initiatives including content creation, SEO, social
+            media marketing, and the execution of growth experiments, with deliverables spanning
+            blog posts, content briefs, outbound copy, landing pages, and performance reports.
+
+      - company: Snowflake
+        position: Technical Product Manager - Streamlit Open Source
+        location: Remote, India
+        start_date: 2023-04
+        end_date: 2025-03
+        highlights:
+          - Joined Snowflake through its acquisition of Streamlit; responsible for the Streamlit
+            open-source library (40k+ GitHub stars, 1M+ monthly active developers, used by 90%
+            of the Fortune 50), working with a team of 2 PMs and 10 engineers.
+          - Built and launched new Streamlit features across data visualization, ML, GenAI,
+            geospatial, UI/UX, and multimedia.
+          - Defined Streamlit's long-term strategy and roadmap with fellow PMs and leadership,
+            translating it into detailed requirements, wireframes, and prototypes.
+          - Maintained the library through feature development, bug fixes, and community engagement,
+            ranking among the [top 10 contributors](https://github.com/streamlit/streamlit/graphs/contributors?from=2021-04-01&to=2024-10-31&type=c).
+          - Partnered with marketing on go-to-market planning across pricing, packaging,
+            positioning, competitive analysis, and sales enablement.
+          - Drove user research (interviews, surveys, usability studies) and turned insights into
+            shipped product solutions.
+          - Represented Streamlit publicly — speaking at live events, appearing in videos, and
+            writing blog posts.
+
+      - company: Snowflake
+        position: Product Manager - Streamlit Documentation
+        location: Remote, India
+        start_date: 2022-04
+        end_date: 2023-04
+        highlights:
+          - Defined the customer and knowledge journeys most critical to docs and mapped the
+            product to them.
+          - Owned every area of the docs platform (getting started, tutorials, API reference,
+            search, knowledge base, telemetry) with clear vision and success criteria.
+          - Created the vision and strategy for scaling docs to support future product growth
+            (more features, integrations, components, apps, and Snowflake integration).
+          - Managed a team of technical writers and content strategists delivering high-quality
+            documentation, while owning platform engineering and product management.
+          - Defined metrics and success criteria for key decisions, instrumenting telemetry and
+            data apps to track the impact of engineering and content work.
+
+      - company: Streamlit
+        position: Developer Advocate
+        location: Remote, India
+        start_date: 2021-04
+        end_date: 2022-04
+        highlights:
+          - Part of a team of 50 [acquired by Snowflake for $800 million](https://techcrunch.com/2022/03/02/snowflake-acquires-streamlit-for-800m-to-help-customers-build-data-based-apps/).
+          - Ran the Streamlit community forum and supported users across GitHub and social media
+            as the go-to resource for users in trouble, resolving the majority of their issues and
+            serving as the bridge between our users and the product and engineering teams.
+          - Sole technical writer and second DevRel hire for the Streamlit open-source library,
+            reporting to the co-founders and Head of DevRel; owned all
+            [documentation](https://docs.streamlit.io/), tutorials, and guides.
+          - Led development of a new documentation platform (with design and engineering) on
+            Next.js, MDX, and Netlify, migrating all content off Sphinx and ReadTheDocs.
+          - Shipped new product docs, tutorials, guides, example scripts, and auto-generated
+            reference docs; reworked existing content to keep it fresh and engaging.
+          - Designed Streamlit's education program, enabling adoption across classrooms, boot camps,
+            and internships.
+          - Built internal Streamlit apps and profiled telemetry to surface product and leadership
+            insights; one app tracking cloud costs identified ~$100k in savings.
+
+      - company: Coursera
+        position: Machine Learning and Data Science Instructor
+        location: Remote, India
+        start_date: 2019-12
+        end_date: 2021-04
+        highlights:
+          - Built curricula, instructional content, and video for 40+ Guided Projects on machine
+            learning, deep learning, data science, and data visualization, reaching 290K+ enrollments.
+          - Coursera's first-ever project instructor and author of the first project on the platform.
+          - Covered topics including Plotly/Seaborn, scikit-learn, H2O AutoML, TensorFlow/Keras
+            (NLP and CV), BERT, TensorFlow Serving, feature engineering, and ML pipelines.
+          - Co-authored instructor onboarding docs and designed assessments for deeplearning.ai's
+            TensorFlow - Data and Deployment Specialization.
+
+      - company: Coursera
+        position: Skills Consultant
+        location: Remote, India
+        start_date: 2020-10
+        end_date: 2021-04
+        highlights:
+          - Built a source of truth with 100% accuracy for skill-to-content tagging to power
+            Coursera's Skills Graph.
+          - Audited 400 of Coursera's courses against the skills taxonomy, partnering with the
+            Skills Graph team to ensure dataset quality for downstream ML needs.
+
+      - company: Rhyme.com (Acquired by Coursera)
+        position: Machine Learning Instructor
+        location: Mountain View, CA
+        start_date: 2018-08
+        end_date: 2020-10
+        highlights:
+          - Created a portfolio of 20+ interactive, hands-on projects on machine learning, deep
+            learning, and data science that led Coursera to acquire the company.
+
+    education:
+      - institution: Minerva University
+        area: Physics and Computer Science
+        degree: BS
+        start_date: 2015-08
+        end_date: 2019-05
+
+design:
+  theme: sb2nov
+  page:
+    size: us-letter
+    top_margin: 2cm
+    bottom_margin: 2cm
+    left_margin: 2cm
+    right_margin: 2cm
+    show_footer: true
+    show_top_note: true
+  colors:
+    name: rgb(0, 79, 144)
+    headline: rgb(0, 79, 144)
+    connections: rgb(0, 79, 144)
+    section_titles: rgb(0, 79, 144)
+    links: rgb(0, 79, 144)
+  typography:
+    alignment: justified
+    font_family:
+      body: Latin Modern Serif
+      name: Latin Modern Serif
+      headline: Latin Modern Serif
+      connections: Latin Modern Serif
+      section_titles: Latin Modern Serif
+    font_size:
+      body: 10pt
+      name: 24pt
+  links:
+    show_external_link_icon: true
+  header:
+    space_below_name: 0.3cm
+    space_below_connections: 0.3cm
+    connections:
+      show_icons: true
+      separator: ''
+      space_between_connections: 0.5cm
+  section_titles:
+    space_above: 0.3cm
+    space_below: 0.2cm
+  sections:
+    space_between_regular_entries: 0.2cm
+  entries:
+    date_and_location_width: 4.5cm
+    side_space: 0.2cm
+    highlights:
+      space_above: 0.1cm
+      space_left: 0.4cm
+      space_between_items: 0.1cm
+  templates:
+    footer: 'NAME - Page PAGE_NUMBER of TOTAL_PAGES'
+    top_note: 'Last updated in CURRENT_DATE'

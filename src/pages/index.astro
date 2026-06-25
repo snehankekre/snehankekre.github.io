@@ -1,0 +1,354 @@
+---
+import Layout from '~/layouts/Layout.astro';
+
+const metadata = {
+  title: 'Snehan Kekre — docs, devrel & diving',
+  ignoreTitleTemplate: true,
+};
+
+const RESUME_URL = '/Snehan_Kekre_CV.pdf';
+const EMAIL = 'snehan.minerva@gmail.com';
+const LINKEDIN = 'https://www.linkedin.com/in/snehankekre/';
+const GITHUB = 'https://github.com/snehankekre';
+
+const work = [
+  {
+    role: 'Head of Documentation',
+    org: 'AstroBee',
+    years: '2025–26',
+    note: 'docs site + every demo asset, the stuff sales pitched on',
+    body: 'Built the documentation site from scratch and owned all of its content, demos, and assets. Pitched in on growth too: content, SEO, experiments.',
+  },
+  {
+    role: 'Technical Product Manager, Streamlit OSS',
+    org: 'Snowflake',
+    years: '2023–25',
+    note: 'top-10 contributor to the repo',
+    body: 'Ran the Streamlit open-source library (40k+ stars, 1M+ monthly devs, 90% of the Fortune 50). Shipped features across data-viz, ML, GenAI and geospatial; set roadmap with leadership; was the public face at talks, videos and the blog.',
+  },
+  {
+    role: 'Product Manager, Streamlit Docs',
+    org: 'Snowflake',
+    years: '2022–23',
+    note: null,
+    body: 'Owned the whole docs platform — getting-started, tutorials, API reference, search, telemetry — and managed a team of technical writers and content strategists while owning the platform engineering.',
+  },
+  {
+    role: 'Developer Advocate',
+    org: 'Streamlit',
+    years: '2021–22',
+    note: 'joined the 50-person team acquired by Snowflake for $800M',
+    body: 'Ran the community forum and was the go-to person when users were stuck. Sole technical writer + second DevRel hire; migrated all the docs onto a new Next.js + MDX platform.',
+  },
+  {
+    role: 'ML & Data Science Instructor',
+    org: 'Coursera',
+    years: '2019–21',
+    note: "Coursera's first-ever project instructor",
+    body: 'Built 40+ hands-on Guided Projects on ML, deep learning and data viz. 290k+ enrollments.',
+  },
+];
+
+const projects = [
+  {
+    name: 'docs.streamlit.io',
+    blurb: 'Moved all of Streamlit’s docs off Sphinx/ReadTheDocs onto a Next.js + MDX platform, then owned the docs, tutorials and auto-generated reference.',
+    href: 'https://docs.streamlit.io/',
+    link: 'docs.streamlit.io ↗',
+  },
+  {
+    name: 'community & education',
+    blurb: 'Ran the forum; helped start and run the Discord and Slack communities and the creator program. The connective tissue between users and the team.',
+    href: null,
+    link: null,
+  },
+  {
+    name: 'self-serve internal analytics',
+    blurb: 'Built internal Streamlit apps on product telemetry for product + leadership. One cost-tracker found ~$100k in savings.',
+    href: null,
+    link: null,
+  },
+];
+
+// Diving photos are placeholders — swap in your own.
+const dives = [
+  { src: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=700&q=80', cap: 'over the reef' },
+  { src: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?auto=format&fit=crop&w=700&q=80', cap: 'light, going down' },
+  { src: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?auto=format&fit=crop&w=700&q=80', cap: 'into the cave' },
+  { src: 'https://images.unsplash.com/photo-1682687982360-3fbab65f9d50?auto=format&fit=crop&w=700&q=80', cap: 'silhouette' },
+  { src: 'https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?auto=format&fit=crop&w=700&q=80', cap: 'surface, from below' },
+  { src: 'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=700&q=80', cap: 'home reef' },
+];
+
+// Sample log — replace with real entries.
+const log = [
+  { site: 'cenote dos ojos', loc: 'mx', depth: '10m', type: 'cavern', note: 'first overhead' },
+  { site: 'the pit', loc: 'mx', depth: '30m', type: 'cave', note: 'halocline' },
+  { site: 'blue hole', loc: '—', depth: '40m', type: 'open', note: 'deep' },
+];
+---
+
+<Layout metadata={metadata}>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="#top">snehan kekre</a>
+      <nav class="nav">
+        <a href="#about">about</a>
+        <a href="#work">work</a>
+        <a href="#diving">diving</a>
+        <a href={RESUME_URL} target="_blank" rel="noopener">résumé&nbsp;↗</a>
+      </nav>
+    </header>
+
+    <main class="wrap" id="top">
+      <!-- intro -->
+      <section class="intro">
+        <h1 class="name">snehan&nbsp;kekre</h1>
+        <p class="tag">docs<span class="dot">·</span>devrel<span class="dot">·</span>diver</p>
+        <p class="now"><span class="kbd">NOW</span> &rarr; Looking for my next community / docs role. Otherwise underwater.</p>
+        <p class="lede">
+          I'm an open-source developer-relations and documentation person. I built and ran the docs
+          and support community for <strong>Streamlit</strong> (1M+ monthly active devs), fixed most
+          of the things people got stuck on, and acted as the bridge between users and the team
+          building the product.
+        </p>
+        <p class="links">
+          <a href={`mailto:${EMAIL}`}>email</a>
+          <a href={LINKEDIN} target="_blank" rel="noopener">linkedin</a>
+          <a href={GITHUB} target="_blank" rel="noopener">github</a>
+          <a href={RESUME_URL} target="_blank" rel="noopener">résumé (pdf)</a>
+        </p>
+      </section>
+
+      <!-- about / what i do -->
+      <section id="about" class="block">
+        <h2 class="label">// what i do</h2>
+        <ul class="tags">
+          <li>developer relations</li>
+          <li>community support</li>
+          <li>technical writing &amp; docs</li>
+          <li>developer education</li>
+          <li>product management</li>
+          <li>python &amp; js/ts</li>
+        </ul>
+        <p class="about-body">
+          I joined Snowflake through its acquisition of Streamlit, owned the open-source library's
+          docs, then product-managed features end to end — and ranked among the project's top
+          contributors on the way. Whenever a feature needed a new tool, I was the one to go learn it.
+          The part I love most is being the bridge between a community and the people who build for it.
+        </p>
+      </section>
+
+      <!-- work -->
+      <section id="work" class="block">
+        <h2 class="label">// work</h2>
+        <ol class="work">
+          {work.map((w) => (
+            <li class="job">
+              <div class="job-head">
+                <span class="job-role">{w.role}</span>
+                <span class="job-meta"><span class="job-org">{w.org}</span><span class="sep">/</span>{w.years}</span>
+              </div>
+              <p class="job-body">{w.body}</p>
+              {w.note && <p class="aside">※ {w.note}</p>}
+            </li>
+          ))}
+        </ol>
+        <p class="muted-line">
+          Full history &amp; education in the <a href={RESUME_URL} target="_blank" rel="noopener">résumé&nbsp;↗</a>
+          &nbsp;(BS, Physics &amp; CS — Minerva University).
+        </p>
+      </section>
+
+      <!-- selected work -->
+      <section class="block">
+        <h2 class="label">// a few things i made</h2>
+        <dl class="projects">
+          {projects.map((p) => (
+            <div class="proj">
+              <dt>
+                {p.href ? <a href={p.href} target="_blank" rel="noopener">{p.name}</a> : p.name}
+              </dt>
+              <dd>
+                {p.blurb}
+                {p.href && <> <a class="proj-link" href={p.href} target="_blank" rel="noopener">{p.link}</a></>}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      <!-- diving (zine) -->
+      <section id="diving" class="block diving">
+        <h2 class="label">// off the keyboard</h2>
+        <p class="dive-intro">
+          When I'm not shipping docs I'm underwater. Diving — and especially <em>cave</em> diving —
+          is where I go to slow down, solve problems, and stay calm when it counts.
+        </p>
+
+        <div class="polaroids">
+          {dives.map((d) => (
+            <figure class="polaroid">
+              <img src={d.src} alt={d.cap} loading="lazy" />
+              <figcaption>{d.cap}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <p class="hint">↑ placeholders for now — my real photos go here.</p>
+
+        <h3 class="sublabel">dive log <span class="hint-inline">(sample)</span></h3>
+        <table class="log">
+          <thead>
+            <tr><th>site</th><th>loc</th><th>depth</th><th>type</th><th>notes</th></tr>
+          </thead>
+          <tbody>
+            {log.map((l) => (
+              <tr><td>{l.site}</td><td>{l.loc}</td><td>{l.depth}</td><td>{l.type}</td><td>{l.note}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
+
+      <!-- footer -->
+      <footer class="foot">
+        <p class="foot-cta">Building a community, docs, or dev-ed program? <a href={`mailto:${EMAIL}`}>Say hi&nbsp;↗</a></p>
+        <p class="foot-meta">
+          <a href={`mailto:${EMAIL}`}>email</a> ·
+          <a href={LINKEDIN} target="_blank" rel="noopener">linkedin</a> ·
+          <a href={GITHUB} target="_blank" rel="noopener">github</a>
+        </p>
+        <p class="foot-note">© {new Date().getFullYear()} snehan kekre · built by hand with astro · no cookies, no tracking.</p>
+      </footer>
+    </main>
+  </div>
+
+  <style is:global>
+    :root {
+      --paper: #f4f1e9;
+      --ink: #18120c;
+      --muted: #756c5f;
+      --accent: #cc3a1d;
+      --deep: #0e3a52;
+      --line: #18120c;
+      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+      --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+      --hand: 'Caveat', cursive;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--paper) !important; }
+
+    .page {
+      min-height: 100vh;
+      background:
+        var(--paper);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+    a:hover { color: var(--accent); }
+
+    /* top bar */
+    .topbar {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem; flex-wrap: wrap;
+      padding: 0.75rem 1.25rem;
+      background: var(--paper);
+      border-bottom: 2px solid var(--line);
+    }
+    .brand { font-weight: 700; text-transform: lowercase; text-decoration: none; letter-spacing: -0.02em; }
+    .nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem 1rem; font-size: 13px; }
+    .nav a { text-decoration: none; white-space: nowrap; }
+    .nav a:hover { text-decoration: underline; }
+
+    .wrap { max-width: 46rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
+
+    /* intro */
+    .name { font-size: clamp(2.2rem, 8vw, 3.6rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1; margin: 0.5rem 0 0.4rem; }
+    .tag { font-size: 0.95rem; color: var(--muted); letter-spacing: 0.04em; margin: 0 0 1.1rem; }
+    .tag .dot { margin: 0 0.5rem; color: var(--accent); }
+    .now {
+      display: inline-block; font-size: 0.82rem; color: var(--ink);
+      border: 1.5px solid var(--line); padding: 0.35rem 0.6rem; margin: 0 0 1.4rem;
+    }
+    .kbd { background: var(--accent); color: var(--paper); padding: 0 0.35rem; font-weight: 700; }
+    /* prose layer: serif, for contrast against the mono structure */
+    .lede, .about-body, .job-body, .proj dd, .dive-intro, .foot-cta {
+      font-family: var(--serif);
+      letter-spacing: 0;
+    }
+    .lede { font-size: 1.3rem; line-height: 1.5; max-width: 36rem; margin: 0 0 1.3rem; }
+    .lede strong { font-weight: 500; font-style: italic; }
+    .links { display: flex; flex-wrap: wrap; gap: 1.1rem; font-size: 0.9rem; }
+
+    /* blocks */
+    .block { margin-top: 3.2rem; }
+    .label { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); border-bottom: 2px solid var(--line); padding-bottom: 0.4rem; margin: 0 0 1.4rem; }
+    .sublabel { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 2.2rem 0 0.8rem; }
+
+    /* tags */
+    .tags { list-style: none; padding: 0; margin: 0 0 1.3rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .tags li { border: 1.5px solid var(--line); padding: 0.2rem 0.6rem; font-size: 0.82rem; }
+    .about-body { max-width: 38rem; font-size: 1.12rem; line-height: 1.65; }
+
+    /* work */
+    .work { list-style: none; padding: 0; margin: 0; }
+    .job { padding: 1.1rem 0; border-top: 1px dashed #b9b0a1; }
+    .job:first-child { border-top: none; padding-top: 0; }
+    .job-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: baseline; }
+    .job-role { font-weight: 700; }
+    .job-meta { font-size: 0.82rem; color: var(--muted); white-space: nowrap; }
+    .job-org { color: var(--deep); }
+    .job-meta .sep { margin: 0 0.4rem; }
+    .job-body { margin: 0.45rem 0 0; max-width: 40rem; font-size: 1.1rem; line-height: 1.6; }
+    .aside { font-size: 0.82rem; color: var(--accent); margin: 0.4rem 0 0; }
+    .muted-line { font-size: 0.85rem; color: var(--muted); margin-top: 1.4rem; }
+
+    /* projects */
+    .projects { margin: 0; }
+    .proj { padding: 1rem 0; border-top: 1px dashed #b9b0a1; }
+    .proj:first-child { border-top: none; padding-top: 0; }
+    .proj dt { font-weight: 700; color: var(--deep); }
+    .proj dt a { color: var(--deep); }
+    .proj dd { margin: 0.4rem 0 0; max-width: 40rem; font-size: 1.1rem; line-height: 1.6; }
+    .proj-link { white-space: nowrap; font-family: var(--mono); font-size: 0.85rem; }
+
+    /* diving */
+    .dive-intro { max-width: 38rem; font-size: 1.12rem; line-height: 1.65; }
+    .dive-intro em { font-style: italic; color: var(--deep); }
+    .polaroids { display: flex; flex-wrap: wrap; gap: 1.4rem 1.1rem; margin: 1.8rem 0 0.6rem; justify-content: center; }
+    .polaroid {
+      margin: 0; background: #fff; padding: 0.5rem 0.5rem 0; width: 11rem;
+      border: 1px solid #d7cdbb; box-shadow: 2px 4px 0 rgba(24,18,12,0.18);
+    }
+    .polaroid img { display: block; width: 100%; height: 9rem; object-fit: cover; }
+    .polaroid figcaption { font-family: var(--hand); font-size: 1.35rem; line-height: 1.1; color: var(--deep); text-align: center; padding: 0.35rem 0 0.5rem; }
+    .polaroid:nth-child(odd) { transform: rotate(-2deg); }
+    .polaroid:nth-child(even) { transform: rotate(1.6deg); }
+    .polaroid:nth-child(3n) { transform: rotate(2.4deg); }
+    .polaroid:hover { transform: rotate(0); transition: transform 0.18s ease; }
+    .hint { font-size: 0.8rem; color: var(--muted); text-align: center; margin: 0.4rem 0 0; }
+    .hint-inline { color: var(--muted); text-transform: none; letter-spacing: 0; }
+
+    /* dive log table */
+    .log { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .log th, .log td { text-align: left; padding: 0.45rem 0.6rem; border: 1px solid var(--line); }
+    .log thead th { background: var(--ink); color: var(--paper); text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.72rem; }
+
+    /* footer */
+    .foot { margin-top: 3.6rem; border-top: 2px solid var(--line); padding-top: 1.4rem; }
+    .foot-cta { font-size: 1.3rem; line-height: 1.4; }
+    .foot-meta { font-size: 0.85rem; margin: 0.6rem 0 0; }
+    .foot-note { font-size: 0.78rem; color: var(--muted); margin: 1rem 0 0; }
+
+    @media (max-width: 560px) {
+      .job-meta { white-space: normal; }
+      .topbar { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .nav { justify-content: flex-start; }
+    }
+  </style>
+</Layout>
