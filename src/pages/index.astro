@@ -258,6 +258,15 @@ const dives = [
         <a href="#work">work</a>
         <a href="#diving">diving</a>
         <a href={RESUME_URL} target="_blank" rel="noopener">CV&nbsp;↗</a>
+        <button
+          type="button"
+          class="theme-toggle"
+          data-aw-toggle-color-scheme
+          aria-label="Toggle dark mode"
+          title="Toggle dark / light"
+        >
+          <span class="i-moon" aria-hidden="true">☾</span><span class="i-sun" aria-hidden="true">☀</span>
+        </button>
       </nav>
     </header>
 
@@ -524,10 +533,28 @@ const dives = [
       --accent: #cc3a1d;
       --deep: #0e3a52;
       --line: #18120c;
+      --dash: #b9b0a1;
+      --chip: #ccbfa6;
       --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
       --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
       --hand: 'Caveat', cursive;
     }
+
+    /* dark mode — a warm, dark version of the same paper/ink palette (default stays light) */
+    html.dark {
+      --paper: #15120d;
+      --ink: #ece4d3;
+      --muted: #9a9081;
+      --accent: #e85a3c;
+      --deep: #74b0c8;
+      --line: #ece4d3;
+      --dash: #4b4439;
+      --chip: #5c5446;
+    }
+    /* keep the polaroids reading as bright prints pinned on the dark page */
+    html.dark .polaroid { box-shadow: 2px 6px 0 rgba(0, 0, 0, 0.55); }
+    html.dark .polaroid:hover { box-shadow: 3px 8px 0 rgba(0, 0, 0, 0.6); }
+    html.dark .polaroid figcaption { color: #0e3a52; }
 
     html { scroll-behavior: smooth; }
     body { background: var(--paper) !important; }
@@ -558,6 +585,15 @@ const dives = [
     .nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.5rem 1rem; font-size: 13px; }
     .nav a { text-decoration: none; white-space: nowrap; }
     .nav a:hover { text-decoration: underline; }
+    .theme-toggle {
+      background: none; border: 1.5px solid var(--line); color: var(--ink);
+      font-family: var(--mono); font-size: 0.85rem; line-height: 1; cursor: pointer;
+      padding: 0.15rem 0.45rem; border-radius: 0;
+    }
+    .theme-toggle:hover { color: var(--accent); border-color: var(--accent); }
+    .theme-toggle .i-sun { display: none; }
+    html.dark .theme-toggle .i-sun { display: inline; }
+    html.dark .theme-toggle .i-moon { display: none; }
 
     .wrap { max-width: 46rem; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; }
 
@@ -590,7 +626,7 @@ const dives = [
 
     /* work */
     .work { list-style: none; padding: 0; margin: 0; }
-    .job { padding: 1.1rem 0; border-top: 1px dashed #b9b0a1; }
+    .job { padding: 1.1rem 0; border-top: 1px dashed var(--dash); }
     .job:first-child { border-top: none; padding-top: 0; }
     .job-head { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: baseline; }
     .job-role { font-weight: 700; }
@@ -603,7 +639,7 @@ const dives = [
 
     /* projects */
     .projects { margin: 0; }
-    .proj { padding: 1rem 0; border-top: 1px dashed #b9b0a1; }
+    .proj { padding: 1rem 0; border-top: 1px dashed var(--dash); }
     .proj:first-child { border-top: none; padding-top: 0; }
     .proj dt { font-weight: 700; color: var(--deep); }
     .proj dt a { color: var(--deep); }
@@ -617,7 +653,7 @@ const dives = [
       letter-spacing: 0.08em; color: var(--accent); margin: 0 0 0.3rem; }
     .ship-head span { color: var(--muted); text-transform: none; letter-spacing: 0; }
     .ships { list-style: none; margin: 0; padding: 0; }
-    .ships li { border-top: 1px dashed #b9b0a1; }
+    .ships li { border-top: 1px dashed var(--dash); }
     .ships li:first-child { border-top: none; }
     .ships a { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem;
       padding: 0.5rem 0; text-decoration: none; color: var(--ink); }
@@ -634,13 +670,13 @@ const dives = [
     /* diving certifications ladder */
     .cert-lead { max-width: 38rem; font-size: 1rem; color: var(--muted); margin: 1.4rem 0 0.2rem; font-family: var(--mono); }
     .certs { list-style: none; margin: 0.6rem 0 0; padding: 0; max-width: 40rem; }
-    .cert-track { padding: 0.7rem 0; border-top: 1px dashed #b9b0a1; }
+    .cert-track { padding: 0.7rem 0; border-top: 1px dashed var(--dash); }
     .cert-track:first-child { border-top: none; }
     .cert-head { font-family: var(--mono); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--deep); margin: 0; }
     .cert-max { color: var(--accent); }
     .cert-apex { margin: 0.18rem 0 0; font-size: 1.1rem; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; }
     .cert-apex strong { color: var(--deep); }
-    .cert-agency { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); border: 1px solid #ccbfa6; padding: 0 0.3rem; border-radius: 2px; }
+    .cert-agency { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); border: 1px solid var(--chip); padding: 0 0.3rem; border-radius: 2px; }
     .cert-note { font-size: 0.9rem; color: var(--muted); font-style: italic; }
     .cert-verify { font-family: var(--mono); font-size: 0.72rem; }
     .cert-steps { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); margin: 0.25rem 0 0; }
