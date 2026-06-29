@@ -10,6 +10,10 @@ const GITHUB = 'https://github.com/snehankekre';
 const COURSERA = 'https://www.coursera.org/instructor/snehan-kekre';
 const INSTAGRAM = 'https://www.instagram.com/snehankekre/';
 
+// rel="me" identity links — declare these profiles as the same person (helps entity/identity signals).
+const ME_LINKS = [LINKEDIN, GITHUB, COURSERA, INSTAGRAM];
+const relMe = (href: string | null) => (href && ME_LINKS.includes(href) ? 'me noopener' : 'noopener');
+
 const metadata = {
   title: 'Snehan Kekre · docs, devrel & diving',
   ignoreTitleTemplate: true,
@@ -270,9 +274,9 @@ const dives = [
           building the product, and product-managed a stack of features into the library myself.
         </p>
         <p class="links">
-          <a href={`mailto:${EMAIL}`}>email</a>
-          <a href={LINKEDIN} target="_blank" rel="noopener">linkedin</a>
-          <a href={GITHUB} target="_blank" rel="noopener">github</a>
+          <a href={`mailto:${EMAIL}`} rel="me">email</a>
+          <a href={LINKEDIN} target="_blank" rel="me noopener">linkedin</a>
+          <a href={GITHUB} target="_blank" rel="me noopener">github</a>
           <a href={RESUME_URL} target="_blank" rel="noopener">CV (pdf)</a>
         </p>
       </section>
@@ -324,11 +328,11 @@ const dives = [
           {projects.map((p) => (
             <div class="proj">
               <dt>
-                {p.href ? <a href={p.href} target="_blank" rel="noopener">{p.name}</a> : p.name}
+                {p.href ? <a href={p.href} target="_blank" rel={relMe(p.href)}>{p.name}</a> : p.name}
               </dt>
               <dd>
                 {p.blurb}
-                {p.href && <> <a class="proj-link" href={p.href} target="_blank" rel="noopener">{p.link}</a></>}
+                {p.href && <> <a class="proj-link" href={p.href} target="_blank" rel={relMe(p.href)}>{p.link}</a></>}
                 {p.href2 && <> <a class="proj-link" href={p.href2} target="_blank" rel="noopener">{p.link2}</a></>}
               </dd>
             </div>
@@ -433,7 +437,7 @@ const dives = [
             add diving photos &amp; clips to <code>src/assets/diving/</code>. Filenames become captions.
           </p>
         )}
-        <p class="dive-follow"><a href={INSTAGRAM} target="_blank" rel="noopener">more on instagram&nbsp;↗</a></p>
+        <p class="dive-follow"><a href={INSTAGRAM} target="_blank" rel="me noopener">more on instagram&nbsp;↗</a></p>
       </section>
 
       <!-- lightbox -->
@@ -447,9 +451,9 @@ const dives = [
       <footer class="foot">
         <p class="foot-cta">Building a community, docs, or dev-ed program? <a href={`mailto:${EMAIL}`}>Say hi&nbsp;↗</a></p>
         <p class="foot-meta">
-          <a href={`mailto:${EMAIL}`}>email</a> ·
-          <a href={LINKEDIN} target="_blank" rel="noopener">linkedin</a> ·
-          <a href={GITHUB} target="_blank" rel="noopener">github</a>
+          <a href={`mailto:${EMAIL}`} rel="me">email</a> ·
+          <a href={LINKEDIN} target="_blank" rel="me noopener">linkedin</a> ·
+          <a href={GITHUB} target="_blank" rel="me noopener">github</a>
         </p>
         <p class="foot-note">© {new Date().getFullYear()} snehan kekre · built by hand with astro · no cookies, no tracking.</p>
       </footer>
