@@ -11,13 +11,13 @@ const COURSERA = 'https://www.coursera.org/instructor/snehan-kekre';
 const INSTAGRAM = 'https://www.instagram.com/snehankekre/';
 
 const metadata = {
-  title: 'Snehan Kekre — docs, devrel & diving',
+  title: 'Snehan Kekre · docs, devrel & diving',
   ignoreTitleTemplate: true,
   description:
-    'Snehan Kekre is an open-source developer relations and documentation leader (Streamlit). Community, docs, and developer education — and a diver.',
+    'Snehan Kekre is an open-source developer relations and documentation leader (Streamlit). Community, docs, and developer education, and a diver.',
 };
 
-// JSON-LD Person structured data — helps search engines tie this site to me as an entity.
+// JSON-LD Person structured data: helps search engines tie this site to me as an entity.
 const personSchema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -61,7 +61,7 @@ const work = [
     org: 'Snowflake',
     years: '2022–23',
     note: null,
-    body: 'Owned the whole docs platform — getting-started, tutorials, API reference, search, telemetry — and managed a team of technical writers and content strategists while owning the platform engineering.',
+    body: 'Owned the whole docs platform (getting-started, tutorials, API reference, search, telemetry) and managed a team of technical writers and content strategists while owning the platform engineering.',
   },
   {
     role: 'Developer Advocate',
@@ -82,7 +82,7 @@ const work = [
 const projects = [
   {
     name: 'docs.astrobee.ai',
-    blurb: 'Built the AstroBee documentation site from scratch and owned all of its content, demos, and assets — the material the team pitched to prospective customers.',
+    blurb: 'Built the AstroBee documentation site from scratch and owned all of its content, demos, and assets, the material the team pitched to prospective customers.',
     href: 'https://docs.astrobee.ai/',
     link: 'docs.astrobee.ai ↗',
     href2: null,
@@ -90,7 +90,7 @@ const projects = [
   },
   {
     name: 'docs.streamlit.io',
-    blurb: 'I ran docs for Streamlit. Migrated the whole site off Sphinx/ReadTheDocs onto a custom Next.js + MDX platform, then owned all of it end to end — guides, tutorials, the auto-generated API reference, and the thousands of commits behind them. Repo’s top contributor.',
+    blurb: 'I ran docs for Streamlit. Migrated the whole site off Sphinx/ReadTheDocs onto a custom Next.js + MDX platform, then owned all of it end to end: guides, tutorials, the auto-generated API reference, and the thousands of commits behind them. Repo’s top contributor.',
     href: 'https://docs.streamlit.io/',
     link: 'docs.streamlit.io ↗',
     href2: 'https://github.com/streamlit/docs/commits?author=snehankekre',
@@ -154,7 +154,7 @@ const authored = [
   { name: 'alert elements', what: 'word-wrap fix', pr: 5162 },
 ];
 
-// Diving certifications — verified credentials, grouped by discipline. head[] lets a track
+// Diving certifications: verified credentials, grouped by discipline. head[] lets a track
 // list more than one agency (the cave track spans TDI + IANTD).
 const PADI_VERIFY = 'https://achievements.padi.com/bec0effb-3f51-4aa7-b9f9-a296d79c1d69';
 
@@ -194,7 +194,7 @@ const certTracks = [
   },
 ];
 
-// Diving media — drop photos & short clips into src/assets/diving/ and they appear here.
+// Diving media: drop photos & short clips into src/assets/diving/ and they appear here.
 // Filenames become captions, e.g. "01-cenote-dos-ojos.jpg" -> "cenote dos ojos".
 // A numeric prefix controls order; images and videos are picked up automatically.
 const diveImages = import.meta.glob('../assets/diving/*.{jpg,jpeg,png,webp,avif,JPG,JPEG,PNG,WEBP}', {
@@ -208,7 +208,7 @@ const diveVideos = import.meta.glob('../assets/diving/*.{mp4,webm,mov,MP4,WEBM,M
 
 // Curated captions (the handwritten note under each frame), keyed by filename.
 const diveCaptions: Record<string, string> = {
-  '01-technical-cave-diving.mp4': 'Sulawesi — the trip that changed everything',
+  '01-technical-cave-diving.mp4': 'Sulawesi, the trip that changed everything',
   '02-100-meter-adv-trimix.mp4': '100m trimix · Tulamben',
   '03-75m-1.webp': '75m, open-circuit sidemount',
   '04-75m-2.webp': 'hypoxic trimix',
@@ -216,7 +216,7 @@ const diveCaptions: Record<string, string> = {
   '06-ccr.mp4': 'rebreather on the Tanjung Jepun wreck',
   '07-cave-jump-how-to.mp4': "how to ‘jump’ in a cave",
   '08-cave-diving-optional.mp4': 'the closest thing to peace',
-  '09-cave-diving-instructor-praying.mp4': 'will we fit? — Kaponda Ponda',
+  '09-cave-diving-instructor-praying.mp4': 'will we fit? · Kaponda Ponda',
 };
 
 const fileName = (path: string) => path.split('/').pop()!;
@@ -267,7 +267,7 @@ const dives = [
           I'm an open-source developer-relations and documentation person. I built and ran the docs
           and support community for <strong>Streamlit</strong> (1M+ monthly active devs), fixed most
           of the things people got stuck on, and acted as the bridge between users and the team
-          building the product — and product-managed a stack of features into the library myself.
+          building the product, and product-managed a stack of features into the library myself.
         </p>
         <p class="links">
           <a href={`mailto:${EMAIL}`}>email</a>
@@ -290,7 +290,7 @@ const dives = [
         </ul>
         <p class="about-body">
           I joined Snowflake through its acquisition of Streamlit, owned the open-source library's
-          docs, then product-managed features end to end — and ranked among the project's top
+          docs, then product-managed features end to end, and ranked among the project's top
           contributors on the way. Whenever a feature needed a new tool, I was the one to go learn it.
           The part I love most is being the bridge between a community and the people who build for it.
         </p>
@@ -313,7 +313,7 @@ const dives = [
         </ol>
         <p class="muted-line">
           Full history &amp; education in the <a href={RESUME_URL} target="_blank" rel="noopener">CV&nbsp;↗</a>
-          &nbsp;(BS, Physics &amp; CS — Minerva University).
+          &nbsp;(BS, Physics &amp; CS, Minerva University).
         </p>
       </section>
 
@@ -341,8 +341,8 @@ const dives = [
         <h2 class="label">// streamlit, the library</h2>
         <p class="ship-intro">
           Not just docs. As technical PM for Streamlit's open-source library I product-managed
-          features end to end — product spec, early prototypes, user research, then shipping with a
-          team of engineers — and authored a fair bit of the code and bug fixes myself.
+          features end to end (product spec, early prototypes, user research, then shipping with a
+          team of engineers) and authored a fair bit of the code and bug fixes myself.
           <a href={ALL_PRS} target="_blank" rel="noopener">89 merged PRs&nbsp;↗</a>
         </p>
 
@@ -381,15 +381,15 @@ const dives = [
       <section id="diving" class="block diving">
         <h2 class="label">// off the keyboard</h2>
         <p class="dive-intro">
-          When I'm not shipping docs I'm underwater. Diving — and especially <em>cave</em> diving —
+          When I'm not shipping docs I'm underwater. Diving, and especially <em>cave</em> diving,
           is where I go to slow down, solve problems, and stay calm when it counts.
         </p>
 
-        <p class="cert-lead">The paper trail — instructor, then maxed out on open-circuit tech and cave, all inside a year.</p>
+        <p class="cert-lead">The paper trail: instructor, then maxed out on open-circuit tech and cave, all inside a year.</p>
         <ul class="certs">
           {certTracks.map((t) => (
             <li class="cert-track">
-              <p class="cert-head">{t.track}{t.maxed && <span class="cert-max"> — maxed out</span>}</p>
+              <p class="cert-head">{t.track}{t.maxed && <span class="cert-max"> · maxed out</span>}</p>
               {t.head.map((h: { name: string; agency: string; href: string | null; note: string }) => (
                 <p class="cert-apex">
                   <strong>{h.name}</strong>
@@ -430,7 +430,7 @@ const dives = [
         </div>
         {dives.length === 0 && (
           <p class="hint">
-            add diving photos &amp; clips to <code>src/assets/diving/</code> — filenames become captions.
+            add diving photos &amp; clips to <code>src/assets/diving/</code>. Filenames become captions.
           </p>
         )}
         <p class="dive-follow"><a href={INSTAGRAM} target="_blank" rel="noopener">more on instagram&nbsp;↗</a></p>
@@ -670,7 +670,7 @@ const dives = [
     .hint { font-size: 0.8rem; color: var(--muted); text-align: center; margin: 0.4rem 0 0; }
     .dive-follow { text-align: center; margin: 1.6rem 0 0; font-size: 0.9rem; }
 
-    /* lightbox — fill the viewport and flex-center, so the media sits dead centre
+    /* lightbox: fill the viewport and flex-center, so the media sits dead centre
        (a bare modal <dialog> loses its centring once Tailwind's reset zeroes margin) */
     .lightbox { inset: 0; width: 100vw; max-width: 100vw; height: 100dvh; max-height: 100dvh;
       margin: 0; border: none; padding: 2rem; background: transparent; overflow: hidden; }

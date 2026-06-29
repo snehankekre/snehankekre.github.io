@@ -10,8 +10,8 @@ site:
 metadata:
   title:
     default: Snehan Kekre
-    template: '%s — Snehan Kekre'
-  description: 'Snehan Kekre is an open-source developer relations and documentation leader (Streamlit). Community, docs, and developer education — and a diver.'
+    template: '%s · Snehan Kekre'
+  description: 'Snehan Kekre is an open-source developer relations and documentation leader (Streamlit). Community, docs, and developer education, and a diver.'
   robots:
     index: true
     follow: true
