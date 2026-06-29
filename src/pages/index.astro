@@ -85,25 +85,73 @@ const projects = [
     blurb: 'Built the AstroBee documentation site from scratch and owned all of its content, demos, and assets — the material the team pitched to prospective customers.',
     href: 'https://docs.astrobee.ai/',
     link: 'docs.astrobee.ai ↗',
+    href2: null,
+    link2: null,
   },
   {
     name: 'docs.streamlit.io',
-    blurb: 'Moved all of Streamlit’s docs off Sphinx/ReadTheDocs onto a Next.js + MDX platform, then owned the docs, tutorials and auto-generated reference.',
+    blurb: 'I ran docs for Streamlit. Migrated the whole site off Sphinx/ReadTheDocs onto a custom Next.js + MDX platform, then owned all of it end to end — guides, tutorials, the auto-generated API reference, and the thousands of commits behind them. Repo’s top contributor.',
     href: 'https://docs.streamlit.io/',
     link: 'docs.streamlit.io ↗',
+    href2: 'https://github.com/streamlit/docs/commits?author=snehankekre',
+    link2: 'my commits ↗',
   },
   {
     name: 'community & education',
     blurb: 'Ran the forum; helped start and run the Discord and Slack communities and the creator program. The connective tissue between users and the team.',
     href: null,
     link: null,
+    href2: null,
+    link2: null,
   },
   {
-    name: 'self-serve internal analytics',
-    blurb: 'Built internal Streamlit apps on product telemetry for product + leadership. One cost-tracker found ~$100k in savings.',
-    href: null,
-    link: null,
+    name: 'guided projects on Coursera',
+    blurb: 'Built 40+ hands-on Guided Projects on ML, deep learning and data viz. 290k+ enrollments.',
+    href: 'https://www.coursera.org/instructor/snehan-kekre',
+    link: 'coursera.org/instructor/snehan-kekre ↗',
+    href2: null,
+    link2: null,
   },
+];
+
+// Streamlit open-source library work. Two honest buckets: features I product-managed
+// (spec, prototypes, research, shipped with engineering) and code I authored myself.
+const PR = (n: number) => `https://github.com/streamlit/streamlit/pull/${n}`;
+const ALL_PRS =
+  'https://github.com/streamlit/streamlit/pulls?q=is%3Apr+author%3Asnehankekre+is%3Amerged';
+
+const pmShipped = [
+  { name: 'st.feedback', what: 'new widget', pr: 8915 },
+  { name: 'st.pills', what: 'new widget', pr: 9283 },
+  { name: 'st.segmented_control', what: 'new widget', pr: 9418 },
+  { name: 'st.audio_input', what: 'new widget', pr: 9111 },
+  { name: 'st.button + link / download / form / popover', what: 'icon parameters', pr: 9301 },
+  { name: 'st.line_chart / st.bar_chart / st.area_chart', what: 'custom axis labels (x_label, y_label)', pr: 8846 },
+  { name: 'st.bar_chart', what: 'horizontal bars', pr: 8877 },
+  { name: 'st.bar_chart', what: 'stacking', pr: 8945 },
+  { name: 'st.area_chart', what: 'stacking', pr: 8992 },
+  { name: 'st.video', what: 'subtitles', pr: 8057 },
+  { name: 'st.audio / st.video', what: 'start/end time + loop', pr: 8348 },
+  { name: 'st.code', what: 'line wrapping (wrap_lines)', pr: 8558 },
+  { name: 'st.json', what: 'configurable expansion depth', pr: 8984 },
+  { name: 'st.graphviz_chart', what: 'graphviz.Source objects', pr: 8993 },
+];
+
+const authored = [
+  { name: 'st.expander', what: 'icon parameter', pr: 8716 },
+  { name: 'st.audio / st.video', what: 'autoplay support', pr: 8481 },
+  { name: 'markdown', what: 'background colors for text', pr: 8435 },
+  { name: 'st.graphviz_chart', what: 'Graphviz layout engines', pr: 7505 },
+  { name: 'st.metric', what: 'label_visibility parameter', pr: 5789 },
+  { name: 'st.map', what: 'theme-aware light/dark basemaps', pr: 5074 },
+  { name: 'st.code', what: 'copy-button visibility regression (fix)', pr: 6498 },
+  { name: 'st.graphviz_chart', what: 'SVG scaling in fullscreen (fix)', pr: 7398 },
+  { name: 'st.slider', what: 'thumb value alignment (fix)', pr: 6828 },
+  { name: 'st.toast', what: 'message truncation (fix)', pr: 8337 },
+  { name: 'streamlit config show', what: 'honor newlines (fix)', pr: 6758 },
+  { name: 'st.json', what: 'preserve whitespace (fix)', pr: 6663 },
+  { name: 'st.image', what: 'correct GIF mimetype (fix)', pr: 5438 },
+  { name: 'alert elements', what: 'word-wrap fix', pr: 5162 },
 ];
 
 // Diving media — drop photos & short clips into src/assets/diving/ and they appear here.
@@ -165,7 +213,7 @@ const dives = [
         <a href="#about">about</a>
         <a href="#work">work</a>
         <a href="#diving">diving</a>
-        <a href={RESUME_URL} target="_blank" rel="noopener">résumé&nbsp;↗</a>
+        <a href={RESUME_URL} target="_blank" rel="noopener">CV&nbsp;↗</a>
       </nav>
     </header>
 
@@ -179,13 +227,13 @@ const dives = [
           I'm an open-source developer-relations and documentation person. I built and ran the docs
           and support community for <strong>Streamlit</strong> (1M+ monthly active devs), fixed most
           of the things people got stuck on, and acted as the bridge between users and the team
-          building the product.
+          building the product — and product-managed a stack of features into the library myself.
         </p>
         <p class="links">
           <a href={`mailto:${EMAIL}`}>email</a>
           <a href={LINKEDIN} target="_blank" rel="noopener">linkedin</a>
           <a href={GITHUB} target="_blank" rel="noopener">github</a>
-          <a href={RESUME_URL} target="_blank" rel="noopener">résumé (pdf)</a>
+          <a href={RESUME_URL} target="_blank" rel="noopener">CV (pdf)</a>
         </p>
       </section>
 
@@ -197,7 +245,7 @@ const dives = [
           <li>community support</li>
           <li>technical writing &amp; docs</li>
           <li>developer education</li>
-          <li>product management</li>
+          <li>technical product management</li>
           <li>python &amp; js/ts</li>
         </ul>
         <p class="about-body">
@@ -224,7 +272,7 @@ const dives = [
           ))}
         </ol>
         <p class="muted-line">
-          Full history &amp; education in the <a href={RESUME_URL} target="_blank" rel="noopener">résumé&nbsp;↗</a>
+          Full history &amp; education in the <a href={RESUME_URL} target="_blank" rel="noopener">CV&nbsp;↗</a>
           &nbsp;(BS, Physics &amp; CS — Minerva University).
         </p>
       </section>
@@ -241,10 +289,52 @@ const dives = [
               <dd>
                 {p.blurb}
                 {p.href && <> <a class="proj-link" href={p.href} target="_blank" rel="noopener">{p.link}</a></>}
+                {p.href2 && <> <a class="proj-link" href={p.href2} target="_blank" rel="noopener">{p.link2}</a></>}
               </dd>
             </div>
           ))}
         </dl>
+      </section>
+
+      <!-- streamlit, the library -->
+      <section id="streamlit" class="block">
+        <h2 class="label">// streamlit, the library</h2>
+        <p class="ship-intro">
+          Not just docs. As technical PM for Streamlit's open-source library I product-managed
+          features end to end — product spec, early prototypes, user research, then shipping with a
+          team of engineers — and authored a fair bit of the code and bug fixes myself.
+          <a href={ALL_PRS} target="_blank" rel="noopener">89 merged PRs&nbsp;↗</a>
+        </p>
+
+        <div class="ship-group">
+          <h3 class="ship-head">product-managed <span>· spec, prototypes, research, shipped with engineering</span></h3>
+          <ul class="ships">
+            {pmShipped.map((s) => (
+              <li>
+                <a href={PR(s.pr)} target="_blank" rel="noopener">
+                  <code>{s.name}</code>
+                  <span class="ship-what">{s.what}</span>
+                  <span class="ship-pr">#{s.pr}&nbsp;↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="ship-group">
+          <h3 class="ship-head">authored <span>· my commits</span></h3>
+          <ul class="ships">
+            {authored.map((s) => (
+              <li>
+                <a href={PR(s.pr)} target="_blank" rel="noopener">
+                  <code>{s.name}</code>
+                  <span class="ship-what">{s.what}</span>
+                  <span class="ship-pr">#{s.pr}&nbsp;↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </section>
 
       <!-- diving (zine) -->
@@ -457,6 +547,23 @@ const dives = [
     .proj dt a { color: var(--deep); }
     .proj dd { margin: 0.4rem 0 0; max-width: 40rem; font-size: 1.1rem; line-height: 1.6; }
     .proj-link { white-space: nowrap; font-family: var(--mono); font-size: 0.85rem; }
+
+    /* streamlit library work */
+    .ship-intro { max-width: 42rem; font-size: 1.05rem; line-height: 1.6; margin: 0 0 0.4rem; }
+    .ship-group { margin-top: 1.6rem; }
+    .ship-head { font-family: var(--mono); font-size: 0.78rem; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--accent); margin: 0 0 0.3rem; }
+    .ship-head span { color: var(--muted); text-transform: none; letter-spacing: 0; }
+    .ships { list-style: none; margin: 0; padding: 0; }
+    .ships li { border-top: 1px dashed #b9b0a1; }
+    .ships li:first-child { border-top: none; }
+    .ships a { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem;
+      padding: 0.5rem 0; text-decoration: none; color: var(--ink); }
+    .ships a:hover { color: var(--accent); }
+    .ships code { font-family: var(--mono); font-weight: 700; color: var(--deep); font-size: 0.95rem; }
+    .ship-what { font-size: 1rem; }
+    .ship-pr { margin-left: auto; font-family: var(--mono); font-size: 0.8rem;
+      color: var(--muted); white-space: nowrap; }
 
     /* diving */
     .dive-intro { max-width: 38rem; font-size: 1.12rem; line-height: 1.65; }
