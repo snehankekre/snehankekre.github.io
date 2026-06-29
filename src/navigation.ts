@@ -2,7 +2,7 @@ import { getPermalink } from './utils/permalinks';
 
 const LINKEDIN = 'https://www.linkedin.com/in/snehankekre/';
 const GITHUB = 'https://github.com/snehankekre';
-const EMAIL = 'mailto:snehan.minerva@gmail.com';
+const EMAIL = 'mailto:contact@snehankekre.com';
 
 export const headerData = {
   links: [
