@@ -154,6 +154,46 @@ const authored = [
   { name: 'alert elements', what: 'word-wrap fix', pr: 5162 },
 ];
 
+// Diving certifications — verified credentials, grouped by discipline. head[] lets a track
+// list more than one agency (the cave track spans TDI + IANTD).
+const PADI_VERIFY = 'https://achievements.padi.com/bec0effb-3f51-4aa7-b9f9-a296d79c1d69';
+
+const certTracks = [
+  {
+    track: 'instructor',
+    maxed: false,
+    head: [{ name: 'Open Water Scuba Instructor', agency: 'PADI', href: PADI_VERIFY, note: 'I teach' }],
+    steps: [] as string[],
+  },
+  {
+    track: 'open-circuit tech',
+    maxed: true,
+    head: [{ name: 'Advanced Trimix', agency: 'TDI', href: null, note: 'hypoxic · ~100 m' }],
+    steps: ['Advanced Nitrox', 'Decompression Procedures', 'Extended Range', 'Trimix 75 m'],
+  },
+  {
+    track: 'cave',
+    maxed: true,
+    head: [
+      { name: 'Stage Cave', agency: 'TDI', href: null, note: 'beyond full cave' },
+      { name: 'Technical Cave Diver', agency: 'IANTD', href: null, note: 'to 55 m' },
+    ],
+    steps: ['Cavern', 'Intro to Cave', 'Full Cave'],
+  },
+  {
+    track: 'rebreather · CCR',
+    maxed: false,
+    head: [{ name: 'O2ptima CM Air Diluent', agency: 'TDI', href: null, note: 'chest-mount “Choptima”' }],
+    steps: [] as string[],
+  },
+  {
+    track: 'sidemount',
+    maxed: false,
+    head: [{ name: 'GO Side Mount (Razor)', agency: 'GO', href: null, note: 'Sanctum Exploration · Bali' }],
+    steps: [] as string[],
+  },
+];
+
 // Diving media — drop photos & short clips into src/assets/diving/ and they appear here.
 // Filenames become captions, e.g. "01-cenote-dos-ojos.jpg" -> "cenote dos ojos".
 // A numeric prefix controls order; images and videos are picked up automatically.
@@ -344,6 +384,24 @@ const dives = [
           When I'm not shipping docs I'm underwater. Diving — and especially <em>cave</em> diving —
           is where I go to slow down, solve problems, and stay calm when it counts.
         </p>
+
+        <p class="cert-lead">The paper trail — instructor, then maxed out on open-circuit tech and cave, all inside a year.</p>
+        <ul class="certs">
+          {certTracks.map((t) => (
+            <li class="cert-track">
+              <p class="cert-head">{t.track}{t.maxed && <span class="cert-max"> — maxed out</span>}</p>
+              {t.head.map((h: { name: string; agency: string; href: string | null; note: string }) => (
+                <p class="cert-apex">
+                  <strong>{h.name}</strong>
+                  <span class="cert-agency">{h.agency}</span>
+                  {h.href && <a class="cert-verify" href={h.href} target="_blank" rel="noopener">verify&nbsp;↗</a>}
+                  {h.note && <span class="cert-note">{h.note}</span>}
+                </p>
+              ))}
+              {t.steps.length > 0 && <p class="cert-steps">↑ {t.steps.join(' · ')}</p>}
+            </li>
+          ))}
+        </ul>
 
         <div class="polaroids">
           {dives.map((d) => (
@@ -568,6 +626,20 @@ const dives = [
     /* diving */
     .dive-intro { max-width: 38rem; font-size: 1.12rem; line-height: 1.65; }
     .dive-intro em { font-style: italic; color: var(--deep); }
+
+    /* diving certifications ladder */
+    .cert-lead { max-width: 38rem; font-size: 1rem; color: var(--muted); margin: 1.4rem 0 0.2rem; font-family: var(--mono); }
+    .certs { list-style: none; margin: 0.6rem 0 0; padding: 0; max-width: 40rem; }
+    .cert-track { padding: 0.7rem 0; border-top: 1px dashed #b9b0a1; }
+    .cert-track:first-child { border-top: none; }
+    .cert-head { font-family: var(--mono); font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--deep); margin: 0; }
+    .cert-max { color: var(--accent); }
+    .cert-apex { margin: 0.18rem 0 0; font-size: 1.1rem; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; }
+    .cert-apex strong { color: var(--deep); }
+    .cert-agency { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); border: 1px solid #ccbfa6; padding: 0 0.3rem; border-radius: 2px; }
+    .cert-note { font-size: 0.9rem; color: var(--muted); font-style: italic; }
+    .cert-verify { font-family: var(--mono); font-size: 0.72rem; }
+    .cert-steps { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); margin: 0.25rem 0 0; }
     /* gallery: a uniform grid so every tile is the same size (no ragged rows),
        breaking out a little wider than the text column for room to breathe */
     .polaroids {
