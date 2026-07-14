@@ -158,6 +158,13 @@ const authored = [
   { name: 'alert elements', what: 'word-wrap fix', pr: 5162 },
 ];
 
+// Rows of each group visible before the "+ n more" expander (arrays are ordered strongest-first).
+const FEATURED = 5;
+const shipGroups = [
+  { title: 'product-managed', sub: 'spec, prototypes, research, shipped with engineering', items: pmShipped },
+  { title: 'authored', sub: 'my commits', items: authored },
+];
+
 // Diving certifications: verified credentials, grouped by discipline. head[] lets a track
 // list more than one agency (the cave track spans TDI + IANTD).
 const PADI_VERIFY = 'https://achievements.padi.com/bec0effb-3f51-4aa7-b9f9-a296d79c1d69';
@@ -363,35 +370,41 @@ const dives = [
           <a href={ALL_PRS} target="_blank" rel="noopener">89 merged PRs&nbsp;↗</a>
         </p>
 
-        <div class="ship-group">
-          <h3 class="ship-head">product-managed <span>· spec, prototypes, research, shipped with engineering</span></h3>
-          <ul class="ships">
-            {pmShipped.map((s) => (
-              <li>
-                <a href={PR(s.pr)} target="_blank" rel="noopener">
-                  <code>{s.name}</code>
-                  <span class="ship-what">{s.what}</span>
-                  <span class="ship-pr">#{s.pr}&nbsp;↗</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div class="ship-group">
-          <h3 class="ship-head">authored <span>· my commits</span></h3>
-          <ul class="ships">
-            {authored.map((s) => (
-              <li>
-                <a href={PR(s.pr)} target="_blank" rel="noopener">
-                  <code>{s.name}</code>
-                  <span class="ship-what">{s.what}</span>
-                  <span class="ship-pr">#{s.pr}&nbsp;↗</span>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {shipGroups.map((g) => (
+          <div class="ship-group">
+            <h3 class="ship-head">{g.title} <span>· {g.sub}</span></h3>
+            <ul class="ships">
+              {g.items.slice(0, FEATURED).map((s) => (
+                <li>
+                  <a href={PR(s.pr)} target="_blank" rel="noopener">
+                    <code>{s.name}</code>
+                    <span class="ship-what">{s.what}</span>
+                    <span class="ship-pr">#{s.pr}&nbsp;↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {g.items.length > FEATURED && (
+              <details class="ships-more">
+                <summary>
+                  <span class="when-closed">+ {g.items.length - FEATURED} more ↓</span>
+                  <span class="when-open">− show less ↑</span>
+                </summary>
+                <ul class="ships">
+                  {g.items.slice(FEATURED).map((s) => (
+                    <li>
+                      <a href={PR(s.pr)} target="_blank" rel="noopener">
+                        <code>{s.name}</code>
+                        <span class="ship-what">{s.what}</span>
+                        <span class="ship-pr">#{s.pr}&nbsp;↗</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
+          </div>
+        ))}
       </section>
 
       <!-- diving (zine) -->
@@ -738,6 +751,18 @@ const dives = [
     .ships a:hover { color: var(--accent); }
     .ships code { font-family: var(--mono); font-weight: 700; color: var(--deep); font-size: 0.95rem; }
     .ship-what { font-size: 1rem; }
+    .ships-more summary {
+      font-family: var(--mono); font-size: 0.8rem; color: var(--accent);
+      cursor: pointer; list-style: none; user-select: none;
+      padding: 0.4rem 0; border-top: 1px dashed var(--dash);
+    }
+    .ships-more summary::-webkit-details-marker { display: none; }
+    .ships-more summary:hover { text-decoration: underline; }
+    .ships-more .when-open { display: none; }
+    .ships-more[open] .when-open { display: inline; }
+    .ships-more[open] .when-closed { display: none; }
+    /* the expanded rows continue the visible list: keep the separator on row one */
+    .ships-more .ships li:first-child { border-top: 1px dashed var(--dash); }
     .ship-pr { margin-left: auto; font-family: var(--mono); font-size: 0.8rem;
       color: var(--muted); white-space: nowrap; }
 
