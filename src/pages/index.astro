@@ -1,8 +1,15 @@
 ---
 import Layout from '~/layouts/Layout.astro';
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import '~/styles/paper.css';
 
 const SITE = 'https://snehankekre.com';
+
+// Latest posts for the homepage section (hidden until the first non-draft post ships).
+const recentPosts = (await getCollection('post', ({ data }) => !data.draft))
+  .sort((a, b) => (b.data.publishDate?.valueOf() ?? 0) - (a.data.publishDate?.valueOf() ?? 0))
+  .slice(0, 3);
 const RESUME_URL = '/Snehan_Kekre_CV.pdf';
 const EMAIL = 'contact@snehankekre.com';
 const LINKEDIN = 'https://www.linkedin.com/in/snehankekre/';
@@ -264,6 +271,7 @@ const dives = [
         <a href="#about">about</a>
         <a href="#work">work</a>
         <a href="#diving">diving</a>
+        {recentPosts.length > 0 && <a href="/posts">posts</a>}
         <a href={RESUME_URL} target="_blank" rel="noopener">CV&nbsp;↗</a>
         <button
           type="button"
@@ -406,6 +414,26 @@ const dives = [
           </div>
         ))}
       </section>
+
+      <!-- posts (hidden until the first post ships) -->
+      {
+        recentPosts.length > 0 && (
+          <section id="posts" class="block">
+            <h2 class="label">// posts</h2>
+            <ul class="post-list">
+              {recentPosts.map((p) => (
+                <li>
+                  <span class="post-date">{p.data.publishDate?.toISOString().slice(0, 10)}</span>
+                  <a href={`/posts/${p.id}`}>{p.data.title}</a>
+                </li>
+              ))}
+            </ul>
+            <p class="muted-line">
+              <a href="/posts">all posts</a> · <a href="/rss.xml">rss</a>
+            </p>
+          </section>
+        )
+      }
 
       <!-- diving (zine) -->
       <section id="diving" class="block diving">
@@ -598,38 +626,12 @@ const dives = [
   </script>
 
   <style is:global>
-    :root {
-      --paper: #f4f1e9;
-      --ink: #18120c;
-      --muted: #756c5f;
-      --accent: #cc3a1d;
-      --deep: #0e3a52;
-      --line: #18120c;
-      --dash: #b9b0a1;
-      --chip: #ccbfa6;
-      --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
-      --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
-      --hand: 'Caveat', cursive;
-    }
+    /* palette + fonts live in src/styles/paper.css (shared with /posts) */
 
-    /* dark mode — a warm, dark version of the same paper/ink palette (default stays light) */
-    html.dark {
-      --paper: #15120d;
-      --ink: #ece4d3;
-      --muted: #9a9081;
-      --accent: #e85a3c;
-      --deep: #74b0c8;
-      --line: #ece4d3;
-      --dash: #4b4439;
-      --chip: #5c5446;
-    }
     /* keep the polaroids reading as bright prints pinned on the dark page */
     html.dark .polaroid { box-shadow: 2px 6px 0 rgba(0, 0, 0, 0.55); }
     html.dark .polaroid:hover { box-shadow: 3px 8px 0 rgba(0, 0, 0, 0.6); }
     html.dark .polaroid figcaption { color: #0e3a52; }
-
-    html { scroll-behavior: smooth; }
-    body { background: var(--paper) !important; }
 
     .page {
       min-height: 100vh;

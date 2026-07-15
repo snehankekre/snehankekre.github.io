@@ -89,6 +89,11 @@ export default defineConfig({
       remarkPlugins: [readingTimeRemarkPlugin],
       rehypePlugins: [responsiveTablesRehypePlugin],
     }),
+    // Dual-theme code blocks: light inline, dark via CSS vars flipped by html.dark
+    // (see the .astro-code rules in src/styles/paper.css).
+    shikiConfig: {
+      themes: { light: 'github-light', dark: 'github-dark' },
+    },
   },
 
   vite: {

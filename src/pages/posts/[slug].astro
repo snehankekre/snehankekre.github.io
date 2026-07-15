@@ -1,0 +1,50 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '~/layouts/Layout.astro';
+import '~/styles/paper.css';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('post', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content, remarkPluginFrontmatter } = await render(post);
+
+const date = post.data.publishDate;
+const dateStr = date ? date.toISOString().slice(0, 10) : '';
+const minutes = remarkPluginFrontmatter?.readingTime;
+
+const metadata = {
+  title: post.data.title,
+  description: post.data.excerpt,
+};
+---
+
+<Layout metadata={metadata}>
+  <div class="post-page">
+    <header class="post-top">
+      <a class="post-brand" href="/">snehan&nbsp;kekre</a>
+      <nav>
+        <a href="/posts">posts</a>
+        <a href="/">home</a>
+      </nav>
+    </header>
+
+    <main class="post-main">
+      <p class="post-label">// posts</p>
+      <h1 class="post-title">{post.data.title}</h1>
+      <p class="post-meta">{dateStr}{minutes ? ` · ${minutes} min read` : ''}</p>
+
+      <article class="post-prose">
+        <Content />
+      </article>
+
+      <footer class="post-foot">
+        <a href="/posts">&larr; all posts</a>
+        <a class="spacer" href={`/posts/${post.id}.md`}>view as markdown</a>
+        <a href="/rss.xml">rss</a>
+      </footer>
+    </main>
+  </div>
+</Layout>

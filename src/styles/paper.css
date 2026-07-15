@@ -1,0 +1,260 @@
+/* The site's shared paper/ink palette + the posts chrome.
+   Imported by the homepage and the /posts pages so they read as one object. */
+
+:root {
+  --paper: #f4f1e9;
+  --ink: #18120c;
+  --muted: #756c5f;
+  --accent: #cc3a1d;
+  --deep: #0e3a52;
+  --line: #18120c;
+  --dash: #b9b0a1;
+  --chip: #ccbfa6;
+  --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --hand: 'Caveat', cursive;
+}
+
+/* dark mode: a warm, dark version of the same paper/ink palette (default stays light) */
+html.dark {
+  --paper: #15120d;
+  --ink: #ece4d3;
+  --muted: #9a9081;
+  --accent: #e85a3c;
+  --deep: #74b0c8;
+  --line: #ece4d3;
+  --dash: #4b4439;
+  --chip: #5c5446;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  background: var(--paper) !important;
+}
+
+/* ---------- posts chrome (post-* classes only; homepage styles stay in index.astro) ---------- */
+
+.post-page {
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 0 1.2rem 4rem;
+}
+.post-page a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.post-page a:hover {
+  color: var(--accent);
+}
+
+.post-top {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1.1rem 0;
+  border-bottom: 1.5px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+.post-top .post-brand {
+  font-weight: 700;
+  text-decoration: none;
+}
+.post-top nav {
+  display: flex;
+  gap: 1.1rem;
+  font-size: 0.85rem;
+}
+
+.post-main {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+.post-label {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin: 2.6rem 0 0.6rem;
+}
+.post-title {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem;
+}
+.post-meta {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0 0 2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px dashed var(--dash);
+}
+
+/* ---------- post prose ---------- */
+
+.post-prose {
+  font-family: var(--serif);
+  font-size: 1.12rem;
+  line-height: 1.7;
+}
+.post-prose h2,
+.post-prose h3 {
+  font-family: var(--mono);
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin: 2.2rem 0 0.7rem;
+}
+.post-prose h2 {
+  font-size: 1.25rem;
+  border-bottom: 1px dashed var(--dash);
+  padding-bottom: 0.35rem;
+}
+.post-prose h3 {
+  font-size: 1.05rem;
+}
+.post-prose p {
+  margin: 0 0 1.1rem;
+}
+.post-prose ul,
+.post-prose ol {
+  margin: 0 0 1.1rem;
+  padding-left: 1.4rem;
+}
+.post-prose li {
+  margin: 0.25rem 0;
+}
+.post-prose img,
+.post-prose video {
+  max-width: 100%;
+  height: auto;
+  border: 1.5px solid var(--line);
+  margin: 1.4rem 0;
+}
+.post-prose figcaption {
+  font-family: var(--hand);
+  font-size: 1.05rem;
+  color: var(--muted);
+  margin-top: -1rem;
+  margin-bottom: 1.4rem;
+}
+.post-prose blockquote {
+  border-left: 3px solid var(--accent);
+  margin: 1.4rem 0;
+  padding: 0.2rem 0 0.2rem 1rem;
+  color: var(--muted);
+  font-style: italic;
+}
+.post-prose code {
+  font-family: var(--mono);
+  font-size: 0.88em;
+}
+.post-prose :not(pre) > code {
+  background: color-mix(in srgb, var(--chip) 35%, transparent);
+  padding: 0.05em 0.3em;
+  border-radius: 2px;
+}
+.post-prose pre {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  border: 1.5px solid var(--line);
+  padding: 1rem 1.1rem;
+  margin: 1.4rem 0;
+  overflow-x: auto;
+}
+.post-prose hr {
+  border: 0;
+  border-top: 1px dashed var(--dash);
+  margin: 2rem 0;
+}
+.post-prose table {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  border-collapse: collapse;
+  margin: 1.4rem 0;
+}
+.post-prose th,
+.post-prose td {
+  border: 1px solid var(--dash);
+  padding: 0.35rem 0.6rem;
+  text-align: left;
+}
+
+/* shiki dual theme: flip tokens when html.dark is set */
+html.dark .post-prose .astro-code,
+html.dark .post-prose .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+}
+
+.post-foot {
+  max-width: 44rem;
+  margin: 3rem auto 0;
+  padding-top: 1.1rem;
+  border-top: 1.5px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+.post-foot .spacer {
+  margin-left: auto;
+}
+
+/* ---------- posts index list ---------- */
+
+.post-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.post-list li {
+  border-top: 1px dashed var(--dash);
+  padding: 0.7rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.9rem;
+}
+.post-list li:first-child {
+  border-top: none;
+}
+.post-list .post-date {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.post-list a {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+}
+.post-list a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+.post-list .post-excerpt {
+  flex-basis: 100%;
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--muted);
+  margin: 0.1rem 0 0;
+}
