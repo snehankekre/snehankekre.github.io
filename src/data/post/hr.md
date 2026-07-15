@@ -1,7 +1,7 @@
 ---
 title: ♥ 61 bpm
 publishDate: 2026-07-15
-excerpt: There is a heart beating on my homepage. It is mine, on an exactly 24 hour delay. How it works, from a Garmin Descent Mk3 to one honest subtraction.
+excerpt: There is a heart beating on my homepage. It is mine, on an exactly 24 hour delay. How it works, from a Garmin Descent Mk3i to one honest subtraction.
 draft: true
 ---
 
@@ -9,14 +9,14 @@ There is a small red heart on my homepage now. It beats. The number next to it i
 heart rate, and the heart pulses at that frequency: 48 bpm means one thump every 1.25 seconds,
 80 bpm means one every 0.75. I wrote this up not because the world needs another integration
 post, but because I wanted to, and because the design ended up containing more interesting
-decisions than I expected when I started.
+decisions than I expected.
 
 ## the watch
 
 <!-- TODO: replace with a photo of my actual watch: drop it at public/posts/hr/descent-mk3.jpg -->
-![Garmin Descent Mk3, 43 mm, carbon gray DLC titanium](/posts/hr/descent-mk3.jpg)
+![Garmin Descent Mk3i, 43 mm, carbon gray DLC titanium](/posts/hr/descent-mk3.jpg)
 
-I wear a [Garmin Descent Mk3](https://www.garmin.com/en-US/p/852183/), 43 mm, carbon gray DLC
+I wear a [Garmin Descent Mk3i](https://www.garmin.com/en-US/p/852217/), 43 mm, carbon gray DLC
 titanium. I bought it as my primary dive computer, alongside my Shearwater Perdix 2, because
 technical diving and overhead environments demand redundancy: if a computer dies at 75 m
 inside a cave, "surface and fix it" is not on the menu. Since April 2025 it has been on 400+
@@ -82,7 +82,7 @@ one day of heart rate as JSON, fresh every morning, in CI.
 [python-garminconnect](https://github.com/cyberjunky/python-garminconnect) is the right
 tool: a Python client that speaks the same private API the Garmin Connect app uses. Log in
 the way the app logs in, call the endpoints the app calls. It exposes essentially everything
-I can see on my phone, which also quietly solves the someday-ledger problem, because
+I can see on my phone, which incidentally solves the someday-ledger problem, because
 workouts, sleep, and HRV are all reachable from the same client.
 
 ## why it is not live
