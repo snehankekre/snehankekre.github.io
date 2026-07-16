@@ -294,7 +294,7 @@ const dives = [
         <p class="hr" id="hr" hidden>
           <span class="hr-heart" aria-hidden="true">&hearts;</span>
           <span class="hr-bpm">--</span> bpm
-          <span class="hr-note">live, via Garmin</span>
+          <span class="hr-note"><a href="/posts/hr">live, via Garmin</a></span>
         </p>
         <p class="lede">
           I'm an open-source developer-relations and documentation person. Part of the founding
@@ -689,6 +689,8 @@ const dives = [
     .hr-bpm { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
     .hr-note { color: var(--muted); }
     .hr-note::before { content: '· '; color: var(--dash); }
+    .hr-note a { color: inherit; text-decoration-color: var(--dash); }
+    .hr-note a:hover { color: var(--accent); }
     @keyframes hr-beat {
       0% { transform: scale(1); }
       14% { transform: scale(1.32); }
