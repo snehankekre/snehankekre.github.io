@@ -223,6 +223,11 @@ const diveVideos = import.meta.glob('../assets/diving/*.{mp4,webm,mov,MP4,WEBM,M
   query: '?url',
   import: 'default',
 });
+// Poster frames for the video tiles (extracted with ffmpeg, one per video, same
+// basename). The grid shows only these; the mp4 downloads when a tile is clicked.
+const divePosterImgs = import.meta.glob('../assets/diving/posters/*.{jpg,jpeg,png,webp}', {
+  eager: true,
+});
 
 // Curated captions (the handwritten note under each frame), keyed by filename.
 const diveCaptions: Record<string, string> = {
@@ -238,6 +243,11 @@ const diveCaptions: Record<string, string> = {
 };
 
 const fileName = (path: string) => path.split('/').pop()!;
+const baseName = (path: string) => fileName(path).replace(/\.[^.]+$/, '');
+const posterFor = (videoPath: string): ImageMetadata | null => {
+  const hit = Object.entries(divePosterImgs).find(([p]) => baseName(p) === baseName(videoPath));
+  return hit ? (hit[1] as { default: ImageMetadata }).default : null;
+};
 const diveCaption = (path: string) =>
   diveCaptions[fileName(path)] ??
   fileName(path)
@@ -256,6 +266,7 @@ const dives = [
     type: 'video' as const,
     src: url as string,
     full: url as string,
+    poster: posterFor(path),
     cap: diveCaption(path),
   })),
 ].sort((a, b) => a.path.localeCompare(b.path));
@@ -475,9 +486,15 @@ const dives = [
               <div class="pol-frame">
                 {d.type === 'image' ? (
                   <Image class="pol-media" src={d.src} alt={d.cap} width={520} loading="lazy" />
+                ) : d.poster ? (
+                  <Fragment>
+                    <Image class="pol-media" src={d.poster} alt={d.cap} width={520} loading="lazy" />
+                    <span class="play-badge" aria-hidden="true">▶</span>
+                  </Fragment>
                 ) : (
                   <Fragment>
-                    <video class="pol-media" src={`${d.src}#t=0.1`} muted playsinline preload="metadata"></video>
+                    {/* no extracted poster yet: keep a video tile but fetch nothing up front */}
+                    <video class="pol-media" src={d.src} muted playsinline preload="none"></video>
                     <span class="play-badge" aria-hidden="true">▶</span>
                   </Fragment>
                 )}
