@@ -206,6 +206,15 @@ function oneko() {
 };
 
 const isReduced = window.matchMedia(`(prefers-reduced-motion: reduce)`) === true || window.matchMedia(`(prefers-reduced-motion: reduce)`).matches === true;
-if (!isReduced) {
+
+// Astro's ClientRouter swaps the <body> on navigation, taking the cat with it
+// but leaving this script (and its interval) alive. Re-spawn on each page load.
+function bootNeko() {
+  if (isReduced) return;
+  if (document.getElementById("oneko")) return; // already prowling this page
+  clearInterval(window.onekoInterval);
   oneko();
 }
+
+bootNeko();
+document.addEventListener("astro:page-load", bootNeko);

@@ -520,58 +520,72 @@ const dives = [
   <script>
     // Heart-rate widget: replays Garmin data with a 24h offset, linearly
     // interpolated between ~2-min samples and re-ticked every 10s.
-    const hrEl = document.getElementById('hr');
-    const bpmEl = hrEl?.querySelector('.hr-bpm');
-    const heartEl = hrEl?.querySelector('.hr-heart') as HTMLElement | null;
-    if (hrEl && bpmEl && heartEl) {
-      fetch('/hr.json')
+    // ClientRouter swaps the DOM without re-running modules, so element lookups
+    // happen inside tick() and init re-runs on astro:page-load.
+    type HrData = { points: [number, number][] } | null;
+
+    const DAY = 86_400_000;
+    const GAP = 20 * 60 * 1000; // treat holes wider than this as no-signal
+    let hrFetch: Promise<HrData> | undefined;
+    let hrData: HrData = null;
+    let hrTimer: ReturnType<typeof setInterval> | undefined;
+
+    const sample = (pts: [number, number][], t: number): number | null => {
+      const first = pts[0][0];
+      const last = pts[pts.length - 1][0];
+      if (t > last) t -= DAY; // just past the data day (pre-refresh); replay it
+      if (t < first - GAP || t > last + GAP) return null;
+      let prev: [number, number] | null = null;
+      let next: [number, number] | null = null;
+      for (const p of pts) {
+        if (p[0] <= t) prev = p;
+        else {
+          next = p;
+          break;
+        }
+      }
+      if (!prev) return next && next[0] - t <= GAP ? next[1] : null;
+      if (!next || next[0] - prev[0] > GAP) return t - prev[0] <= GAP ? prev[1] : null;
+      const f = (t - prev[0]) / (next[0] - prev[0]);
+      return Math.round(prev[1] + f * (next[1] - prev[1]));
+    };
+
+    const tick = () => {
+      const hrEl = document.getElementById('hr');
+      const bpmEl = hrEl?.querySelector('.hr-bpm');
+      const heartEl = hrEl?.querySelector('.hr-heart') as HTMLElement | null;
+      if (!hrEl || !bpmEl || !heartEl || !hrData?.points?.length) return;
+      const bpm = sample(hrData.points, Date.now() - DAY);
+      if (bpm == null) {
+        hrEl.hidden = true;
+        return;
+      }
+      bpmEl.textContent = String(bpm);
+      heartEl.style.setProperty('--beat', `${(60 / bpm).toFixed(3)}s`);
+      hrEl.hidden = false;
+    };
+
+    const initHr = async () => {
+      if (!document.getElementById('hr')) return; // not on this page
+      hrFetch ??= fetch('/hr.json')
         .then((r) => (r.ok ? r.json() : null))
-        .then((d: { points: [number, number][] } | null) => {
-          if (!d?.points?.length) return;
-          const pts = d.points;
-          const first = pts[0][0];
-          const last = pts[pts.length - 1][0];
-          const DAY = 86_400_000;
-          const GAP = 20 * 60 * 1000; // treat holes wider than this as no-signal
+        .catch(() => null);
+      hrData = await hrFetch;
+      tick();
+      hrTimer ??= setInterval(tick, 10_000);
+    };
 
-          const sample = (t: number): number | null => {
-            if (t > last) t -= DAY; // just past the data day (pre-refresh); replay it
-            if (t < first - GAP || t > last + GAP) return null;
-            let prev: [number, number] | null = null;
-            let next: [number, number] | null = null;
-            for (const p of pts) {
-              if (p[0] <= t) prev = p;
-              else {
-                next = p;
-                break;
-              }
-            }
-            if (!prev) return next && next[0] - t <= GAP ? next[1] : null;
-            if (!next || next[0] - prev[0] > GAP) return t - prev[0] <= GAP ? prev[1] : null;
-            const f = (t - prev[0]) / (next[0] - prev[0]);
-            return Math.round(prev[1] + f * (next[1] - prev[1]));
-          };
-
-          const tick = () => {
-            const bpm = sample(Date.now() - DAY);
-            if (bpm == null) {
-              hrEl.hidden = true;
-              return;
-            }
-            bpmEl.textContent = String(bpm);
-            heartEl.style.setProperty('--beat', `${(60 / bpm).toFixed(3)}s`);
-            hrEl.hidden = false;
-          };
-          tick();
-          setInterval(tick, 10_000);
-        })
-        .catch(() => {});
-    }
+    initHr();
+    document.addEventListener('astro:page-load', initHr);
   </script>
 
   <script>
-    const dlg = document.getElementById('lightbox') as HTMLDialogElement | null;
-    if (dlg) {
+    // Diving-gallery lightbox. Re-wired after every ClientRouter swap; the
+    // data-wired flag keeps the immediate call + astro:page-load from double-binding.
+    const initLightbox = () => {
+      const dlg = document.getElementById('lightbox') as HTMLDialogElement | null;
+      if (!dlg || dlg.dataset.wired) return;
+      dlg.dataset.wired = '1';
       const stage = dlg.querySelector('.lb-stage') as HTMLElement;
       const cap = dlg.querySelector('.lb-cap') as HTMLElement;
 
@@ -622,7 +636,10 @@ const dives = [
         if (e.target === dlg) closeLb();
       });
       dlg.addEventListener('close', closeLb);
-    }
+    };
+
+    initLightbox();
+    document.addEventListener('astro:page-load', initLightbox);
   </script>
 
   <style is:global>
