@@ -25,7 +25,7 @@ const metadata = {
   title: 'Snehan Kekre · docs, devrel & diving',
   ignoreTitleTemplate: true,
   description:
-    'Snehan Kekre is an open-source developer relations and documentation leader (Streamlit). Community, docs, and developer education, and a diver.',
+    'Snehan Kekre leads docs, developer relations, and developer education for open-source developer tools (Streamlit, AstroBee). Also a diver.',
 };
 
 // JSON-LD Person structured data: helps search engines tie this site to me as an entity.
@@ -37,14 +37,16 @@ const personSchema = {
   image: `${SITE}/og.png`,
   jobTitle: 'Developer Relations & Documentation Leader',
   description:
-    'Open-source developer relations and documentation leader. Community support, technical writing, and developer education.',
+    'Leads documentation, developer relations, and developer education for open-source developer tools. Built and ran Streamlit docs and community; Head of Documentation at AstroBee.',
   alumniOf: { '@type': 'CollegeOrUniversity', name: 'Minerva University' },
   knowsAbout: [
     'Developer Relations',
-    'Community Support',
+    'Community Building',
     'Technical Writing',
     'Documentation',
+    'Documentation Strategy',
     'Developer Education',
+    'Technical Product Management',
     'Open Source',
     'Python',
     'Streamlit',
@@ -301,17 +303,17 @@ const dives = [
       <section class="intro">
         <h1 class="name">snehan&nbsp;kekre</h1>
         <p class="tag">docs<span class="dot">·</span>devrel<span class="dot">·</span>diver</p>
-        <p class="now"><span class="kbd">NOW</span> &rarr; Looking for my next community / docs role. Otherwise underwater.</p>
+        <p class="now"><span class="kbd">NOW</span> &rarr; Looking to run docs, devrel, or dev-ed next. Otherwise underwater.</p>
         <p class="hr" id="hr" hidden>
           <span class="hr-heart" aria-hidden="true">&hearts;</span>
           <span class="hr-bpm">--</span> bpm
           <span class="hr-note"><a href="/posts/hr">live, via Garmin</a></span>
         </p>
         <p class="lede">
-          I'm an open-source developer-relations and documentation person. Part of the founding
-          DevRel team at <strong>Streamlit</strong> (1M+ monthly active devs), I built and ran its
-          docs and support community, fixed most of the things people got stuck on, and
-          product-managed a stack of features into the library myself.
+          I build and run the docs, community, and education around open-source developer tools.
+          Second DevRel hire at <strong>Streamlit</strong> (1M+ monthly active devs), I grew from
+          sole technical writer to leading its docs team and product-managing the open-source
+          library, then built AstroBee's documentation from scratch as Head of Docs.
         </p>
         <p class="links">
           <a href={`mailto:${EMAIL}`} rel="me">email</a>
@@ -326,17 +328,19 @@ const dives = [
         <h2 class="label">// what i do</h2>
         <ul class="tags">
           <li>developer relations</li>
-          <li>community support</li>
           <li>technical writing &amp; docs</li>
           <li>developer education</li>
           <li>technical product management</li>
+          <li>community support</li>
           <li>python &amp; js/ts</li>
         </ul>
         <p class="about-body">
           The part I love most is the space between a community and the people building for it:
           running the forum, reading what users trip on, and turning it into fixes, features, and
-          better docs. When something needs a tool I haven't touched, I go learn it, and I'll write
-          the guide, ship the fix, or record the video, whatever gets a developer unstuck.
+          better docs. I've done that at every altitude: answering threads myself, leading a team
+          of writers and content strategists, and setting the roadmap for the library. When
+          something needs a tool I haven't touched, I go learn it, and I'll write the guide, ship
+          the fix, or record the video, whatever gets a developer unstuck.
         </p>
       </section>
 
@@ -520,7 +524,7 @@ const dives = [
 
       <!-- footer -->
       <footer class="foot">
-        <p class="foot-cta">Building a community, docs, or dev-ed program? <a href={`mailto:${EMAIL}`}>Say hi&nbsp;↗</a></p>
+        <p class="foot-cta">Need someone to run docs, devrel, or dev-ed? <a href={`mailto:${EMAIL}`}>Say hi&nbsp;↗</a></p>
         <p class="foot-meta">
           <a href={`mailto:${EMAIL}`} rel="me">email</a> ·
           <a href={LINKEDIN} target="_blank" rel="me noopener">linkedin</a> ·

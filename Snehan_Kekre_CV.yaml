@@ -3,6 +3,7 @@ cv:
   email: snehan.minerva@gmail.com
   phone: tel:+91-938-041-30-12
   location: India
+  website: https://snehankekre.com
   social_networks:
     - network: LinkedIn
       username: snehankekre
@@ -10,12 +11,30 @@ cv:
       username: snehankekre
   sections:
     summary:
-      - Open-source developer-relations and documentation leader with 8 years across developer education,
-        community support, and technical writing. Built and ran the documentation and
-        support forum for Streamlit (1M+ monthly active developers), resolving the bulk of user
-        issues and acting as the bridge between users and product and engineering. A strong
-        written communicator who ships docs, code, demos, and content, and represents products
-        publicly through talks, videos, and writing.
+      - Developer relations, documentation, and developer education leader with 8 years in
+        open-source and AI developer tooling. Part of Streamlit's founding DevRel team (acquired
+        by Snowflake for $800M); grew from sole technical writer to Technical Product Manager of
+        the Streamlit open-source library (40k+ GitHub stars, 1M+ monthly active developers, 90%
+        of the Fortune 50), ranking among its top-10 all-time contributors and shipping production
+        Python and TypeScript. Previously Coursera's first-ever project instructor, with 40+
+        hands-on courses and 290K+ enrollments. Builds documentation platforms, communities, and
+        curricula that turn new users into experts.
+    skills:
+      - label: Writing & documentation
+        details: technical writing, docs-as-code, information architecture, API reference,
+          tutorials and guides, Markdown, MDX, Next.js, Sphinx, style guides, SEO
+      - label: Code
+        details: Python, TypeScript, React, Streamlit, Git, GitHub, Jupyter, pandas, scikit-learn,
+          TensorFlow, Keras
+      - label: DevRel & community
+        details: community forums, Discord, Slack, GitHub support, conference talks, webinars,
+          video, curriculum design, creator programs
+      - label: Product
+        details: roadmaps, product specs, prototyping, user research, telemetry and analytics,
+          go-to-market, competitive analysis
+      - label: AI
+        details: GenAI product features, LLM-assisted authoring and coding workflows, documentation
+          for AI agent platforms
     experience:
       - company: AstroBee
         position: Head of Documentation
@@ -23,11 +42,11 @@ cv:
         start_date: 2025-06
         end_date: 2026-05
         highlights:
-          - Built the documentation site and owned all of its content, demos, and assets
-            (including tutorials, guides, and reference docs).
-          - Assisted with growth initiatives including content creation, SEO, social
-            media marketing, and the execution of growth experiments, with deliverables spanning
-            blog posts, content briefs, outbound copy, landing pages, and performance reports.
+          - Built [docs.astrobee.ai](https://docs.astrobee.ai) from scratch for an AI agent
+            platform and owned all of its content, including tutorials, guides, reference docs,
+            and every demo asset the sales team pitched with.
+          - Drove growth alongside docs, delivering blog posts, SEO, landing pages, outbound
+            copy, and growth experiments with performance reporting.
 
       - company: Snowflake
         position: Technical Product Manager - Streamlit Open Source
@@ -38,17 +57,26 @@ cv:
           - Joined Snowflake through its acquisition of Streamlit; responsible for the Streamlit
             open-source library (40k+ GitHub stars, 1M+ monthly active developers, used by 90%
             of the Fortune 50), working with a team of 2 PMs and 10 engineers.
-          - Built and launched new Streamlit features across data visualization, ML, GenAI,
-            geospatial, UI/UX, and multimedia.
+          - Shipped features used by millions end to end as PM (spec, research, prototypes,
+            launch), including [st.pills](https://github.com/streamlit/streamlit/pull/9283),
+            [st.segmented_control](https://github.com/streamlit/streamlit/pull/9418),
+            [st.feedback](https://github.com/streamlit/streamlit/pull/8915),
+            [st.audio_input](https://github.com/streamlit/streamlit/pull/9111), chart
+            [stacking](https://github.com/streamlit/streamlit/pull/8945) and
+            [axis labels](https://github.com/streamlit/streamlit/pull/8846), video subtitles, and
+            icon support across button elements.
+          - Personally designed, coded, and merged features and fixes in Streamlit core (Python,
+            TypeScript, React), including st.expander icons, media autoplay, markdown text
+            highlighting, and theme-aware maps; top-10 all-time
+            [contributor](https://github.com/streamlit/streamlit/graphs/contributors?from=2021-04-01&to=2024-10-31&type=c)
+            with dozens of [merged PRs](https://github.com/streamlit/streamlit/pulls?q=is%3Apr+author%3Asnehankekre+is%3Amerged).
           - Defined Streamlit's long-term strategy and roadmap with fellow PMs and leadership,
             translating it into detailed requirements, wireframes, and prototypes.
-          - Maintained the library through feature development, bug fixes, and community engagement,
-            ranking among the [top 10 contributors](https://github.com/streamlit/streamlit/graphs/contributors?from=2021-04-01&to=2024-10-31&type=c).
           - Partnered with marketing on go-to-market planning across pricing, packaging,
             positioning, competitive analysis, and sales enablement.
           - Drove user research (interviews, surveys, usability studies) and turned insights into
             shipped product solutions.
-          - Represented Streamlit publicly — speaking at live events, appearing in videos, and
+          - Represented Streamlit publicly, speaking at live events, appearing in videos, and
             writing blog posts.
 
       - company: Snowflake
@@ -57,16 +85,15 @@ cv:
         start_date: 2022-04
         end_date: 2023-04
         highlights:
-          - Defined the customer and knowledge journeys most critical to docs and mapped the
-            product to them.
-          - Owned every area of the docs platform (getting started, tutorials, API reference,
-            search, knowledge base, telemetry) with clear vision and success criteria.
-          - Created the vision and strategy for scaling docs to support future product growth
-            (more features, integrations, components, apps, and Snowflake integration).
-          - Managed a team of technical writers and content strategists delivering high-quality
-            documentation, while owning platform engineering and product management.
-          - Defined metrics and success criteria for key decisions, instrumenting telemetry and
-            data apps to track the impact of engineering and content work.
+          - Owned [docs.streamlit.io](https://docs.streamlit.io) end to end (getting started,
+            tutorials, API reference, search, knowledge base, telemetry); top contributor to the
+            [docs repo](https://github.com/streamlit/docs/commits?author=snehankekre) with
+            thousands of commits.
+          - Managed a team of technical writers and content strategists while owning the platform
+            engineering; defined metrics and built telemetry data apps to track the impact of
+            content and engineering work.
+          - Set the strategy for scaling docs with the product (features, components, Snowflake
+            integration) and for meeting users beyond the site, in-product and while coding.
 
       - company: Streamlit
         position: Developer Advocate
@@ -74,17 +101,15 @@ cv:
         start_date: 2021-04
         end_date: 2022-04
         highlights:
-          - Part of a team of 50 [acquired by Snowflake for $800 million](https://techcrunch.com/2022/03/02/snowflake-acquires-streamlit-for-800m-to-help-customers-build-data-based-apps/).
+          - Part of Streamlit's founding DevRel team (second DevRel hire and sole technical
+            writer), reporting to the co-founders and Head of DevRel; owned all
+            [documentation](https://docs.streamlit.io/), tutorials, and guides, and was among the
+            team of 50 [acquired by Snowflake for $800 million](https://techcrunch.com/2022/03/02/snowflake-acquires-streamlit-for-800m-to-help-customers-build-data-based-apps/).
           - Ran the Streamlit community forum and supported users across GitHub and social media
             as the go-to resource for users in trouble, resolving the majority of their issues and
             serving as the bridge between our users and the product and engineering teams.
-          - Sole technical writer and second DevRel hire for the Streamlit open-source library,
-            reporting to the co-founders and Head of DevRel; owned all
-            [documentation](https://docs.streamlit.io/), tutorials, and guides.
           - Led development of a new documentation platform (with design and engineering) on
             Next.js, MDX, and Netlify, migrating all content off Sphinx and ReadTheDocs.
-          - Shipped new product docs, tutorials, guides, example scripts, and auto-generated
-            reference docs; reworked existing content to keep it fresh and engaging.
           - Designed Streamlit's education program, enabling adoption across classrooms, boot camps,
             and internships.
           - Built internal Streamlit apps and profiled telemetry to surface product and leadership
@@ -96,11 +121,13 @@ cv:
         start_date: 2019-12
         end_date: 2021-04
         highlights:
-          - Built curricula, instructional content, and video for 40+ Guided Projects on machine
-            learning, deep learning, data science, and data visualization, reaching 290K+ enrollments.
-          - Coursera's first-ever project instructor and author of the first project on the platform.
-          - Covered topics including Plotly/Seaborn, scikit-learn, H2O AutoML, TensorFlow/Keras
-            (NLP and CV), BERT, TensorFlow Serving, feature engineering, and ML pipelines.
+          - Coursera's first-ever project instructor and author of the first Guided Project on
+            the platform; built curricula, instructional content, and video for 40+ Guided
+            Projects on machine learning, deep learning, and data visualization, reaching 290K+
+            enrollments.
+          - Taught Plotly/Seaborn, scikit-learn, H2O AutoML, TensorFlow/Keras (NLP and computer
+            vision), BERT, TensorFlow Serving, feature engineering, and ML pipelines, supporting
+            thousands of learners in the discussion forums.
           - Co-authored instructor onboarding docs and designed assessments for deeplearning.ai's
             TensorFlow - Data and Deployment Specialization.
 
@@ -110,10 +137,9 @@ cv:
         start_date: 2020-10
         end_date: 2021-04
         highlights:
-          - Built a source of truth with 100% accuracy for skill-to-content tagging to power
-            Coursera's Skills Graph.
-          - Audited 400 of Coursera's courses against the skills taxonomy, partnering with the
-            Skills Graph team to ensure dataset quality for downstream ML needs.
+          - Built a 100%-accurate skill-to-content source of truth powering Coursera's Skills
+            Graph, auditing 400 courses against the skills taxonomy to ensure dataset quality for
+            downstream ML needs.
 
       - company: Rhyme.com (Acquired by Coursera)
         position: Machine Learning Instructor
