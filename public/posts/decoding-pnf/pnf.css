@@ -1,0 +1,87 @@
+.pnf-legend {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  margin: 1.25rem 0 0.5rem;
+}
+.pl::before {
+  content: "";
+  display: inline-block;
+  width: 0.7em;
+  height: 0.7em;
+  margin-right: 0.4em;
+  border: 1px solid var(--ink);
+  vertical-align: baseline;
+}
+.pl-emp::before {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.pl-unk::before {
+  background: color-mix(in srgb, var(--ink) 18%, transparent);
+  border-style: dashed;
+}
+.pnf-grid {
+  display: grid;
+  grid-template-columns: repeat(16, minmax(0, 1fr));
+  gap: 3px;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  margin: 0.5rem 0 1.5rem;
+}
+.pnf-grid .b {
+  position: relative;
+  text-align: center;
+  padding: 0.45em 0;
+  border: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
+  cursor: help;
+}
+.pnf-grid .b.emp {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  border-color: var(--accent);
+}
+.pnf-grid .b.unk {
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
+  border-style: dashed;
+}
+.pnf-grid .b:hover::after,
+.pnf-grid .b:focus::after {
+  content: attr(data-t);
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.5em 0.7em;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  width: max-content;
+  max-width: 16rem;
+  white-space: normal;
+  text-align: left;
+  z-index: 10;
+}
+.pnf-grid .b:nth-child(-n + 8):hover::after,
+.pnf-grid .b:nth-child(-n + 8):focus::after {
+  left: 0;
+  transform: none;
+}
+.pnf-grid .b:nth-last-child(-n + 8):hover::after,
+.pnf-grid .b:nth-last-child(-n + 8):focus::after {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+.pnf-grid:has(.f-depth:hover) .f-depth,
+.pnf-grid:has(.f-stop:hover) .f-stop,
+.pnf-grid:has(.f-tts:hover) .f-tts,
+.pnf-grid:has(.f-at5:hover) .f-at5,
+.pnf-grid:has(.f-tank1:hover) .f-tank1,
+.pnf-grid:has(.f-tank0:hover) .f-tank0,
+.pnf-grid:has(.f-b30:hover) .f-b30 {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}

@@ -15,9 +15,13 @@ const date = post.data.publishDate;
 const dateStr = date ? date.toISOString().slice(0, 10) : '';
 const minutes = remarkPluginFrontmatter?.readingTime;
 
+// Per-post social card: fall back to the site default og.png when a post
+// doesn't ship its own image.
+const ogImage = post.data.image;
 const metadata = {
   title: post.data.title,
   description: post.data.excerpt,
+  ...(ogImage ? { openGraph: { images: [{ url: ogImage, width: 1200, height: 630 }] } } : {}),
 };
 ---
 
