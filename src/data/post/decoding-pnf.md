@@ -8,7 +8,7 @@ draft: false
 
 <link rel="stylesheet" href="/posts/decoding-pnf/pnf.css" />
 
-My [Shearwater Perdix 2](https://shearwater.com/pages/perdix-2-support) computes a number called GF99 every ten seconds of every dive: the
+My [Shearwater Perdix 2](https://shearwater.com/pages/perdix-2-support) computes a number called GF99 every ten seconds of every dive. It's the
 leading tissue's supersaturation as a percentage of its Bühlmann M-value at my current
 depth. In plainer words, it says how close my dissolved gas load is to the decompression
 model's limit, where 100 means I'm standing on the line. It's one of the most interesting
@@ -41,7 +41,7 @@ assert len(data) % 32 == 0
 ```
 
 For my dive #202 (101.5 m at Drop Off dive site Tulamben, 102 minutes runtime), the blob is 16,388 bytes,
-the prefix promises 26,496, and gzip delivers it: 828 records of 32 bytes.
+the prefix promises 26,496, and gzip delivers it. That unpacks to 828 records of 32 bytes.
 The whole dive which is one record every 10 seconds plus bookkeeping, is compressed smaller than a
 photo on your phone. Wow \\(\*o*\)/!
 
@@ -163,8 +163,8 @@ have something to report:
 But a curve that behaves right is still circumstantial. Hmm  (╭ರ_•́)..
 
 So I wrote a verification suite that cross-checks every decoded channel, per sample,
-against Shearwater's own outputs across all 142 dives on this Perdix, and it deserves
-its own post. Short version: the worst
+against Shearwater's own outputs across all 142 of my Shearwater dives, and it deserves
+[its own post](/posts/verifying-undocumented-bytes). Short version: the worst
 disagreement between my decoder and Shearwater's XML across every shared sample is
 0.0000, and byte 25's surfacing value agrees with Cloud's EndGF99 on 142 of 142 dives
 within one GF point.
@@ -194,14 +194,14 @@ ATPLUSFIVE_1ST_BYTE_OFFSET = 26
 Four for four, sweet! And three bytes I'd filed under "no idea" got names in the same table.
 Byte 11 is `BATTERY_PERCENT_REMAINING`, which is why it sat in the eighties and nineties
 and, I checked, never once exceeds 100 across all 32,544 samples. Byte 17 is
-`BATTERYVOLTAGE_OFFSET_MSB`: the high byte of a sixteen-bit battery voltage whose low
+`BATTERYVOLTAGE_OFFSET_MSB`, the high byte of a sixteen-bit battery voltage whose low
 byte is 18, reading zero only because 1.5 volts never needs the high byte. Bytes 30-31
 hold surface air consumption. Shearwater's constant calls it
 `RESPIRATORY_MINUTE_VOLUME` but the parse method reads it as SAC and divides by 100.
 Either way it's `0xFFFF` for me, since I dive without gas integration.
 
 Decompiling the actual parse method with [ILSpy](https://github.com/icsharpcode/ILSpy)
-caught something the that wasn't obvious from the constants alone. Bytes 24 and 25 are ceiling and GF99 only when
+caught something that wasn't obvious from the constants alone. Bytes 24 and 25 are ceiling and GF99 only when
 the decompression model uses gradient factors:
 
 ```csharp
@@ -243,4 +243,4 @@ without the rest of my dive store: [pnf](https://github.com/snehankekre/pnf)
 The mappings above are validated on a Perdix 2 and a Petrel 3 (the latter driving a
 Choptima CCR). Other models in the family may populate these bytes differently. If yours
 disagrees, `bottomtime verify` will say so loudly, and I would love the failing
-blob: [issues welcome](https://github.com/snehankekre/bottomtime/issues).
+blob. [Issues welcome](https://github.com/snehankekre/bottomtime/issues).
