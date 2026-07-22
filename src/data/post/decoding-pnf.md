@@ -1,37 +1,45 @@
 ---
 title: The bytes my dive computer keeps to itself
 publishDate: 2026-07-21
-excerpt: Shearwater Cloud stores every dive as a gzip blob of 32-byte records, then exports a subset of it. GF99, deco ceiling, and battery voltage stay behind. So I decoded the blobs myself.
+excerpt: Shearwater Cloud stores every dive as a compressed blob of 32-byte records, and its export files leave some of the fields out. GF99, the deco ceiling, and battery voltage never make it into the exports. So I decoded the blobs myself.
 image: '~/assets/images/og-decoding-pnf.png'
 draft: false
 ---
 
 <link rel="stylesheet" href="/posts/decoding-pnf/pnf.css" />
 
-My [Shearwater Perdix 2](https://shearwater.com/pages/perdix-2-support) computes a number called GF99 every ten seconds of every dive. It's the
-leading tissue's supersaturation as a percentage of its Bühlmann M-value at my current
-depth. In plainer words, it says how close my dissolved gas load is to the decompression
-model's limit, where 100 means I'm standing on the line. It's one of the most interesting
-numbers a dive computer produces, a live readout of how loaded I actually am, and
-Shearwater Cloud plots it. But the XML export, the thing
-you'd reach for to get your data out, doesn't contain it, and neither does the CSV. Same
-for the deco ceiling, the per-sample battery voltage, and the @+5 prediction. The app is
-clearly reading them from somewhere.
+My [Shearwater Perdix 2](https://shearwater.com/pages/perdix-2-support) computes a number
+called GF99 every ten seconds of every dive. It tells me how close the gas dissolved in my
+body is to the limit my decompression model allows. At 100, I'm right on the limit.
 
-So I went looking. This post is about what I
-found: Shearwater's Petrel Native Format, the 32-byte record stream every Petrel-family
-computer logs internally, and the four bytes in it I first mapped by experiment and only
-later confirmed against Shearwater's own code. The decoder ships in
-[bottomtime](https://github.com/snehankekre/bottomtime), the dive-log store I wrote for
-my two-computer logging habit (`pip install bottomtime`).
+The model is Bühlmann's. It tracks nitrogen and helium in sixteen imaginary tissues, and
+each tissue has a maximum it's allowed to reach at a given depth, called its M-value. GF99
+takes the tissue that's closest to its maximum and reports how far its gas pressure is
+above the surrounding water pressure, as a percentage of how far above it the M-value
+allows. It's one of the most interesting numbers a dive computer produces, because it
+shows how loaded I am right now.
+
+Shearwater Cloud, the app that stores my dives, plots GF99. But GF99 isn't in the XML
+export, which is the file you'd normally use to get your data out, and it isn't in the
+CSV either. Neither are the deco ceiling, the battery voltage at each sample, or the @+5
+prediction. The app must be reading them from somewhere.
+
+So I went looking, and this post is about what I found. Every computer in Shearwater's
+Petrel family logs its dives internally in a format called Petrel Native Format, or PNF.
+It's a stream of 32-byte records, and four bytes in each sample record hold the missing
+numbers. I first mapped those bytes by experiment, and only later confirmed them against
+Shearwater's own code. The decoder ships in
+[bottomtime](https://github.com/snehankekre/bottomtime), the dive-log store I wrote
+because I dive with two computers (`pip install bottomtime`).
 
 ## Where the real log lives
 
-[Shearwater Cloud](https://shearwater.com/pages/shearwater-cloud)'s desktop app has three export options. XML and CSV are lossy renderings.
-The third, "Export Database", writes a SQLite file called `dive_data.db`, and that one
-contains the real log. Inside there's a `log_data` table with a BLOB column, one blob per dive,
-tagged `sw-pnf`. The blob layout is a 4-byte little-endian length followed by a gzip
-stream:
+[Shearwater Cloud](https://shearwater.com/pages/shearwater-cloud)'s desktop app has three
+export options. XML and CSV both leave data out. The third, "Export Database", writes a
+SQLite file called `dive_data.db`, and that file holds the complete log. It has a
+`log_data` table with a BLOB column, one blob per dive, each tagged `sw-pnf`. A blob
+starts with 4 bytes that give its unzipped length as a little-endian integer, and the rest
+is a gzip stream:
 
 ```python
 expected = struct.unpack_from("<I", blob, 0)[0]
@@ -40,12 +48,13 @@ assert len(data) == expected
 assert len(data) % 32 == 0
 ```
 
-For my dive #202 (101.5 m at Drop Off dive site Tulamben, 102 minutes runtime), the blob is 16,388 bytes,
-the prefix promises 26,496, and gzip delivers it. That unpacks to 828 records of 32 bytes.
-The whole dive which is one record every 10 seconds plus bookkeeping, is compressed smaller than a
-photo on your phone. Wow \\(\*o*\)/!
+Take my dive #202, 101.5 m at the Drop Off dive site in Tulamben, 102 minutes long. Its
+blob is 16,388 bytes. The first four bytes promise 26,496 bytes once it's unzipped, and
+gzip delivers exactly that: 828 records of 32 bytes each. That's one record every 10
+seconds plus some bookkeeping, and the whole dive takes up less space than a photo on your
+phone. Wow \\(\*o*\)/!
 
-Byte 0 of each record is its type. In that dive the stream looks like this:
+Byte 0 of each record says what type of record it is. Here's what dive #202 contains:
 
 | type | meaning | count in dive #202 |
 | --- | --- | --- |
@@ -57,43 +66,45 @@ Byte 0 of each record is its type. In that dive the stream looks like this:
 | `0xFF` | final record (serial, model, firmware) | 1 |
 | `0x51`, `0x70`-`0x75`, `0x80`-`0x87`, `0xA0`, `0xA1` | no idea (yet) | 180 |
 
-The opening records carry the dive's configuration: the ten programmed gases, gradient
-factor settings, units, water density, atmospheric pressure, sample interval. The
-closing records mirror them with end-of-dive state.
+The opening records hold the dive's settings: the ten programmed gases, the gradient
+factor settings, units, water density, atmospheric pressure, and how often to take a
+sample. The closing records repeat the same fields with their values at the end of the
+dive.
 
-The last row is the one I care about. Every record type the decoder doesn't understand
-is stored verbatim in the database, per dive, in stream order. Nothing is dropped just
-because I can't read it today.
+The last row is the one I care about. The decoder stores every record type it doesn't
+understand in the database, byte for byte, per dive, in the order it appeared. It never
+throws a record away just because I can't read it yet.
 
 ## Standing on libdivecomputer
 
-Luckily, I didn't have to start from scratch. The open-source
-[libdivecomputer](https://github.com/libdivecomputer/libdivecomputer) project has
-supported Petrel-family computers for years, and its
-[`shearwater_predator_parser.c`](https://github.com/libdivecomputer/libdivecomputer/blob/master/src/shearwater_predator_parser.c)
-handles PNF explicitly. A comment in the parser notes that relative to the legacy
-Predator format "the samples are simply offset by one", because PNF prepends the
-record-type byte, and it documents the sample layout: depth in the first two bytes of
-a sample, then next stop, TTS, gas fractions, temperature, CNS. Reading that parser is how
-I knew what the documented bytes were, and how to check my own mapping against them.
+Luckily, I didn't have to start from scratch.
+[libdivecomputer](https://github.com/libdivecomputer/libdivecomputer) is an open-source
+library that has read Petrel-family computers for years, and its parser,
+[`shearwater_predator_parser.c`](https://github.com/libdivecomputer/libdivecomputer/blob/master/src/shearwater_predator_parser.c),
+handles PNF directly. A comment in the parser says that compared with the older Predator
+format, "the samples are simply offset by one". That's because PNF adds the record-type
+byte at the front. The parser also lays out the sample: depth in the first two bytes,
+then next stop, TTS (time to surface), gas fractions, temperature, and CNS. Reading it
+told me which bytes were already known, and gave me something to check my own mapping
+against.
 
-That parser is as close to a public spec as PNF gets. Shearwater does write protocol
-documentation, but hands it only to registered developers through
+That parser is the closest thing PNF has to a public spec. Shearwater does write protocol
+documentation, but it only gives it to registered developers through
 [a formal process](https://shearwater.com/pages/support).
-[Subsurface](https://subsurface-divelog.org/) imports the desktop database by
-[querying its pre-decoded tables](https://github.com/subsurface/subsurface/blob/master/core/import-shearwater.cpp)
-and never opens the blob. So for the undocumented bytes, there was nothing left to look
-up.
+[Subsurface](https://subsurface-divelog.org/), the open-source dive log, imports the
+desktop database by
+[querying the tables Shearwater has already decoded](https://github.com/subsurface/subsurface/blob/master/core/import-shearwater.cpp),
+and it never opens the blob. So for the undocumented bytes, there was nothing left to
+look up.
 
-Lay the documented offsets over a PNF sample record and 23 of its 32 bytes are
-accounted for, counting the type byte. The other nine are either padding or they're the
-fields the exports omit, and Shearwater Cloud clearly reads *something* more, because
-it plots GF99.
+If you lay the known offsets over a PNF sample record, they explain 23 of its 32 bytes,
+counting the type byte. The other nine are either padding or the fields the exports leave
+out. Shearwater Cloud must read at least some of them, because it plots GF99.
 
 ## Reading the record, byte by byte
 
-Here is the actual record from the deepest sample of dive #202, the moment the gauge
-read 101.5 m. Hover (or tap) any byte:
+Here is the real record from the deepest sample of dive #202, when the gauge read
+101.5 m. Hover over (or tap) any byte:
 
 <div class="pnf-legend">
   <span class="pl pl-doc">documented (libdivecomputer)</span>
@@ -135,53 +146,55 @@ read 101.5 m. Hover (or tap) any byte:
   <span class="b unk f-b30" tabindex="0" data-t="bytes 30-31: surface air consumption (SAC), u16 / 100. Shearwater's constant names it RESPIRATORY_MINUTE_VOLUME. 0xFFFF = n/a; I dive without gas integration">ff</span>
 </div>
 
-The documented bytes check out against what my wrist showed at 101.5 m: 11/63 trimix,
-TTS 53 minutes, next stop 33 m, CNS 4%, water 25 C. The arithmetic is nothing fancier
-than big-endian shorts and a divide by ten.
+The known bytes match what my wrist showed at 101.5 m: 11/63 trimix (11% oxygen, 63%
+helium), TTS 53 minutes, next stop 33 m, CNS 4%, and water at 25 C. Decoding them takes
+nothing more than reading two-byte big-endian numbers and dividing by ten.
 
 ## The four bytes I had to find myself
 
-Bytes 18, 24, 25 and 26-27 are the ones libdivecomputer doesn't read and the exports
-don't include. Mapping them was an empirical process where I had to stare at the values across
-hundreds of dives, form a hypothesis, and try to falsify it.
+libdivecomputer doesn't read bytes 18, 24, 25, and 26-27, and the exports don't include
+them. To map them, I looked at their values across hundreds of dives, guessed what each
+one was, and then tried to prove each guess wrong.
 
-Byte 25 was an interesting light bulb moment. It reads `0xFF` early in a dive, wakes up as tissues load, decays
-during long shallow stops, and spikes right at surfacing. That is exactly how GF99 should
-behave, and it converges on the `EndGF99` value Shearwater Cloud computes for each dive.
-Byte 24 hugs the depth profile from below during deco, always sitting at or just under
-the 3 m-quantized stop depth, and zeroes the moment deco clears. That's the ceiling!
-Byte 18 matched the XML export's `batteryVoltage` times 100 on every sample I checked.
-Bytes 26-27 tracked TTS but ran ahead of it by a sensible margin, which is the @+5
-display field, TTS if I stayed five more minutes.
+Byte 25 was a light-bulb moment. It reads `0xFF` early in a dive, starts showing a value
+as my tissues take on gas, falls during long shallow stops, and jumps right at surfacing.
+That's how GF99 should behave. Its value at the end of each dive also lands on the
+`EndGF99` number that Shearwater Cloud computes for that dive. Byte 24 follows the depth
+during deco and is never deeper than the stop depth, which moves in 3 m steps. It drops to
+zero as soon as deco is done. That's the ceiling! Byte 18 equalled the XML export's
+`batteryVoltage` times 100 on every sample I checked. Bytes 26-27 followed TTS but stayed
+ahead of it by a sensible margin. That's the @+5 field on the display, which shows what my
+TTS would be if I stayed five more minutes.
 
-Here's dive #202 with the empirical bytes plotted. Ceiling in red riding under the grey
-quantized stop depth and GF99 waking up at the 17-minute mark once the tissues actually
-have something to report:
+Here's dive #202 with those bytes plotted. The red ceiling line rides just under the grey
+stop depth, and GF99 starts showing a value at the 17-minute mark, once the tissues have
+something to report:
 
 ![Depth, stop depth and decoded ceiling for a 101.5 m dive, with GF99 below, showing the 0xFF span during on-gassing](/posts/decoding-pnf/gf99-ceiling.png)
 
-But a curve that behaves right is still circumstantial. Hmm  (╭ರ_•́)..
+But a curve that behaves the right way is still only circumstantial evidence. Hmm  (╭ರ_•́)..
 
-So I wrote a verification suite that cross-checks every decoded channel, per sample,
-against Shearwater's own outputs across all 142 of my Shearwater dives, and it deserves
-[its own post](/posts/verifying-undocumented-bytes). Short version: the worst
-disagreement between my decoder and Shearwater's XML across every shared sample is
-0.0000, and byte 25's surfacing value agrees with Cloud's EndGF99 on 142 of 142 dives
-within one GF point.
+So I wrote a verification suite. It checks every decoded channel, sample by sample,
+against Shearwater's own outputs for all 142 of my Shearwater dives, and it gets
+[its own post](/posts/verifying-undocumented-bytes). The short version: across every
+sample that both my decoder and Shearwater's XML have, the biggest difference is 0.0000.
+And byte 25's value at surfacing matches Cloud's EndGF99 within one GF point on 142 of 142
+dives.
 
 ## Then I read Shearwater's own code
 
-I could have stopped at the verification suite. Then a [Reddit comment](https://www.reddit.com/r/AskReverseEngineering/comments/1gq9vth/comment/mbtywtv/?context=3) pointed out that
-Shearwater Cloud ships its parser as a .NET assembly, `DiveLogParser.dll`, and that you
-can open the class `PetrelNativeLogV14Parser` in a decompiler and read the format
-directly. That's a Windows workflow, and I'm on a Mac, but the macOS build of Shearwater
-Cloud is a Unity app and it ships the same managed DLL under
-`Shearwater Cloud.app/Contents/Resources/Data/Managed/`. It turned out to be real
-.NET bytecode which I could read.
+I could have stopped at the verification suite. Then a
+[Reddit comment](https://www.reddit.com/r/AskReverseEngineering/comments/1gq9vth/comment/mbtywtv/?context=3)
+pointed out that Shearwater Cloud ships its parser as a .NET assembly called
+`DiveLogParser.dll`. You can open the class `PetrelNativeLogV14Parser` in a decompiler and
+read the format straight out of it. The comment described a Windows workflow, and I'm on a
+Mac. But the macOS build of Shearwater Cloud is a Unity app, and it ships the same .NET
+DLL under `Shearwater Cloud.app/Contents/Resources/Data/Managed/`. It was real .NET
+bytecode, so I could read it.
 
-The byte offsets are stored as named constants right in the assembly metadata, so I
-didn't even need a decompiler. [dnfile](https://github.com/malwarefrank/dnfile), a
-pure-Python reader, dumps them straight out. Here is what Shearwater calls the bytes I
+The byte offsets are stored as named constants in the assembly's metadata, so I didn't
+even need a decompiler. [dnfile](https://github.com/malwarefrank/dnfile), a pure-Python
+reader for .NET files, prints them out directly. Here's what Shearwater calls the bytes I
 had mapped by hand:
 
 ```
@@ -191,18 +204,18 @@ BATTERYVOLTAGE_OFFSET_LSB  = 18
 ATPLUSFIVE_1ST_BYTE_OFFSET = 26
 ```
 
-Four for four, sweet! And three bytes I'd filed under "no idea" got names in the same table.
-Byte 11 is `BATTERY_PERCENT_REMAINING`, which is why it sat in the eighties and nineties
-and, I checked, never once exceeds 100 across all 32,544 samples. Byte 17 is
-`BATTERYVOLTAGE_OFFSET_MSB`, the high byte of a sixteen-bit battery voltage whose low
-byte is 18, reading zero only because 1.5 volts never needs the high byte. Bytes 30-31
-hold surface air consumption. Shearwater's constant calls it
-`RESPIRATORY_MINUTE_VOLUME` but the parse method reads it as SAC and divides by 100.
-Either way it's `0xFFFF` for me, since I dive without gas integration.
+Four for four, sweet! The same table also named three bytes I had filed under "no idea".
+Byte 11 is `BATTERY_PERCENT_REMAINING`. That's why it sat in the eighties and nineties,
+and I checked that it never once goes above 100 across all 32,544 samples. Byte 17 is
+`BATTERYVOLTAGE_OFFSET_MSB`, the high byte of a 16-bit battery voltage whose low byte is
+byte 18. It reads zero only because 1.5 volts never needs the high byte. Bytes 30-31 hold
+surface air consumption (SAC). Shearwater's constant calls it `RESPIRATORY_MINUTE_VOLUME`,
+but the parse method reads it as SAC and divides by 100. Either way it's `0xFFFF` for me,
+because I dive without gas integration.
 
-Decompiling the actual parse method with [ILSpy](https://github.com/icsharpcode/ILSpy)
-caught something that wasn't obvious from the constants alone. Bytes 24 and 25 are ceiling and GF99 only when
-the decompression model uses gradient factors:
+Decompiling the parse method itself with [ILSpy](https://github.com/icsharpcode/ILSpy)
+showed something the constants alone didn't. Bytes 24 and 25 only mean ceiling and GF99
+when the decompression model uses gradient factors:
 
 ```csharp
 if (headerDecoModel == 3) {   // DCIEM
@@ -215,32 +228,34 @@ if (headerDecoModel == 3) {   // DCIEM
 }
 ```
 
-On a DCIEM dive those two bytes are a safe-ascent depth instead, and my decoder, which
-reads byte 25 as GF99 no matter what, would mis-decode it. All 142 of my dives run
-gradient factors, so the bug has never fired. My data just never contained the case that breaks my code. 
-It's on the fix list now though, found by reading the vendor instead of my own logs lol.
+DCIEM is a decompression model that doesn't use gradient factors, and on a DCIEM dive
+those two bytes hold a safe-ascent depth instead. My decoder reads byte 25 as GF99 no
+matter what, so it would decode a DCIEM dive wrong. All 142 of my dives use gradient
+factors, so the bug has never fired. My data just never contained the case that breaks my
+code. It's on the fix list now, and I found it by reading the vendor's code instead of my
+own logs lol.
 
-## What's still dark
+## What I still can't read
 
-Even the record types I'd shrugged at earlier were mostly named once I looked. `0x70`-`0x75` are
-tissue-loading snapshots, `0x80`-`0x88` are validity bitmaps for the opening and sample
-records, `0x60` is a surface ppO2 log. Three types in my dives are still unexplained.
-`0x51`, `0xA0`, and `0xA1`.
+Once I looked, most of the record types I'd shrugged at earlier had names too.
+`0x70`-`0x75` are snapshots of tissue loading, `0x80`-`0x88` are bitmaps that say which
+fields in the opening and sample records are valid, and `0x60` is a log of ppO2 at the
+surface. Three types in my dives are still unexplained: `0x51`, `0xA0`, and `0xA1`.
 
-They stay in the `undecoded_payloads` table (392,959 rows and counting, Garmin's mystery
-FIT messages included), verbatim, because the blobs are archived and the decoder is
-versioned. When someone works one out, I re-decode from the archive and every past dive
-gains the channel, no re-download needed, even if the computer that logged it is long
-dead by then. That archive-first design is
-its own story.
+They stay in the `undecoded_payloads` table, byte for byte. That table has 392,959 rows
+and counting, including Garmin's mystery FIT messages. I archive the original blobs and
+version the decoder, so when someone works out one of these types, I can re-decode from
+the archive and every past dive gains the new channel. I don't need to download anything
+again, even if the computer that logged the dive is long dead by then. That archive-first
+design is its own story.
 
 I wrote all of this up as a standalone
-[format specification](https://github.com/snehankekre/pnf/blob/main/SPEC.md), and pulled
-the decoder into its own pure-Python package for anyone who wants to read Petrel logs
-without the rest of my dive store: [pnf](https://github.com/snehankekre/pnf)
-(`pip install pnf`).
+[format specification](https://github.com/snehankekre/pnf/blob/main/SPEC.md). I also
+pulled the decoder into its own pure-Python package, [pnf](https://github.com/snehankekre/pnf)
+(`pip install pnf`), for anyone who wants to read Petrel logs without the rest of my dive
+store.
 
-The mappings above are validated on a Perdix 2 and a Petrel 3 (the latter driving a
-Choptima CCR). Other models in the family may populate these bytes differently. If yours
-disagrees, `bottomtime verify` will say so loudly, and I would love the failing
-blob. [Issues welcome](https://github.com/snehankekre/bottomtime/issues).
+I've validated these mappings on a Perdix 2 and on a Petrel 3, which was controlling a
+Choptima CCR (a closed-circuit rebreather). Other models in the family may fill these
+bytes differently. If yours disagrees, `bottomtime verify` will tell you loudly, and I
+would love the failing blob. [Issues welcome](https://github.com/snehankekre/bottomtime/issues).
