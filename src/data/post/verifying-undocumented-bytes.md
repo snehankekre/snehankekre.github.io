@@ -1,32 +1,34 @@
 ---
 title: Proving byte 25
 publishDate: 2026-07-22
-excerpt: "A reverse-engineered byte is a hypothesis. I wanted mine attacked from every angle before trusting it: the vendor's exports, its own arithmetic, physics, a second computer, and finally its source code."
+excerpt: "A reverse-engineered byte is only a guess until something checks it. I tested mine every way I could before trusting them: against the vendor's exports, the vendor's own arithmetic, physics, a second dive computer, and finally the vendor's source code."
 image: '~/assets/images/og-verifying-undocumented-bytes.png'
 draft: false
 ---
 
-In [the last post](/posts/decoding-pnf) I claimed that byte 25 of a Shearwater dive
-sample is GF99 (the live readout of how close your tissue load is to the decompression
-model's limit), byte 24 is the deco ceiling, byte 18 is battery voltage, and bytes 26-27
-are the @+5 prediction, the time to surface if you stayed five more minutes. Shearwater has never documented any of that. Which means the
-claim is exactly as good as the evidence behind it, and "the curve looked right on a few
-dives" is the kind of evidence that decodes your tissue loading wrong for a year before
-you notice.
+In [the last post](/posts/decoding-pnf) I made four claims about a Shearwater dive
+sample. Byte 25 is GF99, the live readout of how close your tissues are to the
+decompression model's limit. Byte 24 is the deco ceiling. Byte 18 is battery voltage.
+Bytes 26-27 are the @+5 prediction, the time to surface if you stayed five more minutes.
 
-So [bottomtime](https://github.com/snehankekre/bottomtime) treats every byte mapping as
-a hypothesis and ships a verification suite, `bottomtime verify`, that tries to falsify
-all of them against every dive in the store. The suite has four independent oracles, and
-a fifth turned up later from outside it. None of them is my own opinion of what a
-plausible dive looks like.
+Shearwater has never documented any of that, so each claim is only as good as the
+evidence behind it. "The curve looked right on a few dives" is the kind of evidence that
+lets you decode your tissue loading wrong for a year before you notice.
 
-## Oracle 1: the vendor's other rendering
+So [bottomtime](https://github.com/snehankekre/bottomtime) treats every byte mapping as a
+guess to be tested. It ships a verification suite, `bottomtime verify`, that tries to
+prove each mapping wrong against every dive in the store. The suite has four independent
+oracles. An oracle here is any source that knows the right answer without asking my
+decoder. A fifth one turned up later, from outside the suite. None of them is my own
+opinion of what a plausible dive looks like.
 
-Shearwater Cloud can export a dive as XML. The XML is lossy (it's missing the very
-channels I had to reverse), but the channels it *does* carry were produced by
-Shearwater's own code reading the same native log. That makes it a per-sample answer
-key for the documented offsets. If my decoder and their exporter disagree about sample
-371's depth, my decoder is the one that's wrong.
+## Oracle 1: the vendor's XML export
+
+Shearwater Cloud can export a dive as XML. The XML leaves things out, including the very
+channels I had to reverse engineer. But the channels it does include came from
+Shearwater's own code reading the same native log. That makes the XML an answer key,
+sample by sample, for the documented bytes. If my decoder and their exporter disagree
+about the depth at sample 371, my decoder is the one that's wrong.
 
 The suite pairs each XML file with its dive by start time and compares nine channels
 sample by sample:
@@ -42,136 +44,145 @@ sample by sample:
 | `batteryVoltage` | `battery_v` | 0.011 V |
 | `currentNdl` | `ndl_min` | 0.001 |
 
-The tolerances exist because the two renderings round differently. The log stores depth
-as decimetres and the XML prints it as a float, so half a decimetre of slack covers the
-rounding without covering any real mistake. Byte 18 earns its place here too. The XML's
-`batteryVoltage` equals the byte's value divided by 100 on every sample, which is what
-promoted it from guess to mapping.
+The tolerances are there because the two files round differently. The log stores depth
+in decimetres and the XML prints it as a decimal number, so allowing half a decimetre
+covers the rounding without hiding any real mistake. Byte 18 gets checked here too. On
+every sample, the XML's `batteryVoltage` equals byte 18 divided by 100, and that's what
+turned byte 18 from a guess into a mapping.
 
-The current run verbatim against my 142 dives with Shearwater dive computers:
+Here's the current run against my 142 dives with Shearwater computers, as printed:
 
 ```
 xml crosscheck: 142 dives, worst deviation 0.0000 at #13[86].depth_m
 ```
 
-Every shared sample of every dive agrees exactly. The "worst" deviation is a rounding
-artifact so small it prints as zero.
+Every shared sample of every dive agrees. The "worst" difference is a rounding error so
+small that it prints as zero.
 
 ## Oracle 2: the vendor's own arithmetic
 
-The XML can't vouch for GF99, since GF99 is one of the fields it omits. But Shearwater
-Cloud computes a summary statistic per dive called `EndGF99`, the gradient factor at
-surfacing, and stores it in the database next to the raw blob. Shearwater's code
-computed that number from the same samples I'm decoding. So if byte 25 really is GF99, then
-the maximum of my decoded byte-25 values over the last minutes of a dive should equal
-their `EndGF99`.
+The XML can't check GF99, because GF99 is one of the fields it leaves out. But Shearwater
+Cloud computes a summary number for each dive called `EndGF99`, the gradient factor at
+surfacing, and stores it in the database next to the raw blob. Shearwater's code computed
+that number from the same samples I'm decoding. So if byte 25 is GF99, the highest
+byte-25 value in the last minutes of a dive should equal Cloud's `EndGF99`.
 
 Across all 142 of my Shearwater dives:
 
 ![Scatter of decoded max GF99 near surfacing against Shearwater Cloud's EndGF99 for 142 dives, all points on the diagonal](/posts/verifying-undocumented-bytes/endgf99.png)
 
-The median disagreement is zero. The worst is a single GF point, and it shows up on two
-dives. On one, Cloud reads 5 where I read 6. On the other, Cloud's EndGF99 is 0 where my
-tail reads 1. Both readings sit at the bottom of the scale, a leading tissue only a few
-percent of the way to its Bühlmann limit, so a one-point gap there is the same clean
-surfacing counted two ways. I
-take the window over the last 60 samples (ten minutes) rather than the literal final
-sample because GF99 keeps moving during the last metre of ascent, and Cloud's snapshot
-and mine need not land on the same instant.
+The median difference is zero. The biggest difference is one GF point, and it happens on
+two dives. On one, Cloud says 5 and I say 6. On the other, Cloud says 0 and I say 1. Both
+are at the very bottom of the scale, where the leading tissue is only a few percent of
+the way to its Bühlmann limit, so a one-point gap there is the same clean surfacing read
+two slightly different ways. I take the highest value over the last 60 samples (ten
+minutes) instead of only the final sample. GF99 keeps moving during the last metre of the
+ascent, and Cloud's snapshot and mine may not be taken at the same moment.
 
 ## Oracle 3: physics
 
-Some checks need no vendor at all. A decoded ceiling that comes out deeper than the
-displayed stop depth would be nonsense. Deco stops land only on a 3 m grid (3 m, 6 m,
-9 m...), and the stop is the ceiling pushed to the next grid depth at least as deep, so
-the decoded ceiling can never sit deeper than the decoded stop. That invariant holds on all
-33,773 samples in the store with zero violations. If I had picked the wrong byte for either
-field, this is the check that would scream, because an arbitrary byte has no reason to
-stay quantized-consistent with its neighbor for a hundred hours of diving.
+Some checks don't need the vendor at all. Deco stops only happen at multiples of 3 m
+(3 m, 6 m, 9 m, and so on), and the stop the computer shows is the ceiling rounded to the
+next multiple of 3 m that's at least as deep. So the decoded ceiling can never be deeper
+than the decoded stop. That rule holds on all 33,773 samples in the store, with zero
+exceptions. If I had picked the wrong byte for either field, this check would catch it
+right away, because a random byte has no reason to stay consistent with the stop depth
+for a hundred hours of diving.
 
-The `0xFF` sentinel behaves physically too. On my 101.5 m dive, byte 25 reads `0xFF`
-from second 10 to second 1050, one contiguous run, and then never again. That span is
-the descent and the deep segment. Tissues sit under ambient pressure the whole time, with
-no supersaturation to report. The sentinel switches off exactly when the physics says a
+The `0xFF` placeholder also behaves the way physics says it should. On my 101.5 m dive,
+byte 25 reads `0xFF` from second 10 to second 1050, in one unbroken run, and never again
+after that. That span is the descent and the time at depth. During all of it, the gas
+pressure in my tissues is below the pressure of the surrounding water, so there's no
+supersaturation to report. The placeholder switches off at the moment the physics says a
 gradient factor starts to exist.
 
 ## Oracle 4: the other wrist
 
-I log every dive on two computers, a Garmin Descent Mk3i and the Perdix. To my knowledge, they share no
-firmware, sensor, nor vendor. After [the matcher](/posts/matching-two-dive-computers) aligns their clocks, both series claim
-to describe the same physical body in the same
-water column, so their depth channels have to agree. For each of the 84 matched pairs
-the suite takes the median absolute depth difference at aligned timestamps:
+I log every dive on two computers, a Garmin Descent Mk3i and the Perdix. As far as I
+know, they share no firmware, no sensors, and no vendor. After
+[the matcher](/posts/matching-two-dive-computers) lines up their clocks, both are
+describing the same body in the same water, so their depths have to agree. For each of
+the 84 matched pairs, the suite takes the median depth difference across the aligned
+timestamps, and then reports the median of those 84 medians:
 
 ```
 twin agreement: 84 matches, median-of-medians 0.162 m, worst 0.840 m
 ```
 
-The tolerance scales with depth, max(0.6 m, 4.5% of max depth), because the two
-computers convert pressure to depth with their own assumed water density (fresh, salt,
-or the EN13319 dive-gauge standard), and those differ by up to about 3%. Sixteen centimetres of median
-disagreement between two unrelated instruments is, honestly, better than I expected
-from physics that starts with "assume a density".
+The tolerance grows with depth. It's the larger of 0.6 m and 4.5% of the dive's max
+depth. That's because each computer converts pressure to depth using its own assumed
+water density (fresh water, salt water, or the EN13319 standard for dive gauges), and
+those densities differ by up to about 3%. A median difference of sixteen centimetres
+between two unrelated instruments is, honestly, better than I expected from a
+calculation that starts with "assume a density".
 
 ## What else byte 25 could have been
 
-A byte that merely correlates with GF99 would sail through a sloppy check, so the live
-alternatives each needed disproving separately. The strongest was SurfGF, Shearwater's
-other gradient number, the same supersaturation recomputed as if I surfaced right now.
-The two converge at the moment of surfacing, so the EndGF99 oracle alone can't tell
-them apart. The sentinel can. SurfGF is well-defined and climbing through the descent
-and bottom phase, which is precisely the 1,040 seconds byte 25 spends reading `0xFF`. CNS, the oxygen-toxicity clock,
-was disproven twice. It's already documented at byte 23, and it never decreases during a dive,
-while byte 25 decays through every long stop. Timers, counters, and battery-like slow
-channels fail the same shape test. GF99 is the only quantity I know of that is
-undefined at depth, wakes on ascent, decays at stops, spikes at surfacing, and lands on
-Shearwater's own EndGF99 142 times out of 142.
+A byte that only correlates with GF99 would pass a sloppy check, so I had to rule out
+each realistic alternative on its own. The strongest one was SurfGF, Shearwater's other
+gradient number. SurfGF is the same supersaturation, calculated as if I surfaced right
+now. GF99 and SurfGF become equal at the moment of surfacing, so the EndGF99 check alone
+can't tell them apart.
 
-## Oracle 5: the vendor's own source
+The `0xFF` placeholder can. SurfGF has a real value that keeps climbing through the
+descent and the time at depth, and that's exactly the 1,040 seconds when byte 25 reads
+`0xFF`. CNS, the oxygen-toxicity clock, was ruled out twice. It's already documented at
+byte 23, and it never goes down during a dive, while byte 25 falls during every long
+stop. Timers, counters, and slow-moving values like battery level fail the same shape
+test. GF99 is the only quantity I know of that has no value at depth, appears on the
+ascent, falls during stops, jumps at surfacing, and matches Shearwater's own EndGF99 142
+times out of 142.
 
-The four oracles above are behavioral. They judge byte 25 by how it acts. A fifth arrived
-later and judges it by construction. Shearwater Cloud ships its parser as a .NET
-assembly, `DiveLogParser.dll`, and the macOS app carries the same managed file as the
-Windows one, so I could read the class that decodes these records
-([the how is in the last post](/posts/decoding-pnf)). It names byte 25 `GF99_OFFSET` and
-byte 24 `DECOCEILING_OFFSET`, confirming all four empirical bytes at once.
+## Oracle 5: the vendor's own source code
 
-It also closed the SurfGF question harder than the sentinel did. The parse method only
-treats byte 25 as GF99 when the deco model uses gradient factors, and reads it as a
-safe-ascent-depth fraction on DCIEM, a decompression model that doesn't use gradient
-factors. A generic gradient number like SurfGF would never
-get that branch, which pins byte 25 as GF99 in particular and closes the one gap the
-behavioral oracles left open. That is the strongest evidence I have, which is why I put
-it last. If I'd read the source first, I'd have trusted a name and
-skipped the checks that would have caught me decoding the DCIEM case wrong. The source
-tells you what the bytes are called. Only the data tells you whether your code is right.
+The four oracles above judge byte 25 by how it behaves. A fifth one arrived later and
+judges it by what Shearwater's code says it is. Shearwater Cloud ships its parser as a
+.NET assembly, `DiveLogParser.dll`, and the macOS app includes the same file as the
+Windows app, so I could read the class that decodes these records
+([the last post covers how](/posts/decoding-pnf)). It names byte 25 `GF99_OFFSET` and
+byte 24 `DECOCEILING_OFFSET`, and it confirms all four bytes I had found by experiment.
+
+It also settled the SurfGF question more firmly than the placeholder did. The parse
+method only treats byte 25 as GF99 when the deco model uses gradient factors. On DCIEM, a
+decompression model that doesn't use gradient factors, it reads the byte as part of a
+safe-ascent depth. A general gradient number like SurfGF would never get that special
+case, so byte 25 has to be GF99 specifically. That closes the one gap the behaviour
+checks left open.
+
+It's the strongest evidence I have, and I put it last on purpose. If I'd read the source
+first, I would have trusted a name and skipped the checks. The source tells you what the
+bytes are called. Only the data tells you whether your code is right.
 
 ## Byte 11, which no oracle could reach
 
-Byte 11 defeated all four behavioral oracles. It was nonzero in 32,544 of my 33,773
-samples, sat between 82 and 94 through the deep dive, and correlated with no exported
-field, computed summary, invariant, or second computer. For a long time it stayed raw in an
-`extra_json` column, unlabeled, as one of 392,959 undecoded payloads the store keeps
-verbatim. The fifth oracle is what finally named it as `BATTERY_PERCENT_REMAINING`. And
-because a name in a binary is still a hypothesis, I checked it the same way as the rest,
-and the values bound cleanly to 0-100 across every sample, which an arbitrary byte has no
-reason to do. While behavior can pin some bytes down, the source has to name the rest, and both
-still have to survive the data.
+Byte 11 got past all four behaviour checks. It was nonzero in 32,544 of my 33,773
+samples, it stayed between 82 and 94 through the deep dive, and it didn't line up with
+any exported field, computed summary, physical rule, or the second computer. For a long
+time it sat unlabelled in an `extra_json` column, one of the 392,959 undecoded payloads
+the store keeps byte for byte.
 
-The discipline underneath all of it is that decoded and verified are different states,
-and only the checks are allowed to move a byte from one to the other. What I never do is
-guess plausibly and move on, because a dive log is the one dataset where
-plausible-but-wrong is worse than missing. Nobody re-checks a number that looks right.
+The fifth oracle finally named it: `BATTERY_PERCENT_REMAINING`. A name in a binary is
+still only a guess, so I checked it like the rest. Its values stay between 0 and 100 on
+every sample, which a random byte has no reason to do. Behaviour can pin down some
+bytes, and the source has to name the others, but either way the answer still has to
+hold up against the data.
 
-## Every trip re-litigates everything
+The rule under all of this is that decoded and verified are two different states, and
+only the checks can move a byte from one state to the other. I never guess something
+plausible and move on, because in a dive log, a plausible wrong number is worse than a
+missing one. Nobody re-checks a number that looks right.
 
-`bottomtime verify` runs against the live store, so every new trip re-litigates every
-mapping: 142 dives of XML agreement, 142 EndGF99 convergences, 33,773 invariant samples,
-84 twin comparisons, and the counts and foreign keys besides. The empirical bytes are
-validated on a Perdix 2 and a Petrel 3 so far. Every mapping that clears the suite is
-what the [pnf spec](https://github.com/snehankekre/pnf/blob/main/SPEC.md) writes down and
-the `pnf` package (`pip install pnf`) decodes. If your Teric or Nerd 2 populates them
-differently, the suite is designed to catch it rather than silently mis-decode, and a
-failing blob in [the issue tracker](https://github.com/snehankekre/bottomtime/issues)
-is the data I can't generate myself. So please, if you have a Shearwater that disagrees with my mapping, run `bottomtime verify` and
-file the blob.
+## Every trip re-checks everything
+
+`bottomtime verify` runs against the live store, so every new dive trip re-checks every
+mapping: XML agreement on 142 dives, EndGF99 on 142 dives, the ceiling rule on 33,773
+samples, 84 two-computer comparisons, plus the row counts and foreign keys. So far the
+bytes I found by experiment are validated on a Perdix 2 and a Petrel 3. Every mapping
+that passes the suite goes into the [pnf spec](https://github.com/snehankekre/pnf/blob/main/SPEC.md),
+and the `pnf` package (`pip install pnf`) decodes it.
+
+If your Teric or Nerd 2 fills these bytes differently, the suite is designed to catch
+that instead of quietly decoding it wrong. A failing blob in
+[the issue tracker](https://github.com/snehankekre/bottomtime/issues) is data I can't
+produce myself. So if you have a Shearwater that disagrees with my mapping, please run
+`bottomtime verify` and file the blob.
