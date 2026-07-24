@@ -98,7 +98,7 @@ gradient factor starts to exist.
 ## Oracle 4: the other wrist
 
 I log every dive on two computers, a Garmin Descent Mk3i and the Perdix. To my knowledge, they share no
-firmware, sensor, nor vendor. After the matcher aligns their clocks, both series claim
+firmware, sensor, nor vendor. After [the matcher](/posts/matching-two-dive-computers) aligns their clocks, both series claim
 to describe the same physical body in the same
 water column, so their depth channels have to agree. For each of the 84 matched pairs
 the suite takes the median absolute depth difference at aligned timestamps:
