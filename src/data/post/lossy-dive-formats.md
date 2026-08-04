@@ -9,7 +9,7 @@ My Perdix 2 records seventeen channels per sample. The open formats can carry si
 them. [Subsurface](https://subsurface-divelog.org/), the best open-source dive log there is, exports four.
 
 Divers blame the formats for that gap. I did too, [in my own
-README](https://github.com/snehankekre/bottomtime/blob/78b0b48057fcf56d8400a61afa84caa3aca012c9/README.md#L9).
+README](https://github.com/snehankekre/bottomtime/blob/78b0b48057fcf56d8400a61afa84caa3aca012c9/README.md?plain=1#L9).
 The gap is in the exporters.
 
 ## One dive, seventeen channels
