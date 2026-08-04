@@ -2,6 +2,7 @@
 title: My dive computer records 17 channels. Subsurface exports 4.
 publishDate: 2026-08-05
 excerpt: "Divers blame the interchange formats for losing decompression data. I counted the fields. UDDF has carried GF99 since 2018, DAN's format has carried the deco ceiling since 2006, and there is a version of UDDF that real software writes and that was never published."
+image: '~/assets/images/og-lossy-dive-formats.png'
 draft: false
 ---
 
