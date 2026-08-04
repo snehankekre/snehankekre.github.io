@@ -7,7 +7,7 @@ draft: true
 
 This file never publishes (`draft: true`). Copy it to start a new post:
 
-1. `cp src/data/post/hello.md src/data/post/<slug>.md` — the filename IS the slug (`hr.md` → `/posts/hr`).
+1. `cp src/data/post/hello.md src/data/post/<slug>.md`. The filename IS the slug (`hr.md` → `/posts/hr`).
 2. Set `title`, `publishDate`, `excerpt`; delete `draft: true` when ready.
 3. Commit and push; the deploy publishes it, adds it to /posts, the homepage, RSS, and the sitemap.
 
