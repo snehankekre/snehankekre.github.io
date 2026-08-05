@@ -36,7 +36,8 @@ passes through.*
 
 ## UDDF standardised GF99 in 2018
 
-From `uddf_3.2.3.xsd`, inside `waypointType`, the per-sample record:
+UDDF is the Universal Dive Data Format, an XML schema for dive logs. From
+`uddf_3.2.3.xsd`, inside `waypointType`, the per-sample record:
 
 ```xml
 <xs:element name="gradientfactor" minOccurs="0">
@@ -62,9 +63,12 @@ setting over a dive is a live GF readout.
 
 `<batterychargecondition>`, `<cns>`, `<otu>`, `<decostop>`, `<nodecotime>`, `<setpo2>`,
 `<measuredpo2>`, `<heartrate>` and `<tankpressure>` are waypoint children too. Twelve of
-my seventeen.
+my seventeen. `<decostop>` is the next stop, which is a different number from the
+current ceiling. UDDF has an element for the first and none for the second.
 
 ## DL7 had the ceiling in 2006
+
+UDDF has no ceiling and no status byte. DL7 had both in 2006, twelve years earlier.
 
 DL7 is Divers Alert Network's format, built for Project Dive Exploration. The
 specification is a Word document by Petar J. Denoble dated July 2006, and it survives in
@@ -83,8 +87,9 @@ Its per-sample segment is ZDP. Two of its fields:
 
 A per-sample deco ceiling, and a per-sample hex warning word whose bits each computer
 defines for itself. The second one is a packed status byte under another name. DAN
-specified both eight years before my dive computer existed, and twelve years before the
-XML standard that has neither.
+specified both eight years before my dive computer existed.
+
+UDDF kept growing after 2018. None of the growth is on its website.
 
 ## UDDF 3.3.0 was never published. Software writes it anyway.
 
@@ -109,11 +114,12 @@ certificate that expired in July 2025 for an unrelated hostname. The schema dire
 stops at 3.2.2. Meanwhile commercial dive software writes 3.3.0 files and an
 open-source dive log keeps one as a test fixture.
 
+Across all three specifications, sixteen of my seventeen channels have somewhere to go.
+The seventeenth is the count of times a rebreather's solenoid fired to inject oxygen,
+and nothing has a field for it.
+
 The standard's most recent useful version is a private agreement between vendors. You
 find it by reading files.
-
-After all three specifications, one of my seventeen channels has nowhere to go: the CCR
-solenoid fire count.
 
 ## Subsurface reads more UDDF than it writes
 
@@ -147,7 +153,8 @@ None of this is a complaint about Subsurface, which is free, excellent, and the 
 most divers have their data at all. That XSLT is old, XSLT is a miserable language to
 extend, and UDDF export matters far less to its users than supporting the next computer
 over USB. Jef Driesen, who maintains libdivecomputer, is thanked in UDDF's own author
-list. These people have done far more for open dive data than I have.
+list. These people have done far more for open dive data than I have. The data is
+thinner at the end of the chain anyway, and UDDF's authors saw that coming.
 
 ## UDDF has a slot for the raw bytes. Nobody fills it.
 
@@ -172,9 +179,14 @@ question.
 ## The same thing happens outside diving
 
 Dive logs are small enough that you can count every field and read every exporter in an
-afternoon. That is the only unusual thing about this case. Any format where a committee wrote a large
+afternoon. That is the only unusual thing about this case.
+
+RFC 5545 gives calendars six component types and three alarm actions. Google's CalDAV
+API supports four of the six and two of the three, and Google's own developer
+documentation is where you find that out: "Doesn't support `VTODO` or `VJOURNAL` data",
+"Doesn't support the `AUDIO` action". Any format where a committee wrote a large
 specification and a few libraries implemented the parts their authors needed works this
-way: healthcare records, calendars, geospatial data, most of the OpenAPI surface.
+way, healthcare records and geospatial data included.
 
 So stop grading a format by its specification. Grade it by what the tools you actually
 use will read and write. That intersection is smaller than the spec, smaller than any
@@ -210,6 +222,13 @@ Subsurface, read at master:
   what it reads
 - [`dives/test-apd-inspiration.uddf`](https://github.com/subsurface/subsurface/blob/master/dives/test-apd-inspiration.uddf),
   the UDDF 3.3.0 file
+
+Calendars:
+
+- [RFC 5545](https://www.rfc-editor.org/rfc/rfc5545.txt), the component types in
+  sections 3.6.1 to 3.6.6 and the alarm actions in section 3.8.6.1
+- [Google's CalDAV API developer guide](https://developers.google.com/workspace/calendar/caldav/v2/guide),
+  under Specifications, where the unsupported list lives
 
 Channel counts come from my own store, one query per column across the 616 samples of
 `A823C228#13`. The decoder is [bottomtime](https://github.com/snehankekre/bottomtime)
