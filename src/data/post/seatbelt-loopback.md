@@ -77,13 +77,24 @@ except Exception as e:
   print("bind FAILED -> %r" % (e,))
 ```
 
-That produced a clean table. Profiles carrying only a `network-bind` rule printed
-`bind FAILED`. Profiles carrying `network-inbound` printed `bind ok`. A profile with no
-`network-bind` rule at all still printed `bind ok`. The conclusion wrote itself:
-`network-bind` does not authorize a bind, `network-inbound` does.
+That produced a clean table. Here are its three rows, re-run today against the same
+profiles:
+
+```
+bind only        bind FAILED -> PermissionError(1, 'Operation not permitted')
+bind + inbound   bind ok
+inbound only     bind ok
+```
+
+Row one carries a `network-bind` rule and fails. Row three has no `network-bind` rule
+anywhere in the profile and passes. The conclusion wrote itself: `network-bind` does not
+authorize a bind, `network-inbound` does.
 
 Read the probe again. Nothing in it can tell a refused `bind()` from a refused
-`listen()`.
+`listen()`. Those three rows are equally consistent with the answer I reached and with
+the answer that turned out to be true, so the table could not have come out any other
+way and it settled nothing. What I needed was a run where the two readings predict
+different output, and I had no such run until I pulled the two calls apart.
 
 ## Which rule authorizes which syscall
 
@@ -112,10 +123,10 @@ as a `bind()` denial.*
 The reason a profile with no `network-bind` rule can still bind is that `network-bind`
 sits underneath `network-inbound` in Seatbelt's operation hierarchy. A rule written on
 `network-inbound` propagates down to `network-bind` when the profile has no
-`network-bind` rule of its own. That inheritance produced the row I found most
-convincing, the one where a profile with no bind rule anywhere in it still printed
-`bind ok`. I read that as proof that `network-bind` was doing nothing. It was the
-inbound rule standing in for a bind rule that was not there.
+`network-bind` rule of its own. That inheritance produced row three of my table, the
+inbound-only profile that printed `bind ok` with no bind rule written anywhere in it. I
+read that row as proof that `network-bind` was doing nothing. It was the inbound rule
+standing in for a bind rule that was not there.
 
 Precedence is by specificity rather than by position, which is worth knowing separately
 because Seatbelt is usually described as last-rule-wins:
@@ -142,6 +153,44 @@ One socket, two rules. The bind rule names the transport and nothing else. The i
 rule covers that same socket and adds `(local tcp) (remote tcp)`, because receiving is a
 separate authorization that takes its own filters. If one operation covered both
 syscalls, the second rule would be redundant, and Apple would not have written it.
+
+## The kernel had been logging the answer
+
+Both denials arrive in Python as the same object. `PermissionError(1, 'Operation not
+permitted')` is what you get for a refused `bind()` and for a refused `listen()`, and
+the exception carries nothing else to tell them apart. That is the layer I was reading,
+and it is the wrong layer. One level down, the kernel writes the name of the operation
+it refused to the unified log, every time.
+
+Two profiles, the first allowing `network-bind` alone and the second allowing
+`network-inbound` while denying `network-bind`:
+
+```
+$ sandbox-exec -f bindonly.sb python3 split.py 127.0.0.1 57111
+BIND_OK  LISTEN_FAIL PermissionError(1, 'Operation not permitted')
+
+$ sandbox-exec -f denybind.sb python3 split.py 127.0.0.1 57112
+BIND_FAIL           PermissionError(1, 'Operation not permitted')
+
+$ log show --last 25s --predicate 'eventMessage CONTAINS "deny(1) network"' --style compact
+kernel (Sandbox) Sandbox: Python(80245) deny(1) network-inbound local:*:57111
+kernel (Sandbox) Sandbox: Python(80246) deny(1) network-bind    local:*:57112
+```
+
+Identical errors in Python, and the log separates them by operation name and prints the
+filter it evaluated. It needs no privileges, no modification to the profile, and no
+change to the program under test. Run against row one of my table, it would have printed
+`network-inbound` beside a probe whose own output said `bind FAILED`, and three days
+would have ended that afternoon.
+
+One thing to know before leaning on it. The kernel collapses identical denial messages,
+so five refused `listen()` calls on the same port from one process produce a single log
+line, and a loop that fails on every iteration reads as though it failed once. Vary the
+port if you want to count them.
+
+Under the pair of rules I ended up shipping, that same predicate stays silent through a
+full bind, listen, accept, and poll on loopback, and prints exactly one line for a dial
+to `1.1.1.1`: `deny(1) network-outbound remote:*:80`.
 
 ## The two rules you need
 
@@ -226,10 +275,23 @@ inbound filter, removing that line breaks the server.
 [The comment I wrote above those
 lines](https://github.com/snehankekre/quickstarted/blob/132d467191f812884b65c8cc7a2cc54e40b3f44f/src/quickstarted/exec/seatbelt.py#L65-L69)
 claims three things: that `network-bind` does not match a `localhost:*` filter, that it
-silently refuses the bind, and that all three rules are needed. The filter matched the
-bind without complaint. The call with no rule behind it was `listen()`, which means the
-edit that fixed my tasks was the inbound rule, and widening the bind filter from
-`localhost:*` to `*:*` bought me nothing. The comment comes out.
+silently refuses the bind, and that all three rules are needed. So I rebuilt the profile
+as it stood before that commit and added the three edits back one at a time, against a
+probe that binds, listens, accepts a connection, and polls itself:
+
+```
+bind localhost:*                        BIND_OK  LISTEN_FAIL
+bind localhost:* + inbound              BIND_OK  LISTEN_OK   POLL_FAIL
+bind localhost:* + inbound + outbound   BIND_OK  LISTEN_OK   POLL_OK
+bind *:*         + inbound + outbound   BIND_OK  LISTEN_OK   POLL_OK
+```
+
+The filter I called broken matched the bind in every row, including the first, where no
+other rule in the profile could have authorized it. The inbound rule and the outbound
+rule each cleared a real failure. The last two rows are identical, so widening from
+`localhost:*` to `*:*` bought me nothing, and the comment explaining why I had done it
+was explaining a change that did nothing. Four runs, and I could have had them before I
+wrote a word of it. The comment comes out.
 
 ## Two things that cost me time
 
