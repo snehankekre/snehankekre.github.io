@@ -1,7 +1,7 @@
 ---
 title: In macOS Seatbelt, bind and listen are two different permissions
 publishDate: 2026-08-06
-excerpt: "network-bind authorizes bind(). network-inbound authorizes listen() and accept(). One propagates to the other under a condition that took me three days to see, because my probe called both syscalls inside one try block and labelled every failure with the name of the wrong one."
+excerpt: "network-bind authorizes bind(). network-inbound authorizes listen() and accept(). One propagates to the other under a condition that took me three days to see, because my probe called both syscalls inside one try block and labelled every failure with the name of the wrong one. The kernel had been logging the name of the operation it refused the entire time, one layer below the exception I was reading."
 image: '~/assets/images/og-seatbelt-loopback.png'
 draft: false
 ---
@@ -89,6 +89,12 @@ inbound only     bind ok
 Row one carries a `network-bind` rule and fails. Row three has no `network-bind` rule
 anywhere in the profile and passes. The conclusion wrote itself: `network-bind` does not
 authorize a bind, `network-inbound` does.
+
+I had the post drafted around that conclusion, and nothing I was going to do next would
+have dislodged it. Every test I could think of running was a test I had designed while
+believing it. So before publishing I went back at the draft with the opposite
+instruction. Assume every claim in here is wrong, and go find the reason. The headline
+claim lasted twenty minutes.
 
 Read the probe again. Nothing in it can tell a refused `bind()` from a refused
 `listen()`. Those three rows are equally consistent with the answer I reached and with
@@ -302,7 +308,9 @@ exactly like a denial.
 Do not let two syscalls share a `try` block when you are working out which one the
 kernel refused. I had a table, the table had real numbers in it, and it was measuring
 something other than what its column header said. Three days and a source comment came
-out of that.
+out of that. Both of my wrong answers survived every test I thought to run, because I
+designed those tests while believing the thing they were supposed to check. Neither
+survived twenty minutes of trying to break them on purpose.
 
 All results are macOS 15.7.3, build 24G419, Darwin 24.6.0. None of this is documented or
 promised, so pin your own results to a version and re-check after upgrades.
