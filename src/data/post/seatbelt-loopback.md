@@ -6,8 +6,10 @@ image: '~/assets/images/og-seatbelt-loopback.png'
 draft: false
 ---
 
-macOS Seatbelt has two rules that look like they cover the same ground. `network-bind`
-authorizes `bind()`. `network-inbound` authorizes `listen()` and `accept()`. They are
+Seatbelt is the sandbox macOS puts a command inside when you run it under
+`sandbox-exec`. It has two rules that look like they cover the same ground.
+`network-bind` authorizes `bind()`. `network-inbound` authorizes `listen()` and
+`accept()`. They are
 separate operations that fail at different syscalls, and under one condition the second
 silently stands in for the first.
 
@@ -27,9 +29,22 @@ calls separated.
 
 I maintain [a harness](https://github.com/snehankekre/quickstarted) that runs documented
 quickstart commands inside a sandbox and records which documentation pages an agent
-reads. On macOS the enforced backend is `sandbox-exec`. Quickstarts frequently end at
-"start the dev server and open it", so the sandbox has to let a process listen on
-loopback and poll itself, while still refusing to reach any documentation host directly.
+reads. Quickstarts frequently end at "start the dev server and open it", so the sandbox
+has to let a process listen on loopback and poll itself, while still refusing to reach
+any documentation host directly.
+
+On macOS the enforced backend is
+[`sandbox-exec`](https://keith.github.io/xcode-man-pages/sandbox-exec.1.html), which
+runs a command inside a policy you hand it as a file. Apple's manual calls the machinery
+underneath it [the sandbox
+facility](https://keith.github.io/xcode-man-pages/sandbox.7.html), and Seatbelt is the
+name it goes by everywhere else. The tool is marked DEPRECATED, in a man page last
+revised in 2017, and developers are pointed at [App
+Sandbox](https://developer.apple.com/documentation/security/app-sandbox) instead. App
+Sandbox covers apps you ship. I need to wrap whatever command a quickstart tells a
+reader to run. Neither man page documents the profile language, so every operation name
+below comes from Apple's own profiles under `/System/Library/Sandbox/Profiles/` and from
+testing.
 
 Every task that started a server failed. The same tasks passed under the Docker backend,
 so the tasks themselves were fine. The failure looked like this:
@@ -227,6 +242,5 @@ kernel refused. I had a table, the table had real numbers in it, and it was meas
 something other than what its column header said. Three days and a source comment came
 out of that.
 
-All results are macOS 15.7.3, build 24G419, Darwin 24.6.0. Seatbelt is deprecated and
-Apple documents none of this, so pin your own results to a version and re-check after
-upgrades.
+All results are macOS 15.7.3, build 24G419, Darwin 24.6.0. None of this is documented or
+promised, so pin your own results to a version and re-check after upgrades.
