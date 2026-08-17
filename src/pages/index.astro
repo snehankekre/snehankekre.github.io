@@ -307,6 +307,36 @@ const dives = [
         <p class="hr" id="hr" hidden>
           <span class="hr-heart" aria-hidden="true">&hearts;</span>
           <span class="hr-bpm">--</span> bpm
+          <!-- Lungs: the trachea is a fixed path, the lobes and the airway tree
+               inflate together from the carina, so the windpipe stays put the
+               way it does in a chest. Hidden as a unit when rr.json is missing
+               or the wrist was bare, leaving the heart alone on the line. -->
+          <span class="hr-breath" hidden>
+          <svg class="hr-lungs" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path class="lung-trachea" d="M12 2.9 V 9.2" />
+            <g class="lung-lobes">
+              <path class="lung-lobe" d="M10.4 4.6 C 9.2 3.4, 6.5 4.2, 5.4 7.0 C 4.1 10.3, 2.4 14.2, 2.3 17.6 C 2.2 20.2, 3.5 21.6, 5.8 21.6 L 9.1 21.6 C 10.0 21.6, 10.4 20.8, 10.4 19.6 Z" />
+              <path class="lung-lobe" d="M13.6 4.6 C 14.8 3.4, 17.5 4.2, 18.6 7.0 C 19.9 10.3, 21.6 14.2, 21.7 17.6 C 21.8 20.2, 20.5 21.6, 18.2 21.6 L 14.9 21.6 C 14.0 21.6, 13.6 20.8, 13.6 19.6 Z" />
+              <g class="lung-tree">
+                <path d="M12 8.8 L 9.3 11.2" stroke-width="1" />
+                <path d="M12 8.8 L 14.7 11.2" stroke-width="1" />
+                <path d="M9.3 11.2 L 6.7 13.1" stroke-width="0.78" />
+                <path d="M9.3 11.2 L 9.7 14.6" stroke-width="0.78" />
+                <path d="M14.7 11.2 L 17.3 13.1" stroke-width="0.78" />
+                <path d="M14.7 11.2 L 14.3 14.6" stroke-width="0.78" />
+                <path d="M6.7 13.1 L 4.9 14.7" stroke-width="0.55" />
+                <path d="M6.7 13.1 L 6.1 16.1" stroke-width="0.55" />
+                <path d="M9.7 14.6 L 8.3 17.1" stroke-width="0.55" />
+                <path d="M9.7 14.6 L 10.1 17.9" stroke-width="0.55" />
+                <path d="M17.3 13.1 L 19.1 14.7" stroke-width="0.55" />
+                <path d="M17.3 13.1 L 17.9 16.1" stroke-width="0.55" />
+                <path d="M14.3 14.6 L 15.7 17.1" stroke-width="0.55" />
+                <path d="M14.3 14.6 L 13.9 17.9" stroke-width="0.55" />
+              </g>
+            </g>
+          </svg>
+          <span class="hr-brpm">--</span> brpm
+          </span>
           <span class="hr-note"><a href="/posts/hr">live, via Garmin</a></span>
         </p>
         <p class="lede">
@@ -540,7 +570,9 @@ const dives = [
 
   <script>
     // Heart-rate widget: replays Garmin data with a 24h offset, linearly
-    // interpolated between ~2-min samples and re-ticked every 10s.
+    // interpolated between ~2-min samples and re-ticked every 10s. Respiration
+    // rides along on the same clock and the same interpolator (rr.json has the
+    // identical shape and cadence) and drives the ring around the heart.
     // ClientRouter swaps the DOM without re-running modules, so element lookups
     // happen inside tick() and init re-runs on astro:page-load.
     type HrData = { points: [number, number][] } | null;
@@ -549,6 +581,8 @@ const dives = [
     const GAP = 20 * 60 * 1000; // treat holes wider than this as no-signal
     let hrFetch: Promise<HrData> | undefined;
     let hrData: HrData = null;
+    let rrFetch: Promise<HrData> | undefined;
+    let rrData: HrData = null;
     let hrTimer: ReturnType<typeof setInterval> | undefined;
 
     const sample = (pts: [number, number][], t: number): number | null => {
@@ -583,6 +617,22 @@ const dives = [
       }
       bpmEl.textContent = String(bpm);
       heartEl.style.setProperty('--beat', `${(60 / bpm).toFixed(3)}s`);
+
+      // The lungs only inflate where there's a real sample under them. Holes in
+      // the respiration day don't hide the heart, they just still the lungs.
+      const breathEl = hrEl.querySelector('.hr-breath') as HTMLElement | null;
+      const brpmEl = hrEl.querySelector('.hr-brpm');
+      const brpm = rrData?.points?.length ? sample(rrData.points, Date.now() - DAY) : null;
+      if (breathEl && brpmEl && brpm) {
+        hrEl.style.setProperty('--breath', `${(60 / brpm).toFixed(2)}s`);
+        brpmEl.textContent = String(brpm);
+        hrEl.dataset.breath = String(brpm);
+        breathEl.hidden = false;
+      } else {
+        delete hrEl.dataset.breath;
+        if (breathEl) breathEl.hidden = true;
+      }
+
       hrEl.hidden = false;
     };
 
@@ -591,7 +641,10 @@ const dives = [
       hrFetch ??= fetch('/hr.json')
         .then((r) => (r.ok ? r.json() : null))
         .catch(() => null);
-      hrData = await hrFetch;
+      rrFetch ??= fetch('/rr.json')
+        .then((r) => (r.ok ? r.json() : null))
+        .catch(() => null);
+      [hrData, rrData] = await Promise.all([hrFetch, rrFetch]);
       tick();
       hrTimer ??= setInterval(tick, 10_000);
     };
@@ -720,8 +773,29 @@ const dives = [
     .kbd { background: var(--accent); color: var(--paper); padding: 0 0.35rem; font-weight: 700; }
     /* heart rate widget */
     .hr { font-size: 0.82rem; color: var(--muted); margin: -0.6rem 0 1.4rem; }
+    /* Lungs, sized to sit beside the heart without the heart having to grow.
+       At 26px the airway tree holds down to the segmental branches; the finer
+       terminal bronchioles land under half a pixel and silt up into the lobes,
+       so they aren't drawn. They only survive above roughly 44px.
+       display:inline-block overrides the Tailwind preflight's `svg{display:block}`,
+       which otherwise breaks this line into three. */
+    .hr-lungs {
+      display: inline-block; width: 26px; height: 26px;
+      vertical-align: -0.62em; margin: 0 0.12em 0 0.5em;
+    }
+    .lung-lobe { fill: var(--hr-heart); fill-opacity: 0.2; }
+    .lung-trachea { fill: none; stroke: var(--hr-heart); stroke-width: 1.25; stroke-linecap: round; }
+    .lung-tree { fill: none; stroke: var(--hr-heart); stroke-linecap: round; stroke-linejoin: round; }
+    /* Inflate from the carina, so the windpipe holds still and the lobes fill
+       downward and outward. Only once a respiration sample is in hand. */
+    .lung-lobes { transform-box: view-box; transform-origin: 12px 9.2px; }
+    .hr[data-breath] .lung-lobes {
+      animation: hr-breathe var(--breath, 4s) ease-in-out infinite;
+    }
+    .hr-brpm { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
     .hr-heart {
       display: inline-block; color: var(--hr-heart); transform-origin: 50% 60%;
+      margin-right: 0.2em;
       animation: hr-beat var(--beat, 1s) ease-out infinite;
     }
     .hr-bpm { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -736,8 +810,17 @@ const dives = [
       42% { transform: scale(1.18); }
       56%, 100% { transform: scale(1); }
     }
+    /* Peak at 40%, not 50%: at rest the inhale is shorter than the exhale
+       (roughly 1:1.5), so a symmetric cycle would read as machinery. Lobes
+       expand a little more vertically than sideways, the way a chest does. */
+    @keyframes hr-breathe {
+      0% { transform: scale(1, 1); }
+      40% { transform: scale(1.045, 1.075); }
+      100% { transform: scale(1, 1); }
+    }
     @media (prefers-reduced-motion: reduce) {
       .hr-heart { animation: none; }
+      .hr[data-breath] .lung-lobes { animation: none; }
     }
     /* prose layer: serif, for contrast against the mono structure */
     .lede, .about-body, .job-body, .proj dd, .dive-intro, .foot-cta {

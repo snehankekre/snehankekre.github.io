@@ -5,8 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
   schedule:
-    # Refresh the heart-rate data: 03:00 WITA/Bali (after the day ends there)
-    # and 12:00 WITA (catches late phone syncs). Keep in sync with HR_TZ below.
+    # Refresh the heart-rate and respiration data: 03:00 WITA/Bali (after the
+    # day ends there) and 12:00 WITA (catches late phone syncs). Keep in sync
+    # with HR_TZ below.
     - cron: '0 19 * * *'
     - cron: '0 4 * * *'
 
@@ -30,9 +31,10 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Fetch heart-rate data
-        # Writes public/hr.json; exits 0 without it on any failure so the
-        # deploy never breaks. The widget hides itself when the file is absent.
+      - name: Fetch heart-rate and respiration data
+        # Writes public/hr.json and public/rr.json; each exits 0 without its
+        # file on any failure so the deploy never breaks, and independently of
+        # the other. The widgets hide themselves when a file is absent.
         env:
           GARMINTOKENS_BASE64: ${{ secrets.GARMINTOKENS_BASE64 }}
           # Where "yesterday" is computed. Update on relocation (with the crons).
@@ -40,6 +42,7 @@ jobs:
         run: |
           pip install --quiet garminconnect==0.3.6
           python scripts/fetch_hr.py
+          python scripts/fetch_rr.py
       - name: Build with Astro
         uses: withastro/action@v3
         with:
