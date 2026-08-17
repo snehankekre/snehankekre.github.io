@@ -2,6 +2,7 @@
 title: My homepage has a pulse
 publishDate: 2026-07-16
 excerpt: There's a small red heart on my homepage now, beating at my actual heart rate with an exactly 24 hour delay. How I get the data out of my Garmin, and where the white lie is.
+image: '~/assets/images/og-hr.png'
 draft: false
 ---
 
@@ -360,7 +361,7 @@ just reads that variable, so the heart on the page beats at whatever rate the da
 ```css
 .hr-heart {
   display: inline-block;
-  color: var(--accent);
+  color: var(--hr-heart);
   transform-origin: 50% 60%;
   animation: hr-beat var(--beat, 1s) ease-out infinite;
 }
