@@ -102,7 +102,7 @@
       const W = profCanvas.clientWidth;
       const H = 240;
       const ink = css('--ink', '#18120c');
-      const accent = css('--accent', '#cc3a1d');
+      const accent = css('--accent', '#55712a');
       const faint = 'color-mix(in srgb, ' + ink + ' 25%, transparent)';
 
       const mL = 40;
@@ -163,7 +163,7 @@
       const W = nccCanvas.clientWidth;
       const H = 110;
       const ink = css('--ink', '#18120c');
-      const accent = css('--accent', '#cc3a1d');
+      const accent = css('--accent', '#55712a');
       const faint = 'color-mix(in srgb, ' + ink + ' 25%, transparent)';
 
       const mL = 40;

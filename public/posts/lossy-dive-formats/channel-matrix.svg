@@ -6,7 +6,7 @@
 <text x="409" y="62" text-anchor="middle" font-size="10.5" fill="#7d7568">DAN</text>
 <text x="527" y="46" text-anchor="middle" font-size="13" fill="#18120c" font-weight="600">UDDF 3.3.0</text>
 <text x="527" y="62" text-anchor="middle" font-size="10.5" fill="#7d7568">unpublished</text>
-<text x="645" y="46" text-anchor="middle" font-size="13" fill="#cc3a1d" font-weight="600">Subsurface</text>
+<text x="645" y="46" text-anchor="middle" font-size="13" fill="#55712a" font-weight="600">Subsurface</text>
 <text x="645" y="62" text-anchor="middle" font-size="10.5" fill="#7d7568">UDDF export</text>
 <text x="24" y="62" font-size="10.5" fill="#7d7568">17 channels recorded</text>
 <line x1="24" y1="74" x2="704" y2="74" stroke="#18120c" stroke-width="1"/>
@@ -14,12 +14,12 @@
 <circle cx="291" cy="106" r="6.5" fill="#18120c"/>
 <circle cx="409" cy="106" r="6.5" fill="#18120c"/>
 <circle cx="527" cy="106" r="6.5" fill="#18120c"/>
-<circle cx="645" cy="106" r="6.5" fill="#cc3a1d"/>
+<circle cx="645" cy="106" r="6.5" fill="#55712a"/>
 <text x="216" y="136.5" text-anchor="end" font-size="12.5" fill="#18120c">temperature</text>
 <circle cx="291" cy="132" r="6.5" fill="#18120c"/>
 <circle cx="409" cy="132" r="6.5" fill="#18120c"/>
 <circle cx="527" cy="132" r="6.5" fill="#18120c"/>
-<circle cx="645" cy="132" r="6.5" fill="#cc3a1d"/>
+<circle cx="645" cy="132" r="6.5" fill="#55712a"/>
 <text x="216" y="163.5" text-anchor="end" font-size="12.5" fill="#18120c">GF99</text>
 <circle cx="291" cy="160" r="6.5" fill="#18120c"/>
 <circle cx="409" cy="160" r="6.5" fill="none" stroke="#c9c2b4" stroke-width="1.5"/>
@@ -69,12 +69,12 @@
 <circle cx="291" cy="402" r="6.5" fill="#18120c"/>
 <circle cx="409" cy="402" r="6.5" fill="#18120c"/>
 <circle cx="527" cy="402" r="6.5" fill="#18120c"/>
-<circle cx="645" cy="402" r="6.5" fill="#cc3a1d"/>
+<circle cx="645" cy="402" r="6.5" fill="#55712a"/>
 <text x="216" y="433.5" text-anchor="end" font-size="12.5" fill="#18120c">helium fraction</text>
 <circle cx="291" cy="430" r="6.5" fill="#18120c"/>
 <circle cx="409" cy="430" r="6.5" fill="none" stroke="#c9c2b4" stroke-width="1.5"/>
 <circle cx="527" cy="430" r="6.5" fill="#18120c"/>
-<circle cx="645" cy="430" r="6.5" fill="#cc3a1d"/>
+<circle cx="645" cy="430" r="6.5" fill="#55712a"/>
 <text x="216" y="460.5" text-anchor="end" font-size="12.5" fill="#18120c">in-deco flag</text>
 <circle cx="291" cy="456" r="6.5" fill="none" stroke="#18120c" stroke-width="2" stroke-dasharray="2.6 2.4"/>
 <circle cx="409" cy="456" r="6.5" fill="none" stroke="#c9c2b4" stroke-width="1.5"/>
@@ -103,7 +103,7 @@
 <text x="409" y="596" text-anchor="middle" font-size="10" fill="#7d7568">of 17</text>
 <text x="527" y="581" text-anchor="middle" font-size="19" font-weight="700" fill="#18120c">13</text>
 <text x="527" y="596" text-anchor="middle" font-size="10" fill="#7d7568">of 17</text>
-<text x="645" y="581" text-anchor="middle" font-size="19" font-weight="700" fill="#cc3a1d">4</text>
+<text x="645" y="581" text-anchor="middle" font-size="19" font-weight="700" fill="#55712a">4</text>
 <text x="645" y="596" text-anchor="middle" font-size="10" fill="#7d7568">of 17</text>
 <circle cx="31" cy="615" r="6" fill="#18120c"/>
 <text x="44" y="619" font-size="11" fill="#7d7568">has a field</text>
