@@ -1,30 +1,43 @@
 /* The site's shared paper/ink palette + the posts chrome.
-   Imported by the homepage and the /posts pages so they read as one object. */
+   Imported by the homepage and the /posts pages so they read as one object.
+
+   The chromatic colours come off Monet's "The Cliff Walk at Pourville" (1882).
+   --accent is the yellow-green of the sunlit headland the two women are
+   standing on, and --deep is the turquoise sea below it. Neither is a pure
+   hue; both are mixed the way he mixed them, which is what keeps them from
+   reading as brand colours. */
 
 :root {
   --paper: #f4f1e9;
   --ink: #18120c;
   --muted: #756c5f;
-  --accent: #cc3a1d;
-  --deep: #0e3a52;
+  --accent: #55712a;
+  --deep: #24666f;
   --line: #18120c;
   --dash: #b9b0a1;
   --chip: #ccbfa6;
   --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
   --serif: 'Newsreader', Georgia, 'Times New Roman', serif;
   --hand: 'Caveat', cursive;
+
+  /* The heart-rate widget keeps its own red, independent of --accent. It is the
+     only living thing on the page and the only warm colour left on it, so it
+     stays put when the rest of the palette moves. */
+  --hr-heart: #cc3a1d;
 }
 
-/* dark mode: a warm, dark version of the same paper/ink palette (default stays light) */
+/* dark mode: the same warm brown-black ground as before, lit by the headland
+   and the sea rather than by the old terracotta */
 html.dark {
   --paper: #15120d;
   --ink: #ece4d3;
   --muted: #9a9081;
-  --accent: #e85a3c;
-  --deep: #74b0c8;
+  --accent: #9cba63;
+  --deep: #6ebfc4;
   --line: #ece4d3;
   --dash: #4b4439;
   --chip: #5c5446;
+  --hr-heart: #e85a3c;
 }
 
 html {

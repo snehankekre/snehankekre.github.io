@@ -30,8 +30,8 @@
 <rect x="534" y="142" width="170" height="44" fill="#f4f1e9" stroke="#18120c" stroke-width="1.5"/>
 <text x="619" y="170" text-anchor="middle" font-size="13.5" fill="#18120c">accept()</text>
 
-<path d="M 130 200 L 130 210 L 502 210 L 502 200" fill="none" stroke="#cc3a1d" stroke-width="1.5"/>
-<line x1="316" y1="210" x2="316" y2="220" stroke="#cc3a1d" stroke-width="1.5"/>
-<text x="316" y="234" text-anchor="middle" font-size="11" fill="#cc3a1d">my first probe wrapped both calls in one try block</text>
-<text x="316" y="248" text-anchor="middle" font-size="11" fill="#cc3a1d">and printed "bind FAILED" for either failure</text>
+<path d="M 130 200 L 130 210 L 502 210 L 502 200" fill="none" stroke="#55712a" stroke-width="1.5"/>
+<line x1="316" y1="210" x2="316" y2="220" stroke="#55712a" stroke-width="1.5"/>
+<text x="316" y="234" text-anchor="middle" font-size="11" fill="#55712a">my first probe wrapped both calls in one try block</text>
+<text x="316" y="248" text-anchor="middle" font-size="11" fill="#55712a">and printed "bind FAILED" for either failure</text>
 </svg>
