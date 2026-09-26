@@ -88,6 +88,8 @@ FIDO2 and speaks only U2F, which signs with ECDSA on the P-256 curve. The newer
 firmware 5.2.3 on and the NEO does not. OpenSSH's
 [`ssh-keygen` manual](https://man.openbsd.org/ssh-keygen) lists both types. I made both keys `ecdsa-sk` so they would behave the same way.
 
+![Two worn YubiKeys on a white sheet. On top, the USB-A YubiKey NEO, plugged into a white USB-A to USB-C adapter. Below it, the USB-C YubiKey 5 NFC. Both have the gold touch contact scuffed from years of use.](/posts/debian-10-to-13/yubikeys.jpg)
+
 When I created the two key files, I named them the wrong way round. The file called
 `id_ecdsa_sk_neo` belonged to the YubiKey 5, and `id_ecdsa_sk` belonged to the NEO.
 Plugging in one token and pointing ssh at the other token's file gets you a server that
@@ -255,6 +257,8 @@ rather than dpkg's plain prompt, with "keep the local version currently installe
 highlighted. I kept it. VPS images usually put their own kernel command line in that
 file, for example to send the console to a serial port the provider's panel can read,
 and I didn't want to find out whether this one would boot without it lol.
+
+![The blue debconf dialog titled "Configuring grub-pc". It says a new version of /etc/default/grub is available but the installed version has been locally modified, and asks what to do. "keep the local version currently installed" is highlighted, above options to install the package maintainer's version, show the differences, or start a shell.](/posts/debian-10-to-13/configuring-grub.jpg)
 
 ### cloud-init owns sources.list
 
