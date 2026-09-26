@@ -88,7 +88,7 @@ FIDO2 and speaks only U2F, which signs with ECDSA on the P-256 curve. The newer
 firmware 5.2.3 on and the NEO does not. OpenSSH's
 [`ssh-keygen` manual](https://man.openbsd.org/ssh-keygen) lists both types. I made both keys `ecdsa-sk` so they would behave the same way.
 
-![Two worn YubiKeys on a white sheet. On top, the USB-A YubiKey NEO, plugged into a white USB-A to USB-C adapter. Below it, the USB-C YubiKey 5 NFC. Both have the gold touch contact scuffed from years of use.](/posts/debian-10-to-13/yubikeys.jpg)
+<img src="/posts/debian-10-to-13/yubikeys.jpg" alt="Two worn YubiKeys on a white sheet. On top, the USB-A YubiKey NEO, plugged into a white USB-A to USB-C adapter. Below it, the USB-C YubiKey 5 NFC. Both have the gold touch contact scuffed from years of use." width="360" style="max-width:360px;width:100%;height:auto">
 
 When I created the two key files, I named them the wrong way round. The file called
 `id_ecdsa_sk_neo` belonged to the YubiKey 5, and `id_ecdsa_sk` belonged to the NEO.
