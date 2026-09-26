@@ -1,5 +1,5 @@
 ---
-title: Upgrading Debian 10 to 13 in under an hour after 21 months of not logging in
+title: Upgrading my Tor bridge from Debian 10 to 13 after 21 months of not logging in
 publishDate: 2026-09-26
 excerpt: "The Tor Project emailed to say my bridge was running an obsolete Tor and would soon be cut from the network. The VPS under it was still on Debian 10, and I had not run apt on it since November 2024. This is everything I did on 21 August 2026, from the log files: getting back in with two YubiKeys I had mislabelled, three release upgrades in 55 minutes, the Tor config mistake that took the bridge down for 19 minutes, automatic updates and reboots, and what changed in the SSH handshake."
 image: '~/assets/images/og-debian-10-to-13.png'
