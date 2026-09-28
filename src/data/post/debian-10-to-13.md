@@ -544,7 +544,7 @@ An SSH connection does two separate cryptographic jobs. The key exchange agrees 
 session keys that encrypt everything after it. Authentication proves who you are and,
 with my setup, that is the YubiKey signing a challenge. The two face different quantum
 threats. Someone can record encrypted traffic today and decrypt it once a large enough
-quantum computer exists (see [BULLRUN](https://en.wikipedia.org/wiki/Bullrun_(decryption_program))), so a key exchange has to hold up for as long as the traffic
+quantum computer exists (see [Harvest now, decrypt later](https://en.wikipedia.org/wiki/Harvest_now,_decrypt_later) and [BULLRUN](https://en.wikipedia.org/wiki/Bullrun_(decryption_program))), so a key exchange has to hold up for as long as the traffic
 needs to stay secret. A signature only has to hold at the moment you log in. Forging
 my YubiKey's signature in ten years doesn't let anyone into a session from today.
 That's why why OpenSSH moved the key exchange first. Their [post-quantum
