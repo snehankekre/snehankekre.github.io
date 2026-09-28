@@ -84,8 +84,30 @@ body {
 }
 .post-top nav {
   display: flex;
+  align-items: baseline;
   gap: 1.1rem;
   font-size: 0.85rem;
+}
+.theme-toggle {
+  background: none;
+  border: 1.5px solid var(--line);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.15rem 0.45rem;
+}
+.theme-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.theme-toggle .i-sun,
+html.dark .theme-toggle .i-moon {
+  display: none;
+}
+html.dark .theme-toggle .i-sun {
+  display: inline;
 }
 
 .post-main {
@@ -281,4 +303,51 @@ html.dark .post-prose .astro-code span {
   font-size: 1rem;
   color: var(--muted);
   margin: 0.1rem 0 0;
+}
+
+/* Table of contents, pinned right of the column on wide screens only. */
+.post-toc {
+  display: none;
+}
+@media (min-width: 76rem) {
+  .post-toc {
+    display: block;
+    position: fixed;
+    top: 6rem;
+    left: calc(50% + 24rem);
+    width: 13rem;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .post-toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .post-page .post-toc a {
+    display: block;
+    padding: 0.2rem 0 0.2rem 0.8rem;
+    border-left: 2px solid var(--dash);
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    line-height: 1.3;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .post-page .post-toc .d3 a {
+    padding-left: 1.6rem;
+    font-size: 0.88rem;
+  }
+  .post-page .post-toc a:hover {
+    color: var(--ink);
+  }
+  .post-page .post-toc a.active {
+    color: var(--ink);
+    border-left-color: var(--accent);
+  }
+}
+.post-prose h2,
+.post-prose h3 {
+  scroll-margin-top: 1.5rem;
 }

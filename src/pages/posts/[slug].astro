@@ -9,7 +9,8 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content, remarkPluginFrontmatter } = await render(post);
+const { Content, headings, remarkPluginFrontmatter } = await render(post);
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 const date = post.data.publishDate;
 const dateStr = date ? date.toISOString().slice(0, 10) : '';
@@ -32,6 +33,9 @@ const metadata = {
       <nav>
         <a href="/posts">posts</a>
         <a href="/">home</a>
+        <button type="button" class="theme-toggle" data-aw-toggle-color-scheme aria-label="Toggle dark mode">
+          <span class="i-moon" aria-hidden="true">☾</span><span class="i-sun" aria-hidden="true">☀</span>
+        </button>
       </nav>
     </header>
 
@@ -50,5 +54,37 @@ const metadata = {
         <a href="/rss.xml">rss</a>
       </footer>
     </main>
+
+    {
+      toc.length > 0 && (
+        <nav class="post-toc" aria-label="On this page">
+          <p class="post-label">// on this page</p>
+          <ul>
+            {toc.map((h) => (
+              <li class={`d${h.depth}`}>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
   </div>
 </Layout>
+
+<script>
+  // ClientRouter swaps pages without re-running modules, so rebind on every page load.
+  let links: HTMLAnchorElement[] = [];
+  let targets: (HTMLElement | null)[] = [];
+  const update = () => {
+    let i = targets.findIndex((t) => t && t.getBoundingClientRect().top > 120) - 1;
+    if (i === -2) i = targets.length - 1;
+    links.forEach((a, j) => a.classList.toggle('active', j === i));
+  };
+  document.addEventListener('astro:page-load', () => {
+    links = [...document.querySelectorAll<HTMLAnchorElement>('.post-toc a')];
+    targets = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))));
+    update();
+  });
+  addEventListener('scroll', update, { passive: true });
+</script>
