@@ -1,6 +1,7 @@
 ---
 title: My dive computer records 17 channels. Subsurface exports 4.
 publishDate: 2026-08-05
+updateDate: 2026-10-24
 excerpt: "Divers blame the open dive-log formats for losing decompression data. I counted the fields. UDDF has had a field for GF99 since 2018, DAN's DL7 format has had one for the deco ceiling since 2006, and there's an unpublished version of UDDF that real software already writes."
 image: '~/assets/images/og-lossy-dive-formats.png'
 draft: false
@@ -10,6 +11,11 @@ My Perdix 2 records seventeen channels in every sample. The open dive-log format
 fields for sixteen of them. [Subsurface](https://subsurface-divelog.org/), the best
 open-source dive log there is, exports four.
 
+*Corrected 24 October 2026. Two channels in the original list read zero on every sample
+of this dive, and the list left out a channel that has data. The corrected list is still
+seventeen channels, and none of the counts in this post changed. [What
+changed](#corrections-and-updates).*
+
 Divers blame the formats for that gap. I did too, [in my own
 README](https://github.com/snehankekre/bottomtime/blob/78b0b48057fcf56d8400a61afa84caa3aca012c9/README.md?plain=1#L9).
 After counting the fields, I think the gap is in the exporters, the programs that write
@@ -18,20 +24,24 @@ these formats and leave most of the fields empty.
 ## One dive, seventeen channels
 
 Here's one dive: `A823C228#13`, 101.5 metres, 101 minutes, 616 samples, breathing
-open-circuit trimix. These are the columns that have data for that dive, which is fewer
+open-circuit trimix. These are the channels that carry data on that dive, which is fewer
 than the schema allows:
 
-depth, temperature, GF99, deco ceiling, time to surface, next stop depth, next stop
-time, CNS percent, battery percent, battery voltage, average ppO2, oxygen fraction,
-helium fraction, an in-deco flag, a packed status byte, a solenoid fire count, and one
-raw oxygen sensor reading.
+depth, temperature, GF99, deco ceiling, time to surface, @+5, the no-decompression limit,
+next stop depth, next stop time, CNS percent, battery percent, battery voltage, average
+ppO2, oxygen fraction, helium fraction, an in-deco flag, and a packed status byte.
+
+@+5 is the time to surface if I stayed five more minutes at the current depth. The
+no-decompression limit and the next stop time share one byte. The Perdix writes the limit
+while there is no stop and the stop time once there is one, and both my decoder and
+Subsurface keep them as two values.
 
 GF99 is the channel divers assume is locked inside vendor formats. It shows how close
 your leading tissue is to its Bühlmann limit. It lives in byte 25 of Shearwater's sample
 record, Shearwater has never documented it, and I spent two weeks
 [proving it was what I thought it was](/posts/verifying-undocumented-bytes).
 
-![Matrix of 17 dive channels against four formats. UDDF 3.2.3 carries 12, DL7 2006 carries 7, the unpublished UDDF 3.3.0 carries 13, and Subsurface's UDDF exporter writes 4. Only the solenoid fire count is absent everywhere.](/posts/lossy-dive-formats/channel-matrix.svg)
+![Matrix of 17 dive channels against four formats. UDDF 3.2.3 carries 12, DL7 2006 carries 7, the unpublished UDDF 3.3.0 carries 13, and Subsurface's UDDF exporter writes 4. Only @+5 is absent everywhere.](/posts/lossy-dive-formats/channel-matrix.svg)
 
 *Filled means the format has a place to put that channel. Between them, the three
 specifications cover sixteen of the seventeen. The exporter column is the one your data
@@ -123,8 +133,8 @@ directory stops at 3.2.2. Meanwhile, commercial dive software writes 3.3.0 files
 open-source dive log keeps one as a test file.
 
 Across all three specifications, sixteen of my seventeen channels have a place to go. The
-seventeenth is the number of times a rebreather's solenoid fired to inject oxygen, and
-none of the formats has a field for it.
+seventeenth is @+5, and none of the formats has a field for it. The closest is 3.3.0's
+`<timetosurface>`, which holds the plain time to surface.
 
 So the most recent useful version of the standard is an unpublished agreement between
 vendors, and the only way to find it is to read their files.
@@ -204,6 +214,34 @@ internal model, and you can measure it in an afternoon. Then keep the original b
 because the data that survives is whatever two programs happened to agree on, and that's
 never the part you'll want.
 
+## Corrections and updates
+
+**24 October 2026, correction.** The original list of seventeen channels included a
+solenoid fire count and one raw oxygen sensor reading. Both are zero on all 616 samples
+of this dive. It's an open-circuit dive, so no solenoid fired, and no oxygen sensor was
+connected to the Perdix. My query counted every column that held a value, and the
+decoder writes zeros. The same list left out @+5, which takes 83 different values on this
+dive. At the time my store kept @+5 in a catch-all JSON column, and the query only looked
+at named columns.
+
+The corrected list swaps those two for @+5 and the no-decompression limit, which my
+decoder now stores separately from the next stop time. The two new channels fill the
+same cells in the matrix as the two they replace, so every count in this post is
+unchanged. The sentence about the channel no format can carry changed meaning. It used
+to name the solenoid count, and now it names @+5.
+
+**24 October 2026, update.** The Subsurface links below used to point at master.
+Subsurface changed `xslt/uddf-export.xslt` on 25 August 2026, three weeks after this
+post, and it is now 797 lines. The links now point at commit `d174161`, the version I
+read on 4 August, where the file is 773 lines. The current exporter still writes the same
+seven waypoint elements.
+
+**24 October 2026, update.** When I wrote this I had only read the exporter. Today I
+downloaded three of my dives from the Perdix into Subsurface 6.0.5771 over Bluetooth and
+ran them through the current `uddf-export.xslt`, the stylesheet behind its UDDF export.
+For this dive the UDDF has 616 waypoints. Every one has `depth` and `divetime`, 9 have
+`temperature`, 5 have `switchmix`, and they hold nothing else.
+
 ## Sources
 
 UDDF 3.2.3, the newest published release:
@@ -222,15 +260,17 @@ DL7:
   Divers Alert Network, Petar J. Denoble, July 2006. A Word file in the archived PyDL7
   repository, which is the only copy I could find.
 
-Subsurface, read at master:
+Subsurface, read at commit
+[`d174161`](https://github.com/subsurface/subsurface/tree/d174161ef9988cb804bf7f03a9f4f39d3b786615)
+on 4 August 2026:
 
-- [`core/sample.h`](https://github.com/subsurface/subsurface/blob/master/core/sample.h),
+- [`core/sample.h`](https://github.com/subsurface/subsurface/blob/d174161ef9988cb804bf7f03a9f4f39d3b786615/core/sample.h),
   what it holds per sample
-- [`xslt/uddf-export.xslt`](https://github.com/subsurface/subsurface/blob/master/xslt/uddf-export.xslt),
+- [`xslt/uddf-export.xslt`](https://github.com/subsurface/subsurface/blob/d174161ef9988cb804bf7f03a9f4f39d3b786615/xslt/uddf-export.xslt),
   what it writes
-- [`xslt/uddf.xslt`](https://github.com/subsurface/subsurface/blob/master/xslt/uddf.xslt),
+- [`xslt/uddf.xslt`](https://github.com/subsurface/subsurface/blob/d174161ef9988cb804bf7f03a9f4f39d3b786615/xslt/uddf.xslt),
   what it reads
-- [`dives/test-apd-inspiration.uddf`](https://github.com/subsurface/subsurface/blob/master/dives/test-apd-inspiration.uddf),
+- [`dives/test-apd-inspiration.uddf`](https://github.com/subsurface/subsurface/blob/d174161ef9988cb804bf7f03a9f4f39d3b786615/dives/test-apd-inspiration.uddf),
   the UDDF 3.3.0 file
 
 Calendars:
@@ -240,6 +280,7 @@ Calendars:
 - [Google's CalDAV API developer guide](https://developers.google.com/workspace/calendar/caldav/v2/guide),
   under Specifications, where the unsupported list lives
 
-Channel counts come from my own store, one query per column across the 616 samples of
-`A823C228#13`. The decoder is [bottomtime](https://github.com/snehankekre/bottomtime)
+Channel counts come from one query per column of my own store across the 616 samples of
+`A823C228#13`. A column counts as a channel when it holds a nonzero value on at least one
+sample. The decoder is [bottomtime](https://github.com/snehankekre/bottomtime)
 and the format work behind it is [pnf](https://github.com/snehankekre/pnf).

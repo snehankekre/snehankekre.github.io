@@ -1,6 +1,7 @@
 ---
 title: The bytes my dive computer keeps to itself
 publishDate: 2026-07-21
+updateDate: 2026-10-24
 excerpt: Shearwater Cloud stores every dive as a compressed blob of 32-byte records, and its export files leave some of the fields out. GF99, the deco ceiling, and battery voltage never make it into the exports. So I decoded the blobs myself.
 image: '~/assets/images/og-decoding-pnf.png'
 draft: false
@@ -96,6 +97,12 @@ desktop database by
 [querying the tables Shearwater has already decoded](https://github.com/subsurface/subsurface/blob/master/core/import-shearwater.cpp),
 and it never opens the blob. So for the undocumented bytes, there was nothing left to
 look up.
+
+*Update, 24 October 2026. In my own Shearwater Cloud database, the two tables Subsurface
+reads dives and samples from (`dive_logs` and `dive_log_records`) are empty, and every
+dive exists only as a blob. Opening that database in Subsurface 6.0.5404 imported zero
+dives. Downloading from the Perdix over Bluetooth into Subsurface 6.0.5771 works, because
+libdivecomputer reads the computer directly.*
 
 If you lay the known offsets over a PNF sample record, they explain 23 of its 32 bytes,
 counting the type byte. The other nine are either padding or the fields the exports leave
