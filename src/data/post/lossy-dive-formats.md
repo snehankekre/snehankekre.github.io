@@ -16,7 +16,7 @@ of this dive, and the list left out a channel that has data. The corrected list 
 seventeen channels, and none of the counts in this post changed. [What
 changed](#corrections-and-updates).*
 
-Divers blame the formats for that gap. I did too, [in my own
+Divers blame the formats for that gap. I did too, [in my
 README](https://github.com/snehankekre/bottomtime/blob/78b0b48057fcf56d8400a61afa84caa3aca012c9/README.md?plain=1#L9).
 After counting the fields, I think the gap is in the exporters, the programs that write
 these formats and leave most of the fields empty.
@@ -171,7 +171,7 @@ None of this is a complaint about Subsurface. It's free, it's excellent, and it'
 reason most divers have their data at all. That XSLT file is old, XSLT is a miserable
 language to extend, and UDDF export matters far less to Subsurface's users than
 supporting the next dive computer over USB. Jef Driesen, who maintains libdivecomputer,
-is thanked in UDDF's own list of authors. These people have done far more for open dive
+is thanked in UDDF's list of authors. These people have done far more for open dive
 data than I have. The data still gets thinner at the end of the chain, and UDDF's authors
 saw that coming.
 
@@ -189,7 +189,7 @@ original bytes, so that a better decoder could come back to them later. It sits 
 `<divecomputercontrol>`, next to the log instead of inside it. I have never seen a tool
 write one.
 
-My own store works the same way. It keeps the original bytes, each file named by the hash
+My store works the same way. It keeps the original bytes, each file named by the hash
 of its contents, and treats the decoded database as a view I can rebuild. I built it
 because I thought the formats had failed me. But the formats had done their part. Every
 program that uses them implements only the part its author needed at the time. That part
@@ -203,7 +203,7 @@ afternoon. That's the only unusual thing about this case.
 
 RFC 5545, the calendar standard, defines six component types and three alarm actions.
 Google's CalDAV API supports four of the six types and two of the three actions, and
-Google's own developer documentation says so: "Doesn't support `VTODO` or `VJOURNAL`
+Google's developer documentation says so: "Doesn't support `VTODO` or `VJOURNAL`
 data", "Doesn't support the `AUDIO` action". Any format where a committee wrote a large
 specification, and a few libraries implemented the parts their authors needed, works this
 way. Healthcare records and geospatial data are two more examples.
@@ -249,7 +249,7 @@ UDDF 3.2.3, the newest published release:
 - [The documentation index](https://www.streit.cc/resources/UDDF/v3.2.3/en/index.html),
   dated 15 November 2018
 - [`uddf_3.2.3.xsd`](https://www.streit.cc/resources/UDDF/v3.2.3/schema/uddf_3.2.3.xsd),
-  the schema itself, which the documentation's own schema chapter does not link
+  the schema itself, which the documentation's schema chapter does not link
 - [`<waypoint>`](https://www.streit.cc/resources/UDDF/v3.2.3/en/waypoint.html),
   [`<gradientfactor>`](https://www.streit.cc/resources/UDDF/v3.2.3/en/gradientfactor.html)
   and [`<dcdump>`](https://www.streit.cc/resources/UDDF/v3.2.3/en/dcdump.html)
@@ -280,7 +280,7 @@ Calendars:
 - [Google's CalDAV API developer guide](https://developers.google.com/workspace/calendar/caldav/v2/guide),
   under Specifications, where the unsupported list lives
 
-Channel counts come from one query per column of my own store across the 616 samples of
+Channel counts come from one query per column of my store across the 616 samples of
 `A823C228#13`. A column counts as a channel when it holds a nonzero value on at least one
 sample. The decoder is [bottomtime](https://github.com/snehankekre/bottomtime)
 and the format work behind it is [pnf](https://github.com/snehankekre/pnf).

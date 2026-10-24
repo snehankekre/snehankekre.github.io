@@ -29,7 +29,7 @@ So I went looking, and this post is about what I found. Every computer in Shearw
 Petrel family logs its dives internally in a format called Petrel Native Format, or PNF.
 It's a stream of 32-byte records, and four bytes in each sample record hold the missing
 numbers. I first mapped those bytes by experiment, and only later confirmed them against
-Shearwater's own code. The decoder ships in
+Shearwater's code. The decoder ships in
 [bottomtime](https://github.com/snehankekre/bottomtime), the dive-log store I wrote
 because I dive with two computers (`pip install bottomtime`).
 
@@ -86,7 +86,7 @@ handles PNF directly. A comment in the parser says that compared with the older 
 format, "the samples are simply offset by one". That's because PNF adds the record-type
 byte at the front. The parser also lays out the sample: depth in the first two bytes,
 then next stop, TTS (time to surface), gas fractions, temperature, and CNS. Reading it
-told me which bytes were already known, and gave me something to check my own mapping
+told me which bytes were already known, and gave me something to check my mapping
 against.
 
 That parser is the closest thing PNF has to a public spec. Shearwater does write protocol
@@ -98,7 +98,7 @@ desktop database by
 and it never opens the blob. So for the undocumented bytes, there was nothing left to
 look up.
 
-*Update, 24 October 2026. In my own Shearwater Cloud database, the two tables Subsurface
+*Update, 24 October 2026. In my Shearwater Cloud database, the two tables Subsurface
 reads dives and samples from (`dive_logs` and `dive_log_records`) are empty, and every
 dive exists only as a blob. Opening that database in Subsurface 6.0.5404 imported zero
 dives. Downloading from the Perdix over Bluetooth into Subsurface 6.0.5771 works, because
@@ -116,7 +116,7 @@ Here is the real record from the deepest sample of dive #202, when the gauge rea
 <div class="pnf-legend">
   <span class="pl pl-doc">documented (libdivecomputer)</span>
   <span class="pl pl-emp">found empirically</span>
-  <span class="pl pl-unk">named later, from Shearwater's own DLL</span>
+  <span class="pl pl-unk">named later, from Shearwater's DLL</span>
 </div>
 <div class="pnf-grid">
   <span class="b doc f-type" tabindex="0" data-t="byte 0: record type 0x01 = dive sample">01</span>
@@ -182,13 +182,13 @@ something to report:
 But a curve that behaves the right way is still only circumstantial evidence. Hmm  (╭ರ_•́)..
 
 So I wrote a verification suite. It checks every decoded channel, sample by sample,
-against Shearwater's own outputs for all 142 of my Shearwater dives, and it gets
+against Shearwater's outputs for all 142 of my Shearwater dives, and it gets
 [its own post](/posts/verifying-undocumented-bytes). The short version: across every
 sample that both my decoder and Shearwater's XML have, the biggest difference is 0.0000.
 And byte 25's value at surfacing matches Cloud's EndGF99 within one GF point on 142 of 142
 dives.
 
-## Then I read Shearwater's own code
+## Then I read Shearwater's code
 
 I could have stopped at the verification suite. Then a
 [Reddit comment](https://www.reddit.com/r/AskReverseEngineering/comments/1gq9vth/comment/mbtywtv/?context=3)
@@ -240,7 +240,7 @@ those two bytes hold a safe-ascent depth instead. My decoder reads byte 25 as GF
 matter what, so it would decode a DCIEM dive wrong. All 142 of my dives use gradient
 factors, so the bug has never fired. My data just never contained the case that breaks my
 code. It's on the fix list now, and I found it by reading the vendor's code instead of my
-own logs lol.
+logs lol.
 
 ## What I still can't read
 
